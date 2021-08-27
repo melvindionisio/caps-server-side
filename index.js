@@ -4,7 +4,7 @@ const OwnerRoutes = require("./routes/owner");
 const BhRoutes = require("./routes/boardinghouse");
 const AdminRoutes = require("./routes/admin");
 
-const port = 3030;
+const port = 3001;
 
 const app = express();
 
