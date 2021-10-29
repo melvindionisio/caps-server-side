@@ -4,8 +4,7 @@ const OwnerRoutes = require("./routes/owner");
 const BhRoutes = require("./routes/boardinghouse");
 const AdminRoutes = require("./routes/admin");
 const SeekerRoutes = require("./routes/seeker");
-
-const myport = 3001;
+require("dotenv").config();
 
 const app = express();
 
@@ -20,6 +19,6 @@ app.use("/api/boardinghouses", BhRoutes);
 app.use("/api/admin", AdminRoutes);
 app.use("/api/users", SeekerRoutes);
 
-app.listen(proccess.env.myport || myport, () => {
-  console.log(`Server running on ${myport}`);
+app.listen(proccess.env.myport || 3001, () => {
+  console.log(`Server running `);
 });
