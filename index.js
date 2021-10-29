@@ -19,6 +19,6 @@ app.use("/api/boardinghouses", BhRoutes);
 app.use("/api/admin", AdminRoutes);
 app.use("/api/users", SeekerRoutes);
 
-app.listen(proccess.env.myport || 3001, () => {
+app.listen(proccess.env.PORT || 3001, () => {
   console.log(`Server running `);
 });
