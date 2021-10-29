@@ -5,7 +5,7 @@ const BhRoutes = require("./routes/boardinghouse");
 const AdminRoutes = require("./routes/admin");
 const SeekerRoutes = require("./routes/seeker");
 
-const port = 3001;
+const myport = 3001;
 
 const app = express();
 
@@ -20,6 +20,6 @@ app.use("/api/boardinghouses", BhRoutes);
 app.use("/api/admin", AdminRoutes);
 app.use("/api/users", SeekerRoutes);
 
-app.listen(port, () => {
-  console.log(`Server running on ${port}`);
+app.listen(proccess.env.myport || myport, () => {
+  console.log(`Server running on ${myport}`);
 });
