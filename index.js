@@ -18,6 +18,14 @@ app.use("/api/owners", OwnerRoutes);
 app.use("/api/boardinghouses", BhRoutes);
 app.use("/api/admin", AdminRoutes);
 app.use("/api/users", SeekerRoutes);
+app.get("/", () => {
+  res.send([
+    {
+      name: "Melvin Dionisio",
+      age: 21,
+    },
+  ]);
+});
 
 app.listen(process.env.PORT || 3001, () => {
   console.log(`Server running `);
