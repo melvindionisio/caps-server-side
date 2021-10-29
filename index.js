@@ -3,6 +3,7 @@ const cors = require("cors");
 const OwnerRoutes = require("./routes/owner");
 const BhRoutes = require("./routes/boardinghouse");
 const AdminRoutes = require("./routes/admin");
+const SeekerRoutes = require("./routes/seeker");
 
 const port = 3001;
 
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/owners", OwnerRoutes);
 app.use("/api/boardinghouses", BhRoutes);
 app.use("/api/admin", AdminRoutes);
+app.use("/api/users", SeekerRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on ${port}`);
