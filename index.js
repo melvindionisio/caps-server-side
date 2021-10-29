@@ -18,7 +18,7 @@ app.use("/api/owners", OwnerRoutes);
 app.use("/api/boardinghouses", BhRoutes);
 app.use("/api/admin", AdminRoutes);
 app.use("/api/users", SeekerRoutes);
-app.get("/", () => {
+app.get("/", (req, res) => {
   res.send([
     {
       name: "Melvin Dionisio",
