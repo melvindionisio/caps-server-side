@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // routers
 app.use("/api/owners", OwnerRoutes);
-app.use("/api/boardinghouses", BhRoutes);
+app.use("/api/boarding-house", BhRoutes);
 app.use("/api/admin", AdminRoutes);
 app.use("/api/users", SeekerRoutes);
 app.get("/", (req, res) => {
