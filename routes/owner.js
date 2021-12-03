@@ -2,17 +2,24 @@ const express = require("express");
 const db = require("../connection");
 const Router = express.Router();
 
-Router.get("/", (req, res) => {
-  db.query(`SELECT * FROM boardinghouse_owner`, (err, rows) => {
-    if (!err) {
-      res.send(rows);
-    } else {
-      console.log(err);
-    }
-  });
-});
+const ownersController = require("../controller/owners.controller");
+const getAllOwners = ownersController.getAllOwners;
+const getOwner = ownersController.getOwner;
+const registerOwner = ownersController.registerOwner;
+const loginOwner = ownersController.loginOwner;
 
-// Router.post("/", (req, res) => {});
+// import {
+//   getAllOwners,
+//   getOwner,
+//   registerOwner,
+//   loginOwner,
+// } from "../controller/owners.controller";
+
+Router.get("/", getAllOwners);
+Router.get("/:ownerId", getOwner);
+Router.post("/register", registerOwner);
+Router.post("/auth", loginOwner);
+
 // Router.put("/", (req, res) => {});
 // Router.delete("/", (req, res) => {});
 

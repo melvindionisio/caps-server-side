@@ -1,4 +1,4 @@
 DB_HOST=localhost
 DB_USER=root
 DB_PASS=password
-DB=searchnstay
+DB=searchnstay_database
