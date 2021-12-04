@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 
 // Get All the owners data
 exports.getAllOwners = async (req, res) => {
-  db.query(`SELECT * FROM boarding_house_owner`, (err, rows) => {
+  db.query(`SELECT * FROM boarding_house_owners`, (err, rows) => {
     if (!err) {
       res.send(rows);
     } else {
@@ -15,20 +15,19 @@ exports.getAllOwners = async (req, res) => {
 
 // Getter for specific owner
 exports.getOwner = async (req, res) => {
-  res.send(req.params.ownerId);
-  //   ownerId = req.params.ownerId;
+  ownerId = req.params.ownerId;
 
-  //   db.query(
-  //     `SELECT * FROM boarding_house_owner WHERE bho_id = ?`,
-  //     [ownerId],
-  //     async (err, rows) => {
-  //       if (!err) {
-  //         res.send(rows);
-  //       } else {
-  //         console.log(err);
-  //       }
-  //     }
-  //   );
+  db.query(
+    `SELECT * FROM boarding_house_owners WHERE bho_id = ?`,
+    [ownerId],
+    async (err, rows) => {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log(err);
+      }
+    }
+  );
 };
 
 // Register Owner Account
@@ -48,12 +47,12 @@ exports.registerOwner = async (req, res) => {
 
 // Login Owner Account
 exports.loginOwner = async (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+  const username = req.body.owner_username;
+  const password = req.body.owner_password;
 
   if (username && password) {
     db.query(
-      "SELECT * FROM users WHERE username = ?",
+      "SELECT * FROM boarding_house_owners WHERE bho_username = ?",
       [username],
       async (err, result) => {
         if (err) {
@@ -66,18 +65,21 @@ exports.loginOwner = async (req, res) => {
         if (result.length > 0) {
           req.session.loggedin = true;
           req.session.username = username;
-          const validate = await bcrypt.compare(password, result[0].password);
+          const validate = await bcrypt.compare(
+            password,
+            result[0].bho_password
+          );
 
-          if (username === result[0].username && validate) {
+          if (username === result[0].bho_username && validate) {
             res.send({
               ...result[0],
               message: "You successfully logged in!",
               error: "success",
             });
-          } else if (username === result[0].username || validate) {
-            res.redirect("/incorrectpassword");
+          } else if (username === result[0].bho_username || validate) {
+            res.redirect("/api/owners/auth/incorrect-password");
           } else {
-            res.redirect("/usernotfound");
+            res.redirect("/api/owners/auth/user-not-found");
           }
         } else {
           res.send({ message: "User does not exist!" });

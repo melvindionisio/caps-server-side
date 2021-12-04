@@ -8,17 +8,22 @@ const getOwner = ownersController.getOwner;
 const registerOwner = ownersController.registerOwner;
 const loginOwner = ownersController.loginOwner;
 
-// import {
-//   getAllOwners,
-//   getOwner,
-//   registerOwner,
-//   loginOwner,
-// } from "../controller/owners.controller";
-
 Router.get("/", getAllOwners);
 Router.get("/:ownerId", getOwner);
 Router.post("/register", registerOwner);
+
 Router.post("/auth", loginOwner);
+// LOGIN REDIRECTS
+Router.get("/auth/incorrect-password", (req, res) => {
+  res.send({
+    message: "Your Password was Incorrect!",
+  });
+});
+Router.get("/auth/user-not-found", (req, res) => {
+  res.send({
+    message: "The account was not found! Please try again.",
+  });
+});
 
 // Router.put("/", (req, res) => {});
 // Router.delete("/", (req, res) => {});

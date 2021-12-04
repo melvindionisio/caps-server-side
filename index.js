@@ -1,10 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
-const OwnerRoutes = require("./routes/owner");
-const BhRoutes = require("./routes/boardinghouse");
+const OwnerRoutes = require("./routes/owners");
+const BhRoutes = require("./routes/boardinghouses");
 const AdminRoutes = require("./routes/admin");
-const SeekerRoutes = require("./routes/seeker");
+const SeekerRoutes = require("./routes/seekers");
+const RoomsRoutes = require("./routes/rooms");
 require("dotenv").config();
 
 const app = express();
@@ -23,14 +24,15 @@ app.use(
 
 // routers
 app.use("/api/owners", OwnerRoutes);
-app.use("/api/boarding-house", BhRoutes);
+app.use("/api/boarding-houses", BhRoutes);
 app.use("/api/admin", AdminRoutes);
-app.use("/api/users", SeekerRoutes);
+app.use("/api/seekers", SeekerRoutes);
+app.use("/api/rooms", RoomsRoutes);
 app.get("/", (req, res) => {
   res.send([
     {
-      name: "Melvin Dionisio",
-      age: 21,
+      capstoneProject: "Search 'n Stay: Boarding House Finder",
+      members: ["Melvin Dionisio", "Ivan Joseph Arang", "Jhelan Anabo"],
     },
   ]);
 });
