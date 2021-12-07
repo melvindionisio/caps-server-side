@@ -1,3 +1,2 @@
-// LOGIN OWNER
-// REGISTER OWNER
-// UPDATE OWNER - add message after successful updating admin account
+// LOGIN ADMIN
+// UPDATE admin - add message after successful updating admin account

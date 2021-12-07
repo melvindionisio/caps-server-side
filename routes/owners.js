@@ -12,6 +12,7 @@ const updateOwner = ownersController.updateOwner;
 Router.get("/", getAllOwners);
 Router.get("/:ownerId", getOwner);
 Router.post("/register", registerOwner);
+
 Router.post("/auth", loginOwner);
 // LOGIN REDIRECTS
 Router.get("/auth/incorrect-password", (req, res) => {
