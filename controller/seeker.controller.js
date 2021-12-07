@@ -1,0 +1,5 @@
+// GET ALL SEEKER
+// LOGIN SEEKER ACCOUNT
+// REGISTER SEEKER ACCOUNT
+// UPDATE SEEKER ACCOUNT - add message after successful updating owner account
+// GET ALL SEEKER's SAVED BOOKMARKED

@@ -2,7 +2,7 @@ const db = require("../connection");
 const express = require("express");
 const bcrypt = require("bcrypt");
 
-// Get All the owners data
+// GET ALL OWNER ACCOUNT
 exports.getAllOwners = async (req, res) => {
   db.query(`SELECT * FROM boarding_house_owners`, (err, rows) => {
     if (!err) {
@@ -13,7 +13,7 @@ exports.getAllOwners = async (req, res) => {
   });
 };
 
-// Getter for specific owner
+// GET SPECIFIC OWNER ACCOUNT
 exports.getOwner = async (req, res) => {
   ownerId = req.params.ownerId;
 
@@ -30,7 +30,7 @@ exports.getOwner = async (req, res) => {
   );
 };
 
-// Register Owner Account
+// REGISTER OWNER ACCOUNT
 const saltRounds = 5;
 exports.registerOwner = async (req, res) => {
   const name = req.body.name;
@@ -42,10 +42,11 @@ exports.registerOwner = async (req, res) => {
     "INSERT INTO boarding_house_owners (bho_name, bho_username, bho_password) VALUE (?,?,?)";
   db.query(sqlInsert, [name, username, encryptedPassword], (err, result) => {
     console.log(result);
+    // ! MESSAGE FOR SUCCESSFUL REGISTRATION
   });
 };
 
-// Login Owner Account
+// LOGIN OWNER ACCOUNT
 exports.loginOwner = async (req, res) => {
   const username = req.body.owner_username;
   const password = req.body.owner_password;
@@ -92,3 +93,24 @@ exports.loginOwner = async (req, res) => {
     res.send("Please enter username and password");
   }
 };
+
+// UPDATE SPECIFIC OWNER ACCOUNT | name | username | password
+exports.updateOwner = async (req, res) => {
+  ownerId = req.params.ownerId;
+
+  db.query(
+    `SELECT * FROM boarding_house_owners WHERE bho_id = ?`,
+    [ownerId],
+    async (err, rows) => {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log(err);
+      }
+    }
+  );
+
+  // ALSO SEND A MESSAGE UPAN SUCCESSFUL UPDATING AN OWNER ACCOUNT
+};
+
+// DELETE OWNER ACCOUNT - INCLUDING THE BOARDING HOUSE CONNECTED TO THE ACCOUNT

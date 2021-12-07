@@ -1,3 +1,5 @@
-// zone getter - dashboard get by zone
-// all boarding house
-// boardinghouse by id
+// GET BOARDING HOUSE BY ZONE - dashboard get by zone
+// GET ALL BOARDING HOUSE
+// GET A BOARDING HOUSE
+// UPDATE A BOARDING HOUSE
+// DELETE A BOARDING HOUSE

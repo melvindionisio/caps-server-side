@@ -7,11 +7,11 @@ const getAllOwners = ownersController.getAllOwners;
 const getOwner = ownersController.getOwner;
 const registerOwner = ownersController.registerOwner;
 const loginOwner = ownersController.loginOwner;
+const updateOwner = ownersController.updateOwner;
 
 Router.get("/", getAllOwners);
 Router.get("/:ownerId", getOwner);
 Router.post("/register", registerOwner);
-
 Router.post("/auth", loginOwner);
 // LOGIN REDIRECTS
 Router.get("/auth/incorrect-password", (req, res) => {
@@ -25,7 +25,8 @@ Router.get("/auth/user-not-found", (req, res) => {
   });
 });
 
-// Router.put("/", (req, res) => {});
+// UPDATE OWNER ACCOUNT
+Router.put("/:ownerId", updateOwner);
 // Router.delete("/", (req, res) => {});
 
 module.exports = Router;

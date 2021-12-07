@@ -1,8 +1,7 @@
 const db = require("../connection");
 const express = require("express");
-const bcrypt = require("bcrypt");
 
-// Get All the owners data
+// GET ALL ROOMS
 exports.getAllRooms = async (req, res) => {
   db.query(`SELECT * FROM rooms`, (err, rows) => {
     if (!err) {
@@ -13,7 +12,7 @@ exports.getAllRooms = async (req, res) => {
   });
 };
 
-// Getter for specific owner
+// GET SPECIFIC ROOM
 exports.getRoom = async (req, res) => {
   roomId = req.params.roomId;
 
@@ -28,4 +27,14 @@ exports.getRoom = async (req, res) => {
       }
     }
   );
+};
+
+// ADD A ROOM
+exports.addRoom = async (req, res) => {
+  // code for adding a room
+};
+
+// UPDATE A ROOM
+exports.updateRoom = async (req, res) => {
+  const roomId = req.params.roomId;
 };
