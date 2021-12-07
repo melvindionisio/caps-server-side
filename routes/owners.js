@@ -7,27 +7,19 @@ const getAllOwners = ownersController.getAllOwners;
 const getOwner = ownersController.getOwner;
 const registerOwner = ownersController.registerOwner;
 const loginOwner = ownersController.loginOwner;
-const updateOwner = ownersController.updateOwner;
+const updateOwnerProfile = ownersController.updateOwnerProfile;
+const updateOwnerPassword = ownersController.updateOwnerPassword;
+const deleteOwner = ownersController.deleteOwner;
 
 Router.get("/", getAllOwners);
 Router.get("/:ownerId", getOwner);
 Router.post("/register", registerOwner);
-
 Router.post("/auth", loginOwner);
-// LOGIN REDIRECTS
-Router.get("/auth/incorrect-password", (req, res) => {
-  res.send({
-    message: "Your Password was Incorrect!",
-  });
-});
-Router.get("/auth/user-not-found", (req, res) => {
-  res.send({
-    message: "The account was not found! Please try again.",
-  });
-});
 
 // UPDATE OWNER ACCOUNT
-Router.put("/:ownerId", updateOwner);
-// Router.delete("/", (req, res) => {});
+Router.put("/:ownerId", updateOwnerProfile);
+Router.post("/:ownerId", updateOwnerPassword);
+
+Router.delete("/:ownerId", deleteOwner);
 
 module.exports = Router;

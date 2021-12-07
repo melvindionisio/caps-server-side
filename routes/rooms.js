@@ -7,11 +7,12 @@ const getAllRooms = roomsController.getAllRooms;
 const getRoom = roomsController.getRoom;
 const addRoom = roomsController.addRoom;
 const updateRoom = roomsController.updateRoom;
+const deleteRoom = roomsController.deleteRoom;
 
 Router.get("/", getAllRooms);
 Router.get("/:roomId", getRoom);
 Router.post("/", addRoom);
 Router.put("/:roomId", updateRoom);
-// Router.delete("/", (req, res) => {});
+Router.delete("/:roomId", deleteRoom);
 
 module.exports = Router;

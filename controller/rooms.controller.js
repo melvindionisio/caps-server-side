@@ -34,11 +34,15 @@ exports.addRoom = async (req, res) => {
   // code for adding a room
 };
 
-// UPDATE A ROOM
+// UPDATE A ROOM details
 exports.updateRoom = async (req, res) => {
+  const roomId = req.params.roomId;
+};
+
+// DELETE SPECIFIC ROOM
+exports.deleteRoom = async (req, res) => {
   const roomId = req.params.roomId;
 };
 
 // UPDATE ROOM AVAILABILITY
 // UPDATE ROOM SLOTS STATUS
-// DELETE SPECIFIC ROOM
