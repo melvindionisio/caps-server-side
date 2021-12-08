@@ -16,17 +16,13 @@ exports.getAllRooms = async (req, res) => {
 exports.getRoom = async (req, res) => {
   roomId = req.params.roomId;
 
-  db.query(
-    `SELECT * FROM rooms WHERE room_id = ?`,
-    [roomId],
-    async (err, rows) => {
-      if (!err) {
-        res.send(rows);
-      } else {
-        console.log(err);
-      }
+  db.query(`SELECT * FROM rooms WHERE room_id = ?`, [roomId], (err, rows) => {
+    if (!err) {
+      res.send(rows);
+    } else {
+      console.log(err);
     }
-  );
+  });
 };
 
 // ADD A ROOM

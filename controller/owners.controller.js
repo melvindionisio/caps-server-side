@@ -14,13 +14,13 @@ exports.getAllOwners = async (req, res) => {
 };
 
 // GET SPECIFIC OWNER ACCOUNT
-exports.getOwner = async (req, res) => {
+exports.getOwner = (req, res) => {
   const ownerId = req.params.ownerId;
 
   db.query(
     `SELECT * FROM boarding_house_owners WHERE bho_id = ?`,
     [ownerId],
-    async (err, rows) => {
+    (err, rows) => {
       if (!err) {
         res.send(rows);
       } else {
@@ -40,10 +40,15 @@ exports.registerOwner = async (req, res) => {
 
   const sqlInsert =
     "INSERT INTO boarding_house_owners (bho_name, bho_username, bho_password) VALUE (?,?,?)";
-  db.query(sqlInsert, [name, username, encryptedPassword], (err, result) => {
-    console.log(result);
-    // ! MESSAGE FOR SUCCESSFUL REGISTRATION MISSING
-  });
+  db.query(
+    sqlInsert,
+    [name, username, encryptedPassword],
+    async (err, result) => {
+      console.log(result);
+      const bho_id = await result.insertId;
+      // ! MESSAGE FOR SUCCESSFUL REGISTRATION MISSING
+    }
+  );
 };
 
 // LOGIN OWNER ACCOUNT
@@ -98,17 +103,17 @@ exports.loginOwner = async (req, res) => {
   }
 };
 
-// UPDATE SPECIFIC OWNER PROFILE | name | username
-exports.updateOwnerProfile = async (req, res) => {
+// UPDATE SPECIFIC OWNER PROFILE | name | username ✅ Done !
+exports.updateOwnerProfile = (req, res) => {
   const ownerId = req.params.ownerId;
   const newName = req.body.newName;
   const newUsername = req.body.newUsername;
   db.query(
     `UPDATE boarding_house_owners SET bho_name = ?, bho_username = ? WHERE bho_id = ?`,
     [newName, newUsername, ownerId],
-    async (err, rows) => {
+    (err, rows) => {
       if (!err) {
-        res.send({ message: "Successfully updated Profile!" });
+        res.send({ message: "Profile successfully changed!" });
         console.log("id", rows.affectedRows, "has updated.");
       } else {
         console.log(err);
@@ -118,7 +123,7 @@ exports.updateOwnerProfile = async (req, res) => {
   );
 };
 
-// UPDATE SPECIFIC OWNER PASSWORD
+// UPDATE SPECIFIC OWNER PASSWORD ✅ Done !
 exports.updateOwnerPassword = async (req, res) => {
   const ownerId = req.params.ownerId;
 
@@ -132,9 +137,9 @@ exports.updateOwnerPassword = async (req, res) => {
     async (err, rows) => {
       if (!err) {
         // res.send(rows);
-        res.send({ message: "Password Successfully changed!" });
+        res.send({ message: "Password successfully changed!" });
       } else {
-        res.send(err);
+        res.send({ message: err });
         console.log(err);
       }
     }

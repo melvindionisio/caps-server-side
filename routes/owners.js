@@ -18,8 +18,8 @@ Router.post("/register", registerOwner);
 Router.post("/auth", loginOwner);
 
 // UPDATE OWNER ACCOUNT
-Router.put("/:ownerId", updateOwnerProfile); // ✅ done
-Router.post("/:ownerId", updateOwnerPassword);
+Router.put("/update-profile/:ownerId", updateOwnerProfile); // ✅ Done!
+Router.put("/update-password/:ownerId", updateOwnerPassword); // ✅ Done!
 
 Router.delete("/:ownerId", deleteOwner);
 
