@@ -78,12 +78,10 @@ exports.loginOwner = async (req, res) => {
               error: "success",
             });
           } else if (username === result[0].bho_username || validate) {
-            // res.redirect("/api/owners/auth/incorrect-password");
             res.send({
               message: "Your Password was Incorrect!",
             });
           } else {
-            // res.redirect("/api/owners/auth/user-not-found");
             res.send({
               message: "The account was not found! Please try again.",
             });
@@ -100,7 +98,7 @@ exports.loginOwner = async (req, res) => {
   }
 };
 
-// UPDATE SPECIFIC OWNER ACCOUNT | name | username | password
+// UPDATE SPECIFIC OWNER PROFILE | name | username
 exports.updateOwnerProfile = async (req, res) => {
   const ownerId = req.params.ownerId;
   const newName = req.body.newName;
@@ -120,19 +118,23 @@ exports.updateOwnerProfile = async (req, res) => {
   );
 };
 
-// UPDATE SPECIFIC OWNER ACCOUNT | name | username | password
+// UPDATE SPECIFIC OWNER PASSWORD
 exports.updateOwnerPassword = async (req, res) => {
   const ownerId = req.params.ownerId;
+
   const updatedPassword = req.body.newPassword;
+  const encryptedPassword = await bcrypt.hash(updatedPassword, saltRounds);
+
   // ! HASH PASSWORD BEFORE SENDING TO DB
   db.query(
     `UPDATE boarding_house_owners SET bho_password = ? WHERE bho_id = ?`,
-    [updatedPassword, ownerId],
+    [encryptedPassword, ownerId],
     async (err, rows) => {
       if (!err) {
         // res.send(rows);
-        console.log(rows.affectedRows);
+        res.send({ message: "Password Successfully changed!" });
       } else {
+        res.send(err);
         console.log(err);
       }
     }

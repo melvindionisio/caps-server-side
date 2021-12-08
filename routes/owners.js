@@ -13,11 +13,12 @@ const deleteOwner = ownersController.deleteOwner;
 
 Router.get("/", getAllOwners);
 Router.get("/:ownerId", getOwner);
+
 Router.post("/register", registerOwner);
 Router.post("/auth", loginOwner);
 
 // UPDATE OWNER ACCOUNT
-Router.put("/:ownerId", updateOwnerProfile);
+Router.put("/:ownerId", updateOwnerProfile); // ✅ done
 Router.post("/:ownerId", updateOwnerPassword);
 
 Router.delete("/:ownerId", deleteOwner);
