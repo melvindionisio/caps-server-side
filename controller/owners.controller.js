@@ -110,24 +110,23 @@ exports.updateOwnerProfile = async (req, res) => {
     [newName, newUsername, ownerId],
     async (err, rows) => {
       if (!err) {
-        // res.send(rows);
-        console.log(rows.affectedRows);
+        res.send({ message: "Successfully updated Profile!" });
+        console.log("id", rows.affectedRows, "has updated.");
       } else {
         console.log(err);
+        res.send({ message: err });
       }
     }
   );
-
-  // ALSO SEND A MESSAGE UPAN SUCCESSFUL UPDATING AN OWNER ACCOUNT
 };
 
 // UPDATE SPECIFIC OWNER ACCOUNT | name | username | password
 exports.updateOwnerPassword = async (req, res) => {
   const ownerId = req.params.ownerId;
-  const updatedPassword = req.body;
+  const updatedPassword = req.body.newPassword;
   // ! HASH PASSWORD BEFORE SENDING TO DB
   db.query(
-    `UPDATE boarding_house_owners SET ? WHERE bho_id = ?`,
+    `UPDATE boarding_house_owners SET bho_password = ? WHERE bho_id = ?`,
     [updatedPassword, ownerId],
     async (err, rows) => {
       if (!err) {
