@@ -30,7 +30,7 @@ exports.getOwner = (req, res) => {
   );
 };
 
-// REGISTER OWNER ACCOUNT
+// REGISTER OWNER ACCOUNT ✅ DONE!
 const saltRounds = 5;
 exports.registerOwner = async (req, res) => {
   const name = req.body.name;
@@ -40,15 +40,18 @@ exports.registerOwner = async (req, res) => {
 
   const sqlInsert =
     "INSERT INTO boarding_house_owners (bho_name, bho_username, bho_password) VALUE (?,?,?)";
-  db.query(
-    sqlInsert,
-    [name, username, encryptedPassword],
-    async (err, result) => {
+  db.query(sqlInsert, [name, username, encryptedPassword], (err, result) => {
+    if (!err) {
       console.log(result);
-      const bho_id = await result.insertId;
-      // ! MESSAGE FOR SUCCESSFUL REGISTRATION MISSING
+      res.send({
+        message: "Owner successfully registered!",
+        ownerId: result.insertId,
+      });
+    } else {
+      console.log(err);
+      res.send({ message: err });
     }
-  );
+  });
 };
 
 // LOGIN OWNER ACCOUNT

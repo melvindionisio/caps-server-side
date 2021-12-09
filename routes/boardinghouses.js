@@ -8,6 +8,7 @@ const getAllBoardinghouse = boardinghousesController.getAllBoardinghouse;
 const getBoardinghouseById = boardinghousesController.getBoardinghouseById;
 const getAllBoardinghouseLocations =
   boardinghousesController.getAllBoardinghouseLocations;
+const registerBoardinghouse = boardinghousesController.registerBoardinghouse;
 
 // GET ALL THE BOARDING HOUSE INCLUDING THE OWNER
 Router.get("/", getAllBoardinghouse);
@@ -18,7 +19,7 @@ Router.get("/zone/:zone", getBoardinghouseByZone);
 Router.get("/map-marks", getAllBoardinghouseLocations);
 
 // ALONG WITH OWNER ACCOUNT CREATION
-Router.post("/initial-details", async (req, res) => {});
+Router.post("/register/:ownerId", registerBoardinghouse);
 
 // Router.put("/", (req, res) => {});
 // Router.delete("/", (req, res) => {});
