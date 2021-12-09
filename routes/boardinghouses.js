@@ -6,6 +6,8 @@ const boardinghousesController = require("../controller/boardinghouses.controlle
 const getBoardinghouseByZone = boardinghousesController.getBoardinghouseByZone;
 const getAllBoardinghouse = boardinghousesController.getAllBoardinghouse;
 const getBoardinghouseById = boardinghousesController.getBoardinghouseById;
+const getBoardinghouseByOwnerId =
+  boardinghousesController.getBoardinghouseByOwnerId;
 const getAllBoardinghouseLocations =
   boardinghousesController.getAllBoardinghouseLocations;
 const registerBoardinghouse = boardinghousesController.registerBoardinghouse;
@@ -13,6 +15,7 @@ const registerBoardinghouse = boardinghousesController.registerBoardinghouse;
 // GET ALL THE BOARDING HOUSE INCLUDING THE OWNER
 Router.get("/", getAllBoardinghouse);
 Router.get("/:bhId", getBoardinghouseById);
+Router.get("/owner/:ownerId", getBoardinghouseByOwnerId);
 Router.get("/zone/:zone", getBoardinghouseByZone);
 
 // GETTING ALL THE BH COORDINATES FOR MAP MARKING - FOR SEEKER MAP

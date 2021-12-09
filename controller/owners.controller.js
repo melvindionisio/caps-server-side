@@ -54,7 +54,7 @@ exports.registerOwner = async (req, res) => {
   });
 };
 
-// LOGIN OWNER ACCOUNT
+// LOGIN OWNER ACCOUNT ✅ SEMI-DONE!
 exports.loginOwner = async (req, res) => {
   const username = req.body.owner_username;
   const password = req.body.owner_password;

@@ -1,6 +1,7 @@
-// UPDATE SPECIFIC BOARDING HOUSE
+const db = require("../connection");
+const express = require("express");
 
-// ADD BASIC BH INFO FROM ADMIN
+// ADD BASIC BH INFO FROM ADMIN ✅DONE!
 exports.registerBoardinghouse = (req, res) => {
   const boardinghouse_owner = req.body.boardinghouse_owner;
   const boardinghouse_name = req.body.boardinghouse_name;
@@ -11,7 +12,7 @@ exports.registerBoardinghouse = (req, res) => {
   const ownerId = req.params.ownerId;
 
   const sqlInsert =
-    "INSERT INTO boarding_house (bh_name, bh_owner, bh_adress, bh_contacts, tagline, bho_id) VALUE (?,?,?,?,?)";
+    "INSERT INTO boarding_house (bh_name, bh_owner, bh_address, bh_contacts, tagline, bho_id) VALUE (?,?,?,?,?,?)";
   db.query(
     sqlInsert,
     [
@@ -37,9 +38,6 @@ exports.registerBoardinghouse = (req, res) => {
   );
 };
 
-const db = require("../connection");
-const express = require("express");
-
 // GET ALL BOARDING HOUSE
 exports.getAllBoardinghouse = (req, res) => {
   db.query(`SELECT * FROM boarding_house`, (err, rows) => {
@@ -57,6 +55,22 @@ exports.getBoardinghouseById = (req, res) => {
   // res.send(boardinghouseId);
   db.query(
     `SELECT * FROM boarding_house WHERE boardinghouse_id = ? `[boardinghouseId],
+    (err, rows) => {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log(err);
+      }
+    }
+  );
+};
+
+// GET SPECIFIC BOARDING HOUSE by OwnerID
+exports.getBoardinghouseByOwnerId = (req, res) => {
+  const ownerId = req.params.ownerId;
+  db.query(
+    `SELECT * FROM boarding_house WHERE bho_id = ?`,
+    [ownerId],
     (err, rows) => {
       if (!err) {
         res.send(rows);
@@ -88,6 +102,9 @@ exports.getBoardinghouseByZone = (req, res) => {
     res.send({ message: "The UEP zone is only 1, 2, and 3." });
   }
 };
+
+// UPDATE SPECIFIC BOARDING HOUSE
+// missing!
 
 // ! FOR MAP PURPOSE - GET ALL THE LONGITUDE, LATITUDE, NAME, ADDRESS of BH
 exports.getAllBoardinghouseLocations = (req, res) => {
