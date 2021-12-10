@@ -91,7 +91,7 @@ exports.getBoardinghouseByZone = (req, res) => {
     res.send(zone);
 
     // db.query(
-    //   `SELECT * FROM boarding_house WHERE bh_address_zone = ?`,
+    //   `SELECT * FROM boarding_house WHERE bh_zone_address = ?`,
     //   [zone],
     //   (err, result) => {
     //     if (!err) {

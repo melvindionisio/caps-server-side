@@ -6,6 +6,9 @@ const BhRoutes = require("./routes/boardinghouses");
 const AdminRoutes = require("./routes/admin");
 const SeekerRoutes = require("./routes/seekers");
 const RoomsRoutes = require("./routes/rooms");
+const BookmarksRoutes = require("./routes/bookmarks");
+const ReviewsRoutes = require("./routes/reviews");
+
 require("dotenv").config();
 
 const app = express();
@@ -29,6 +32,9 @@ app.use("/api/boarding-houses", BhRoutes);
 app.use("/api/admin", AdminRoutes);
 app.use("/api/seekers", SeekerRoutes);
 app.use("/api/rooms", RoomsRoutes);
+app.use("/api/bookmarks", BookmarksRoutes);
+app.use("/api/reviews", ReviewsRoutes);
+
 app.get("/", (req, res) => {
   res.send([
     {
