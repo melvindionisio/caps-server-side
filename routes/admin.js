@@ -3,9 +3,7 @@ const db = require("../connection");
 const Router = express.Router();
 
 const adminController = require("../controller/admin.controller");
-const loginAdmin = adminController.loginAdmin;
-const updateAdmin = adminController.updateAdmin;
-
+// GET
 Router.get("/", (req, res) => {
   db.query(`SELECT * FROM admin`, (err, rows) => {
     if (!err) {
@@ -16,7 +14,10 @@ Router.get("/", (req, res) => {
   });
 });
 
-Router.post("/", loginAdmin);
-Router.put("/:adminId", updateAdmin);
+// SEND
+Router.post("/", adminController.loginAdmin);
+
+// SEND
+Router.put("/:adminId", adminController.updateAdmin);
 
 module.exports = Router;

@@ -1,28 +1,31 @@
 const express = require("express");
-const db = require("../connection");
 const Router = express.Router();
 
 const boardinghousesController = require("../controller/boardinghouses.controller");
-const getBoardinghouseByZone = boardinghousesController.getBoardinghouseByZone;
-const getAllBoardinghouse = boardinghousesController.getAllBoardinghouse;
-const getBoardinghouseById = boardinghousesController.getBoardinghouseById;
-const getBoardinghouseByOwnerId =
-  boardinghousesController.getBoardinghouseByOwnerId;
-const getAllBoardinghouseLocations =
-  boardinghousesController.getAllBoardinghouseLocations;
-const registerBoardinghouse = boardinghousesController.registerBoardinghouse;
 
 // GET ALL THE BOARDING HOUSE INCLUDING THE OWNER
-Router.get("/", getAllBoardinghouse);
-Router.get("/:bhId", getBoardinghouseById);
-Router.get("/owner/:ownerId", getBoardinghouseByOwnerId);
-Router.get("/zone/:zone", getBoardinghouseByZone);
+Router.get("/", boardinghousesController.getAllBoardinghouse);
+Router.get("/:bhId", boardinghousesController.getBoardinghouseById);
+Router.get(
+  "/owner/:ownerId",
+  boardinghousesController.getBoardinghouseByOwnerId
+);
+Router.get("/zone/:zone", boardinghousesController.getBoardinghouseByZone);
 
-// GETTING ALL THE BH COORDINATES FOR MAP MARKING - FOR SEEKER MAP
-Router.get("/map-marks", getAllBoardinghouseLocations);
+Router.get(
+  "/owner-app/map-marks/:ownerId",
+  boardinghousesController.getBoardinghouseLocation
+); // GETTING  COORDINATES FOR MAP MARKING - OWNER
 
-// ALONG WITH OWNER ACCOUNT CREATION
-Router.post("/register/:ownerId", registerBoardinghouse);
+Router.get(
+  "/seeker-app/map-marks",
+  boardinghousesController.getAllBoardinghouseLocations
+); // GETTING ALL COORDINATES FOR MAP MARKING - FOR SEEKER MAP
+
+Router.post(
+  "/register/:ownerId",
+  boardinghousesController.registerBoardinghouse
+); // ALONG WITH OWNER ACCOUNT CREATION
 
 // Router.put("/", (req, res) => {});
 // Router.delete("/", (req, res) => {});

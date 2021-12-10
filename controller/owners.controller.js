@@ -4,9 +4,9 @@ const bcrypt = require("bcrypt");
 
 // GET ALL OWNER ACCOUNT
 exports.getAllOwners = async (req, res) => {
-  db.query(`SELECT * FROM boarding_house_owners`, (err, rows) => {
+  db.query(`SELECT * FROM boarding_house_owners`, (err, result) => {
     if (!err) {
-      res.send(rows);
+      res.send({ ...result });
     } else {
       console.log(err);
     }
@@ -20,9 +20,9 @@ exports.getOwner = (req, res) => {
   db.query(
     `SELECT * FROM boarding_house_owners WHERE bho_id = ?`,
     [ownerId],
-    (err, rows) => {
+    (err, result) => {
       if (!err) {
-        res.send(rows);
+        res.send({ ...result[0] });
       } else {
         console.log(err);
       }
@@ -114,10 +114,10 @@ exports.updateOwnerProfile = (req, res) => {
   db.query(
     `UPDATE boarding_house_owners SET bho_name = ?, bho_username = ? WHERE bho_id = ?`,
     [newName, newUsername, ownerId],
-    (err, rows) => {
+    (err, result) => {
       if (!err) {
         res.send({ message: "Profile successfully changed!" });
-        console.log("id", rows.affectedRows, "has updated.");
+        console.log("id", result.affectedRows, "has updated.");
       } else {
         console.log(err);
         res.send({ message: err });
@@ -137,9 +137,9 @@ exports.updateOwnerPassword = async (req, res) => {
   db.query(
     `UPDATE boarding_house_owners SET bho_password = ? WHERE bho_id = ?`,
     [encryptedPassword, ownerId],
-    async (err, rows) => {
+    async (err, result) => {
       if (!err) {
-        // res.send(rows);
+        // res.send(result);
         res.send({ message: "Password successfully changed!" });
       } else {
         res.send({ message: err });

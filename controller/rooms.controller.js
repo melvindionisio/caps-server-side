@@ -3,9 +3,9 @@ const express = require("express");
 
 // GET ALL ROOMS - need boardinghouse_id to get rooms associated with the current login owner
 exports.getAllRooms = async (req, res) => {
-  db.query(`SELECT * FROM rooms`, (err, rows) => {
+  db.query(`SELECT * FROM rooms`, (err, result) => {
     if (!err) {
-      res.send(rows);
+      res.send({ ...result });
     } else {
       console.log(err);
     }
@@ -16,9 +16,9 @@ exports.getAllRooms = async (req, res) => {
 exports.getRoom = async (req, res) => {
   roomId = req.params.roomId;
 
-  db.query(`SELECT * FROM rooms WHERE room_id = ?`, [roomId], (err, rows) => {
+  db.query(`SELECT * FROM rooms WHERE room_id = ?`, [roomId], (err, result) => {
     if (!err) {
-      res.send(rows);
+      res.send({ ...result[0] });
     } else {
       console.log(err);
     }

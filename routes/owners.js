@@ -1,26 +1,21 @@
 const express = require("express");
-const db = require("../connection");
 const Router = express.Router();
 
 const ownersController = require("../controller/owners.controller");
-const getAllOwners = ownersController.getAllOwners;
-const getOwner = ownersController.getOwner;
-const registerOwner = ownersController.registerOwner;
-const loginOwner = ownersController.loginOwner;
-const updateOwnerProfile = ownersController.updateOwnerProfile;
-const updateOwnerPassword = ownersController.updateOwnerPassword;
-const deleteOwner = ownersController.deleteOwner;
 
-Router.get("/", getAllOwners);
-Router.get("/:ownerId", getOwner);
+// GET
+Router.get("/", ownersController.getAllOwners);
+Router.get("/:ownerId", ownersController.getOwner);
 
-Router.post("/register", registerOwner);
-Router.post("/auth", loginOwner);
+// SEND
+Router.post("/register", ownersController.registerOwner);
+Router.post("/auth", ownersController.loginOwner);
 
 // UPDATE OWNER ACCOUNT
-Router.put("/update-profile/:ownerId", updateOwnerProfile); // ✅ Done!
-Router.put("/update-password/:ownerId", updateOwnerPassword); // ✅ Done!
+Router.put("/update-profile/:ownerId", ownersController.updateOwnerProfile); // ✅ Done!
+Router.put("/update-password/:ownerId", ownersController.updateOwnerPassword); // ✅ Done!
 
-Router.delete("/:ownerId", deleteOwner);
+// DELETE
+Router.delete("/:ownerId", ownersController.deleteOwner);
 
 module.exports = Router;
