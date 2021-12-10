@@ -5,7 +5,7 @@ const express = require("express");
 exports.getAllRooms = async (req, res) => {
   db.query(`SELECT * FROM rooms`, (err, result) => {
     if (!err) {
-      res.send({ ...result });
+      res.send(result);
     } else {
       console.log(err);
     }

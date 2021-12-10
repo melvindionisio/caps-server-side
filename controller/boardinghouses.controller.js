@@ -42,7 +42,7 @@ exports.registerBoardinghouse = (req, res) => {
 exports.getAllBoardinghouse = (req, res) => {
   db.query(`SELECT * FROM boarding_house`, (err, result) => {
     if (!err) {
-      res.send({ ...result });
+      res.send(result);
     } else {
       console.log(err);
     }
@@ -95,7 +95,7 @@ exports.getBoardinghouseByZone = (req, res) => {
     //   [zone],
     //   (err, result) => {
     //     if (!err) {
-    //       res.send({...result});
+    //       res.send(result);
     //     } else {
     //       console.log(err);
     //     }
@@ -115,13 +115,14 @@ exports.getAllBoardinghouseLocations = (req, res) => {
     `SELECT boardinghouse_id, bh_name, bh_address, bh_longitude, bh_latitude FROM boarding_house`,
     (err, result) => {
       if (!err) {
-        res.send({ ...result });
+        res.send(result);
       } else {
         console.log(err);
       }
     }
   );
 };
+
 // GET SPECIFIC BOARDINGHOUSE LOCATION BY OWNER ID
 exports.getBoardinghouseLocation = (req, res) => {
   const ownerId = req.params.ownerId;

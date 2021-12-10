@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 exports.getAllOwners = async (req, res) => {
   db.query(`SELECT * FROM boarding_house_owners`, (err, result) => {
     if (!err) {
-      res.send({ ...result });
+      res.send(result);
     } else {
       console.log(err);
     }
