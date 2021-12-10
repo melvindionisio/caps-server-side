@@ -88,23 +88,21 @@ exports.getBoardinghouseByOwnerId = (req, res) => {
   );
 };
 
-// GET ALL BOARDING HOUSE BY ZONE - dashboard get by zone
-exports.getBoardinghouseByZone = (req, res) => {
+// GET ALL BOARDING HOUSE BY ZONE - dashboard get by zone ✅ DONE!
+exports.getBoardinghousesByZone = (req, res) => {
   const zone = req.params.zone;
   if (zone <= 3 && zone > 0) {
-    res.send(zone);
-
-    // db.query(
-    //   `SELECT * FROM boarding_house WHERE bh_zone_address = ?`,
-    //   [zone],
-    //   (err, result) => {
-    //     if (!err) {
-    //       res.send(result);
-    //     } else {
-    //       console.log(err);
-    //     }
-    //   }
-    // );
+    db.query(
+      `SELECT * FROM boarding_house WHERE bh_zone_address = ?`,
+      [zone],
+      (err, result) => {
+        if (!err) {
+          res.send(result);
+        } else {
+          console.log(err);
+        }
+      }
+    );
   } else {
     res.send({ message: "The UEP zone is only 1, 2, and 3." });
   }
@@ -113,10 +111,10 @@ exports.getBoardinghouseByZone = (req, res) => {
 // UPDATE SPECIFIC BOARDING HOUSE
 // missing!
 
-// ! FOR MAP PURPOSE - GET ALL THE LONGITUDE, LATITUDE, NAME, ADDRESS of BH
+// ! FOR MAP PURPOSE - GET ALL THE LONGITUDE, LATITUDE, NAME, ADDRESS of BH ✅ DONE!
 exports.getAllBoardinghouseLocations = (req, res) => {
   db.query(
-    `SELECT boardinghouse_id, bh_name, bh_address, bh_longitude, bh_latitude FROM boarding_house`,
+    `SELECT boardinghouse_id, bh_name, bh_complete_address, bh_longitude, bh_latitude FROM boarding_house`,
     (err, result) => {
       if (!err) {
         res.send(result);
@@ -127,7 +125,7 @@ exports.getAllBoardinghouseLocations = (req, res) => {
   );
 };
 
-// GET SPECIFIC BOARDINGHOUSE LOCATION BY OWNER ID
+// GET SPECIFIC BOARDINGHOUSE LOCATION BY OWNER ID ✅ DONE!
 exports.getBoardinghouseLocation = (req, res) => {
   const ownerId = req.params.ownerId;
 

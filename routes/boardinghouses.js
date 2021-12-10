@@ -10,7 +10,7 @@ Router.get(
   "/owner/:ownerId",
   boardinghousesController.getBoardinghouseByOwnerId
 );
-Router.get("/zone/:zone", boardinghousesController.getBoardinghouseByZone);
+Router.get("/zone/:zone", boardinghousesController.getBoardinghousesByZone);
 
 Router.get(
   "/owner-map/map-marks/:ownerId",
@@ -25,7 +25,7 @@ Router.get(
 Router.post(
   "/register/:ownerId",
   boardinghousesController.registerBoardinghouse
-); // ALONG WITH OWNER ACCOUNT CREATION
+); // ALONG WITH OWNER ACCOUNT CREATION ✅ DONE!
 
 // Router.put("/", (req, res) => {});
 // Router.delete("/", (req, res) => {});
