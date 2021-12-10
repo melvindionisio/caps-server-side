@@ -5,6 +5,8 @@ const express = require("express");
 exports.registerBoardinghouse = (req, res) => {
   const boardinghouse_owner = req.body.boardinghouse_owner;
   const boardinghouse_name = req.body.boardinghouse_name;
+  const street_address = req.body.street_address;
+  const zone_address = req.body.zone_address;
   const complete_address = req.body.complete_address;
   const contact_number = req.body.contact_number;
   const tagline = req.body.tagline;
@@ -12,12 +14,14 @@ exports.registerBoardinghouse = (req, res) => {
   const ownerId = req.params.ownerId;
 
   const sqlInsert =
-    "INSERT INTO boarding_house (bh_name, bh_owner, bh_address, bh_contacts, tagline, bho_id) VALUE (?,?,?,?,?,?)";
+    "INSERT INTO boarding_house (bh_name, bh_owner, bh_street_address, bh_zone_address, bh_complete_address, bh_contacts, tagline, bho_id) VALUE (?,?,?,?,?,?,?,?)";
   db.query(
     sqlInsert,
     [
       boardinghouse_name,
       boardinghouse_owner,
+      street_address,
+      zone_address,
       complete_address,
       contact_number,
       tagline,
@@ -128,7 +132,7 @@ exports.getBoardinghouseLocation = (req, res) => {
   const ownerId = req.params.ownerId;
 
   db.query(
-    `SELECT boardinghouse_id, bh_name, bh_address, bh_longitude, bh_latitude FROM boarding_house WHERE bho_id = ?`,
+    `SELECT boardinghouse_id, bh_name, bh_complete_address, bh_longitude, bh_latitude FROM boarding_house WHERE bho_id = ?`,
     [ownerId],
     (err, result) => {
       if (!err) {

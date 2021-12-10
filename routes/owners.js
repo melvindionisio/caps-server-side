@@ -16,6 +16,6 @@ Router.put("/update-profile/:ownerId", ownersController.updateOwnerProfile); // 
 Router.put("/update-password/:ownerId", ownersController.updateOwnerPassword); // ✅ Done!
 
 // DELETE
-Router.delete("/:ownerId", ownersController.deleteOwner);
+Router.delete("/delete/:ownerId", ownersController.deleteOwner);
 
 module.exports = Router;
