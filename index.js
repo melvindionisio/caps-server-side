@@ -9,6 +9,7 @@ const RoomsRoutes = require("./routes/rooms");
 require("dotenv").config();
 
 const app = express();
+const fallbackPort = 3500;
 
 // middlewares
 app.use(cors());
@@ -37,6 +38,6 @@ app.get("/", (req, res) => {
   ]);
 });
 
-app.listen(process.env.PORT || 3500, () => {
+app.listen(process.env.PORT || fallbackPort, () => {
   console.log(`Server running `);
 });
