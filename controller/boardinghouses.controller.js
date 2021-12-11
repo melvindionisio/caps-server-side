@@ -53,6 +53,54 @@ exports.getAllBoardinghouse = (req, res) => {
   });
 };
 
+// GET NUMBER OF TOTAL BOARDING HOUSE ✅DONE!
+exports.getTotalBoardinghouse = (req, res) => {
+  db.query(`SELECT COUNT(*) FROM boarding_house`, (err, result) => {
+    if (!err) {
+      let total = { ...result[0] }[Object.keys({ ...result[0] })[0]];
+      res.send({ total: total });
+    } else {
+      console.log(err);
+    }
+  });
+};
+
+// GET NUMBER OF TOTAL BOARDING HOUSE by ZONE ✅DONE!
+exports.getTotalBoardinghouseByZone = (req, res) => {
+  let zoneAddress = req.params.zoneAddress;
+  zoneAddress = zoneAddress.charAt(0).toUpperCase() + zoneAddress.slice(1);
+  const zone = zoneAddress.replace(/-/g, " ");
+  db.query(
+    `SELECT COUNT(*) FROM boarding_house WHERE bh_zone_address = ? `,
+    [zone],
+    (err, result) => {
+      if (!err) {
+        let total = { ...result[0] }[Object.keys({ ...result[0] })[0]];
+        res.send({ total: total });
+      } else {
+        console.log(err);
+      }
+    }
+  );
+};
+
+// GET ALL BOARDINGHOUSE BY ZONE ✅DONE!
+exports.getAllBoardinghousesByZone = (req, res) => {
+  const zoneAddress = req.params.zoneAddress;
+  const zone = zoneAddress.replace(/-/g, " ");
+  db.query(
+    `SELECT * FROM boarding_house WHERE bh_zone_address= ? `,
+    [zone],
+    (err, result) => {
+      if (!err) {
+        res.send(result);
+      } else {
+        console.log(err);
+      }
+    }
+  );
+};
+
 // GET SPECIFIC BOARDING HOUSE ✅ DONE!
 exports.getBoardinghouseById = (req, res) => {
   const boardinghouseId = req.params.bhId;
@@ -88,27 +136,7 @@ exports.getBoardinghouseByOwnerId = (req, res) => {
   );
 };
 
-// GET ALL BOARDING HOUSE BY ZONE - dashboard get by zone ✅ DONE!
-exports.getBoardinghousesByZone = (req, res) => {
-  const zone = req.params.zone;
-  if (zone <= 3 && zone > 0) {
-    db.query(
-      `SELECT * FROM boarding_house WHERE bh_zone_address = ?`,
-      [zone],
-      (err, result) => {
-        if (!err) {
-          res.send(result);
-        } else {
-          console.log(err);
-        }
-      }
-    );
-  } else {
-    res.send({ message: "The UEP zone is only 1, 2, and 3." });
-  }
-};
-
-// UPDATE SPECIFIC BOARDING HOUSE
+// UPDATE SPECIFIC BOARDING HOUSE by OwnerID
 // missing!
 
 // ! FOR MAP PURPOSE - GET ALL THE LONGITUDE, LATITUDE, NAME, ADDRESS of BH ✅ DONE!

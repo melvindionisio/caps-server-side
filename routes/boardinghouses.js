@@ -5,12 +5,21 @@ const boardinghousesController = require("../controller/boardinghouses.controlle
 
 // GET ALL THE BOARDING HOUSE INCLUDING THE OWNER
 Router.get("/", boardinghousesController.getAllBoardinghouse);
+Router.get("/total", boardinghousesController.getTotalBoardinghouse);
+Router.get(
+  "/total/:zoneAddress",
+  boardinghousesController.getTotalBoardinghouseByZone
+);
 Router.get("/:bhId", boardinghousesController.getBoardinghouseById);
 Router.get(
-  "/owner/:ownerId",
+  "/by-owner/:ownerId",
   boardinghousesController.getBoardinghouseByOwnerId
 );
-Router.get("/zone/:zone", boardinghousesController.getBoardinghousesByZone);
+
+Router.get(
+  "/by-zone/:zoneAddress",
+  boardinghousesController.getAllBoardinghousesByZone
+);
 
 Router.get(
   "/owner-map/map-marks/:ownerId",
