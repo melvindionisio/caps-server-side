@@ -1,5 +1,4 @@
 const db = require("../connection");
-const express = require("express");
 
 // ADD BASIC BH INFO FROM ADMIN ✅ DONE!
 exports.registerBoardinghouse = (req, res) => {
@@ -51,6 +50,29 @@ exports.getAllBoardinghouse = (req, res) => {
       console.log(err);
     }
   });
+};
+
+// GET ALL BOARDING HOUSE Export ✅ DONE!
+exports.getAllBoardinghouseExport = (req, res) => {
+  db.query(
+    `SELECT boardinghouse_id, bh_name, bh_owner, bh_street_address, bh_zone_address FROM boarding_house`,
+    (err, results) => {
+      if (!err) {
+        const newResults = results.map((item) => {
+          return {
+            id: item.boardinghouse_id,
+            name: item.bh_name,
+            owner_name: item.bh_owner,
+            street: item.bh_street_address,
+            zone: item.bh_zone_address,
+          };
+        });
+        res.send(newResults);
+      } else {
+        console.log(err);
+      }
+    }
+  );
 };
 
 // GET NUMBER OF TOTAL BOARDING HOUSE ✅DONE!

@@ -5,6 +5,7 @@ const boardinghousesController = require("../controller/boardinghouses.controlle
 
 // GET ALL THE BOARDING HOUSE INCLUDING THE OWNER
 Router.get("/", boardinghousesController.getAllBoardinghouse);
+Router.get("/export", boardinghousesController.getAllBoardinghouseExport);
 Router.get("/total", boardinghousesController.getTotalBoardinghouse);
 Router.get(
   "/total/:zoneAddress",
