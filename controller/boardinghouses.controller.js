@@ -167,7 +167,25 @@ exports.getAllBoardinghouseLocations = (req, res) => {
     `SELECT boardinghouse_id, bh_name, bh_complete_address, bh_longitude, bh_latitude FROM boarding_house`,
     (err, result) => {
       if (!err) {
-        res.send(result);
+        let featureCollections = {
+          type: "FeatureCollection",
+          features: [],
+        };
+        featureCollections.features = Array.from(result, (mark) => {
+          return {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [mark.bh_longitude, mark.bh_latitude],
+            },
+            properties: {
+              title: mark.bh_name,
+              description: mark.bh_complete_address,
+            },
+          };
+        });
+
+        res.send(featureCollections);
       } else {
         console.log(err);
       }
