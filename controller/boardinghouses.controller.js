@@ -7,13 +7,15 @@ exports.registerBoardinghouse = (req, res) => {
   const street_address = req.body.street_address;
   const zone_address = req.body.zone_address;
   const complete_address = req.body.complete_address;
+  const longitude = req.body.longitude;
+  const latitude = req.body.latitude;
   const contact_number = req.body.contact_number;
   const tagline = req.body.tagline;
 
   const ownerId = req.params.ownerId;
 
   const sqlInsert =
-    "INSERT INTO boarding_house (bh_name, bh_owner, bh_street_address, bh_zone_address, bh_complete_address, bh_contacts, tagline, bho_id) VALUE (?,?,?,?,?,?,?,?)";
+    "INSERT INTO boarding_house (bh_name, bh_owner, bh_street_address, bh_zone_address, bh_complete_address, bh_longitude, bh_latitude, bh_contacts, tagline, bho_id) VALUE (?,?,?,?,?,?,?,?,?,?)";
   db.query(
     sqlInsert,
     [
@@ -22,6 +24,8 @@ exports.registerBoardinghouse = (req, res) => {
       street_address,
       zone_address,
       complete_address,
+      longitude,
+      latitude,
       contact_number,
       tagline,
       ownerId,
@@ -202,7 +206,30 @@ exports.getBoardinghouseLocation = (req, res) => {
     [ownerId],
     (err, result) => {
       if (!err) {
-        res.send({ ...result[0] });
+        if (result.length <= 0) {
+          res.send({
+            message: "Empty response, or simply does not exist!",
+          });
+        } else {
+          let featureCollections = {
+            type: "FeatureCollection",
+            features: [],
+          };
+          featureCollections.features = Array.from(result, (mark) => {
+            return {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [mark.bh_longitude, mark.bh_latitude],
+              },
+              properties: {
+                title: mark.bh_name,
+                description: mark.bh_complete_address,
+              },
+            };
+          });
+          res.send(featureCollections);
+        }
       } else {
         console.log(err);
       }
