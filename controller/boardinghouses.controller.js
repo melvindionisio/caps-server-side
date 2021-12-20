@@ -101,8 +101,12 @@ exports.getTotalBoardinghouseByZone = (req, res) => {
     [zone],
     (err, result) => {
       if (!err) {
-        let total = { ...result[0] }[Object.keys({ ...result[0] })[0]];
-        res.send({ total: total });
+        if (result.length >= 0) {
+          let total = { ...result[0] }[Object.keys({ ...result[0] })[0]];
+          res.send({ total: total });
+        } else {
+          res.send({ total: 0 });
+        }
       } else {
         console.log(err);
       }
