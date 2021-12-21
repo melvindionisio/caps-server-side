@@ -48,8 +48,33 @@ exports.registerBoardinghouse = (req, res) => {
 // GET ALL BOARDING HOUSE ✅ DONE!
 exports.getAllBoardinghouse = (req, res) => {
   db.query(`SELECT * FROM boarding_house`, (err, result) => {
+    let boardinghouses = [];
+
     if (!err) {
-      res.send(result);
+      boardinghouses = Array.from(result, (boardinghouse) => {
+        return {
+          id: boardinghouse.boardinghouse_id,
+          ownerId: boardinghouse.bho_id,
+          name: boardinghouse.bh_name,
+          owner: boardinghouse.bh_owner,
+          streetAddress: boardinghouse.bh_street_address,
+          zoneAddress: boardinghouse.bh_zone_address,
+          completeAddress: boardinghouse.bh_complete_address,
+          longitude: boardinghouse.bh_longitude,
+          latitude: boardinghouse.bh_latitude,
+          contacts: boardinghouse.bh_contacts,
+          popularity: boardinghouse.bh_popularity,
+          tagline: boardinghouse.tagline,
+          houseProtocols: boardinghouse.house_protocols,
+          offers: boardinghouse.offers,
+          priceRange: boardinghouse.price_range,
+          waterSource: boardinghouse.water_source,
+          genderCategory: boardinghouse.gender_category,
+          totalRooms: boardinghouse.total_rooms,
+        };
+      });
+      res.send(boardinghouses);
+      console.log("Boarding houses retrieved.");
     } else {
       console.log(err);
     }
@@ -122,8 +147,31 @@ exports.getAllBoardinghousesByZone = (req, res) => {
     `SELECT * FROM boarding_house WHERE bh_zone_address= ? `,
     [zone],
     (err, result) => {
+      let boardinghouses = [];
       if (!err) {
-        res.send(result);
+        boardinghouses = Array.from(result, (boardinghouse) => {
+          return {
+            id: boardinghouse.boardinghouse_id,
+            ownerId: boardinghouse.bho_id,
+            name: boardinghouse.bh_name,
+            owner: boardinghouse.bh_owner,
+            streetAddress: boardinghouse.bh_street_address,
+            zoneAddress: boardinghouse.bh_zone_address,
+            completeAddress: boardinghouse.bh_complete_address,
+            longitude: boardinghouse.bh_longitude,
+            latitude: boardinghouse.bh_latitude,
+            contacts: boardinghouse.bh_contacts,
+            popularity: boardinghouse.bh_popularity,
+            tagline: boardinghouse.tagline,
+            houseProtocols: boardinghouse.house_protocols,
+            offers: boardinghouse.offers,
+            priceRange: boardinghouse.price_range,
+            waterSource: boardinghouse.water_source,
+            genderCategory: boardinghouse.gender_category,
+            totalRooms: boardinghouse.total_rooms,
+          };
+        });
+        res.send(boardinghouses);
       } else {
         console.log(err);
       }
@@ -139,8 +187,31 @@ exports.getBoardinghouseById = (req, res) => {
     `SELECT * FROM boarding_house WHERE boardinghouse_id = ? `,
     [boardinghouseId],
     (err, result) => {
+      let boardinghouses = [];
       if (!err) {
-        res.send({ ...result[0] });
+        boardinghouses = Array.from(result, (boardinghouse) => {
+          return {
+            id: boardinghouse.boardinghouse_id,
+            ownerId: boardinghouse.bho_id,
+            name: boardinghouse.bh_name,
+            owner: boardinghouse.bh_owner,
+            streetAddress: boardinghouse.bh_street_address,
+            zoneAddress: boardinghouse.bh_zone_address,
+            completeAddress: boardinghouse.bh_complete_address,
+            longitude: boardinghouse.bh_longitude,
+            latitude: boardinghouse.bh_latitude,
+            contacts: boardinghouse.bh_contacts,
+            popularity: boardinghouse.bh_popularity,
+            tagline: boardinghouse.tagline,
+            houseProtocols: boardinghouse.house_protocols,
+            offers: boardinghouse.offers,
+            priceRange: boardinghouse.price_range,
+            waterSource: boardinghouse.water_source,
+            genderCategory: boardinghouse.gender_category,
+            totalRooms: boardinghouse.total_rooms,
+          };
+        });
+        res.send({ ...boardinghouses[0] });
       } else {
         console.log(err);
       }
@@ -187,6 +258,7 @@ exports.getAllBoardinghouseLocations = (req, res) => {
               coordinates: [mark.bh_longitude, mark.bh_latitude],
             },
             properties: {
+              id: mark.boardinghouse_id,
               title: mark.bh_name,
               description: mark.bh_complete_address,
             },
@@ -227,6 +299,7 @@ exports.getBoardinghouseLocation = (req, res) => {
                 coordinates: [mark.bh_longitude, mark.bh_latitude],
               },
               properties: {
+                id: mark.boardinghouse_id,
                 title: mark.bh_name,
                 description: mark.bh_complete_address,
               },
