@@ -1,5 +1,9 @@
 const db = require("../connection");
 
+// const _bhRemap = (result) => {
+//   let boardinghouses =
+// }
+
 // ADD BASIC BH INFO FROM ADMIN ✅ DONE!
 exports.registerBoardinghouse = (req, res) => {
   const boardinghouse_owner = req.body.boardinghouse_owner;
@@ -47,38 +51,99 @@ exports.registerBoardinghouse = (req, res) => {
 
 // GET ALL BOARDING HOUSE ✅ DONE!
 exports.getAllBoardinghouse = (req, res) => {
-  db.query(`SELECT * FROM boarding_house`, (err, result) => {
-    let boardinghouses = [];
-
-    if (!err) {
-      boardinghouses = Array.from(result, (boardinghouse) => {
-        return {
-          id: boardinghouse.boardinghouse_id,
-          ownerId: boardinghouse.bho_id,
-          name: boardinghouse.bh_name,
-          owner: boardinghouse.bh_owner,
-          streetAddress: boardinghouse.bh_street_address,
-          zoneAddress: boardinghouse.bh_zone_address,
-          completeAddress: boardinghouse.bh_complete_address,
-          longitude: boardinghouse.bh_longitude,
-          latitude: boardinghouse.bh_latitude,
-          contacts: boardinghouse.bh_contacts,
-          popularity: boardinghouse.bh_popularity,
-          tagline: boardinghouse.tagline,
-          houseProtocols: boardinghouse.house_protocols,
-          offers: boardinghouse.offers,
-          priceRange: boardinghouse.price_range,
-          waterSource: boardinghouse.water_source,
-          genderCategory: boardinghouse.gender_category,
-          totalRooms: boardinghouse.total_rooms,
-        };
-      });
-      res.send(boardinghouses);
-      console.log("Boarding houses retrieved.");
-    } else {
-      console.log(err);
-    }
-  });
+  res.send([
+    {
+      id: 4,
+      ownerId: 4,
+      name: "UEP Men's Dorm",
+      owner: "UEP",
+      streetAddress: "Seaside",
+      zoneAddress: "Zone 1",
+      completeAddress: "Seaside - Zone 1, UEP",
+      longitude: 124.6652,
+      latitude: 12.5111,
+      contacts: "+639",
+      popularity: null,
+      tagline: "Welcome to UEP Men's Dorm!",
+      houseProtocols: null,
+      offers: null,
+      priceRange: null,
+      waterSource: null,
+      genderCategory: null,
+      totalRooms: null,
+    },
+    {
+      id: 6,
+      ownerId: 6,
+      name: "UEP Women's Dorm",
+      owner: "UEP",
+      streetAddress: "University Town",
+      zoneAddress: "Zone 1",
+      completeAddress: "University Town - Zone 1, UEP",
+      longitude: 124.665,
+      latitude: 12.5109,
+      contacts: "+639",
+      popularity: null,
+      tagline: "Welcome to UEP Women's Dorm!",
+      houseProtocols: null,
+      offers: null,
+      priceRange: null,
+      waterSource: null,
+      genderCategory: null,
+      totalRooms: null,
+    },
+    {
+      id: 7,
+      ownerId: 7,
+      name: "Bahay Kubo",
+      owner: "Jhelan Anabo",
+      streetAddress: "Seaside",
+      zoneAddress: "Zone 2",
+      completeAddress: "Seaside - Zone 1, UEP",
+      longitude: 124.6662,
+      latitude: 12.5107,
+      contacts: "+639",
+      popularity: null,
+      tagline: "Maliit lamang",
+      houseProtocols: null,
+      offers: null,
+      priceRange: null,
+      waterSource: null,
+      genderCategory: null,
+      totalRooms: null,
+    },
+  ]);
+  // db.query(`SELECT * FROM boarding_house`, (err, result) => {
+  //   let boardinghouses = [];
+  //   if (!err) {
+  //     boardinghouses = Array.from(result, (boardinghouse) => {
+  //       return {
+  //         id: boardinghouse.boardinghouse_id,
+  //         ownerId: boardinghouse.bho_id,
+  //         name: boardinghouse.bh_name,
+  //         owner: boardinghouse.bh_owner,
+  //         streetAddress: boardinghouse.bh_street_address,
+  //         zoneAddress: boardinghouse.bh_zone_address,
+  //         completeAddress: boardinghouse.bh_complete_address,
+  //         longitude: boardinghouse.bh_longitude,
+  //         latitude: boardinghouse.bh_latitude,
+  //         contacts: boardinghouse.bh_contacts,
+  //         popularity: boardinghouse.bh_popularity,
+  //         tagline: boardinghouse.tagline,
+  //         houseProtocols: boardinghouse.house_protocols,
+  //         offers: boardinghouse.offers,
+  //         priceRange: boardinghouse.price_range,
+  //         waterSource: boardinghouse.water_source,
+  //         genderCategory: boardinghouse.gender_category,
+  //         totalRooms: boardinghouse.total_rooms,
+  //       };
+  //     });
+  //     res.send(boardinghouses);
+  //     console.log("Boarding houses retrieved.");
+  //   } else {
+  //     console.log(err);
+  //   }
+  // });
 };
 
 // GET ALL BOARDING HOUSE Export ✅ DONE!
@@ -242,35 +307,77 @@ exports.getBoardinghouseByOwnerId = (req, res) => {
 
 // ! FOR MAP PURPOSE - GET ALL THE LONGITUDE, LATITUDE, NAME, ADDRESS of BH ✅ DONE!
 exports.getAllBoardinghouseLocations = (req, res) => {
-  db.query(
-    `SELECT boardinghouse_id, bh_name, bh_complete_address, bh_longitude, bh_latitude FROM boarding_house`,
-    (err, result) => {
-      if (!err) {
-        let featureCollections = {
-          type: "FeatureCollection",
-          features: [],
-        };
-        featureCollections.features = Array.from(result, (mark) => {
-          return {
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: [mark.bh_longitude, mark.bh_latitude],
-            },
-            properties: {
-              id: mark.boardinghouse_id,
-              title: mark.bh_name,
-              description: mark.bh_complete_address,
-            },
-          };
-        });
+  res.send({
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [124.6652, 12.5111],
+        },
+        properties: {
+          id: 4,
+          title: "UEP Men's Dorm",
+          description: "Seaside - Zone 1, UEP",
+        },
+      },
+      {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [124.665, 12.5109],
+        },
+        properties: {
+          id: 6,
+          title: "UEP Women's Dorm",
+          description: "University Town - Zone 1, UEP",
+        },
+      },
+      {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [124.6662, 12.5107],
+        },
+        properties: {
+          id: 7,
+          title: "Bahay Kubo",
+          description: "Seaside - Zone 1, UEP",
+        },
+      },
+    ],
+  });
 
-        res.send(featureCollections);
-      } else {
-        console.log(err);
-      }
-    }
-  );
+  // db.query(
+  //   `SELECT boardinghouse_id, bh_name, bh_complete_address, bh_longitude, bh_latitude FROM boarding_house`,
+  //   (err, result) => {
+  //     if (!err) {
+  //       let featureCollections = {
+  //         type: "FeatureCollection",
+  //         features: [],
+  //       };
+  //       featureCollections.features = Array.from(result, (mark) => {
+  //         return {
+  //           type: "Feature",
+  //           geometry: {
+  //             type: "Point",
+  //             coordinates: [mark.bh_longitude, mark.bh_latitude],
+  //           },
+  //           properties: {
+  //             id: mark.boardinghouse_id,
+  //             title: mark.bh_name,
+  //             description: mark.bh_complete_address,
+  //           },
+  //         };
+  //       });
+
+  //       res.send(featureCollections);
+  //     } else {
+  //       console.log(err);
+  //     }
+  //   }
+  // );
 };
 
 // GET SPECIFIC BOARDINGHOUSE LOCATION BY OWNER ID ✅ DONE!
