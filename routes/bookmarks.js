@@ -5,14 +5,6 @@ const Router = express.Router();
 const bookmarksController = require("../controller/bookmarks.controller");
 
 // GET
-Router.get("/:seekerId", (req, res) => {
-  db.query(`SELECT * FROM bookmarks`, (err, result) => {
-    if (!err) {
-      res.send(result);
-    } else {
-      console.log(err);
-    }
-  });
-});
+Router.get("/:seekerId", bookmarksController.getAllSeekerBookmarks);
 
 module.exports = Router;
