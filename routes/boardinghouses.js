@@ -37,6 +37,11 @@ Router.post(
   boardinghousesController.registerBoardinghouse
 ); // ALONG WITH OWNER ACCOUNT CREATION ✅ DONE!
 
+Router.put(
+  "/owner-map/update-coordinates/:ownerId",
+  boardinghousesController.updateBoardinghouseCoordinates
+); // Updating existing boardinghouse coordinates
+
 // Router.put("/", (req, res) => {});
 // Router.delete("/", (req, res) => {});
 

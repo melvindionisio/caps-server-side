@@ -27,6 +27,16 @@ const _bhRemap = (result) => {
   return boardinghouses;
 };
 
+// Update Boardinghouse coordinates.
+exports.updateBoardinghouseCoordinates = (req, res) => {
+  const ownerId = req.params.ownerId;
+  const { newLongitude, newLatitude } = req.body;
+
+  res.send({ message: "Coordinates updated!" });
+
+  // return message
+};
+
 // ADD BASIC BH INFO FROM ADMIN ✅ DONE!
 exports.registerBoardinghouse = (req, res) => {
   const boardinghouse_owner = req.body.boardinghouse_owner;
@@ -149,31 +159,8 @@ exports.getAllBoardinghousesByZone = (req, res) => {
     `SELECT * FROM boarding_house WHERE bh_zone_address= ? `,
     [zone],
     (err, result) => {
-      let boardinghouses = [];
       if (!err) {
-        boardinghouses = Array.from(result, (boardinghouse) => {
-          return {
-            id: boardinghouse.boardinghouse_id,
-            ownerId: boardinghouse.bho_id,
-            name: boardinghouse.bh_name,
-            owner: boardinghouse.bh_owner,
-            streetAddress: boardinghouse.bh_street_address,
-            zoneAddress: boardinghouse.bh_zone_address,
-            completeAddress: boardinghouse.bh_complete_address,
-            longitude: boardinghouse.bh_longitude,
-            latitude: boardinghouse.bh_latitude,
-            contacts: boardinghouse.bh_contacts,
-            popularity: boardinghouse.bh_popularity,
-            tagline: boardinghouse.tagline,
-            houseProtocols: boardinghouse.house_protocols,
-            offers: boardinghouse.offers,
-            priceRange: boardinghouse.price_range,
-            waterSource: boardinghouse.water_source,
-            genderCategory: boardinghouse.gender_category,
-            totalRooms: boardinghouse.total_rooms,
-          };
-        });
-        res.send(boardinghouses);
+        res.send(_bhRemap(result));
       } else {
         console.log(err);
       }

@@ -19,11 +19,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
-  session({
-    secret: "secret",
-    resave: true,
-    saveUninitialized: true,
-  })
+	session({
+		secret: "secret",
+		resave: true,
+		saveUninitialized: true,
+	})
 );
 
 // routers
@@ -36,14 +36,19 @@ app.use("/api/bookmarks", BookmarksRoutes);
 app.use("/api/reviews", ReviewsRoutes);
 
 app.get("/", (req, res) => {
-  res.send([
-    {
-      capstoneProject: "Search 'n Stay: Boarding House Finder",
-      members: ["Melvin Dionisio", "Ivan Joseph Arang", "Jhelan Anabo"],
-    },
-  ]);
+	res.send([
+		{
+			capstoneProject:
+				"Search 'n Stay: Boarding House Finder",
+			members: [
+				"Melvin Dionisio",
+				"Ivan Joseph Arang",
+				"Jhelan Anabo",
+			],
+		},
+	]);
 });
 
 app.listen(process.env.PORT || fallbackPort, () => {
-  console.log(`Server running `);
+	console.log(`Server running `);
 });
