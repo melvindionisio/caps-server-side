@@ -1,5 +1,4 @@
 const db = require("../connection");
-const express = require("express");
 
 // GET ALL ROOMS - need boardinghouse_id to get rooms associated with the current login owner
 exports.getAllRooms = async (req, res) => {

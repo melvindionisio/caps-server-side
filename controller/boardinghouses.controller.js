@@ -31,8 +31,19 @@ const _bhRemap = (result) => {
 exports.updateBoardinghouseCoordinates = (req, res) => {
   const ownerId = req.params.ownerId;
   const { newLongitude, newLatitude } = req.body;
-
-  res.send({ message: "Coordinates updated!" });
+  db.query(
+    `UPDATE boarding_house SET bh_longitude = ?, bh_latitude = ? WHERE bho_id = ?`,
+    [newLongitude, newLatitude, ownerId],
+    (err, result) => {
+      if (!err) {
+        res.send({ message: "Coordinates updated!" });
+        console.log("id", result.affectedRows, "has updated.");
+      } else {
+        console.log(err);
+        res.send({ message: err });
+      }
+    }
+  );
 
   // return message
 };

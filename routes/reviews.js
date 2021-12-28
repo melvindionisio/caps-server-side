@@ -4,21 +4,17 @@ const Router = express.Router();
 
 const reviewsController = require("../controller/reviews.controller");
 
-// GET
-Router.get("/:bhId", (req, res) => {
-  const bhId = req.params.bhId;
+const AddReview = reviewsController.addReview;
+const GetReview = reviewsController.getReview;
+const GetAllReviews = reviewsController.getAllReviews;
+const UpdateReview = reviewsController.updateReview;
+const DeleteReview = reviewsController.deleteReview;
 
-  db.query(
-    `SELECT * FROM reviews WHERE boardinghouse_id = ? `,
-    [bhId],
-    (err, result) => {
-      if (!err) {
-        res.send(result);
-      } else {
-        console.log(err);
-      }
-    }
-  );
-});
+// GET
+Router.post("/:bhId", AddReview);
+Router.get("/boardinghouse-id/:bhId", GetAllReviews);
+Router.get("/:reviewId", GetReview);
+Router.put("/:reviewId", UpdateReview);
+Router.delete("/:reviewId", DeleteReview);
 
 module.exports = Router;
