@@ -2,10 +2,25 @@ const db = require("../connection");
 
 exports.addBookmark = (req, res) => {
   const seekerId = req.params.seekerId;
-  res.send({
-    message: "This will add the bookmark to dedicated seeker",
-    seekerId: seekerId,
-  });
+  const { bookmarkDate, roomId, boardinghouseId } = req.body;
+
+  const sqlInsert =
+    "INSERT INTO bookmarks (bookmark_date, seeker_id , room_id, boardinghouse_id) VALUE (?,?,?,?)";
+  db.query(
+    sqlInsert,
+    [bookmarkDate, seekerId, roomId, boardinghouseId],
+    (err, result) => {
+      if (!err) {
+        console.log(result);
+        res.send({
+          message: "Bookmark added",
+        });
+      } else {
+        console.log(err);
+        res.send({ message: err });
+      }
+    }
+  );
 };
 
 // this will return all bookmarks with the generated liks

@@ -1,24 +1,20 @@
 const express = require("express");
-const db = require("../connection");
 const Router = express.Router();
 
-Router.get("/", (req, res) => {
-  db.query(`SELECT * FROM boardinghouse_seeker`, (err, rows) => {
-    if (!err) {
-      //   res.send(rows);
-      res.send([
-        { Name: "Melvin Dionisio" },
-        { Name: "Ivan Arang" },
-        { Name: "Jhelan Anabo" },
-      ]);
-    } else {
-      console.log(err);
-    }
-  });
-});
+const seekersController = require("../controller/seeker.controller");
 
-// Router.post("/", (req, res) => {});
-// Router.put("/", (req, res) => {});
-// Router.delete("/", (req, res) => {});
+const GetAllSeekers = seekersController.getAllSeekers;
+const RegisterSeeker = seekersController.registerSeeker;
+const LoginSeeker = seekersController.loginSeeker;
+const FacebookSignIn = seekersController.facebookLogin;
+const GoogleSignIn = seekersController.googleLogin;
+const UpdateSeeker = seekersController.updateSeeker;
+
+Router.get("/", GetAllSeekers);
+Router.post("/register", RegisterSeeker);
+Router.post("/login", LoginSeeker);
+Router.post("/google-signin", GoogleSignIn);
+Router.post("/facebook-signin", FacebookSignIn);
+Router.put("/update-seeker", UpdateSeeker);
 
 module.exports = Router;
