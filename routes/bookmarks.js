@@ -12,7 +12,7 @@ const AddBookmark = bookmarksController.addBookmark;
 Router.post("/add/:seekerId", AddBookmark);
 
 // GET
-Router.get("/:seekerId", GetAllSeekerBookmarks);
+Router.get("/seeker/:seekerId", GetAllSeekerBookmarks);
 Router.delete("/delete/:bookmarkId", DeleteBookmark);
 
 module.exports = Router;

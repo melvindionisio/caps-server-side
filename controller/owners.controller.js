@@ -1,5 +1,4 @@
 const db = require("../connection");
-const express = require("express");
 const bcrypt = require("bcrypt");
 
 // GET ALL OWNER ACCOUNT
@@ -147,8 +146,6 @@ exports.updateOwnerPassword = async (req, res) => {
       }
     }
   );
-
-  // ALSO SEND A MESSAGE UPAN SUCCESSFUL UPDATING AN OWNER ACCOUNT
 };
 
 // DELETE SPECIFIC OWNER ACCOUNT - INCLUDING THE BOARDING HOUSE CONNECTED TO THE ACCOUNT

@@ -12,7 +12,7 @@ const DeleteReview = reviewsController.deleteReview;
 
 // GET
 Router.post("/:bhId", AddReview);
-Router.get("/boardinghouse-id/:bhId", GetAllReviews);
+Router.get("/boardinghouse/:bhId", GetAllReviews);
 Router.get("/:reviewId", GetReview);
 Router.put("/:reviewId", UpdateReview);
 Router.delete("/:reviewId", DeleteReview);
