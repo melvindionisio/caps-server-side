@@ -19,6 +19,23 @@ exports.getAllSeekers = (req, res) => {
   });
 };
 
+exports.getSeekerProfile = (req, res) => {
+  const seekerId = req.params.seekerId;
+  db.query(
+    `SELECT * FROM boarding_house_seekers WHERE seeker_id = ? `,
+    [seekerId],
+    (err, result) => {
+      if (!err) {
+        res.send(result[0]);
+      } else {
+        res.send({
+          message: err,
+        });
+      }
+    }
+  );
+};
+
 saltRounds = 5;
 exports.registerSeeker = async (req, res) => {
   const { name, username, password } = req.body;
@@ -67,26 +84,28 @@ exports.loginSeeker = (req, res) => {
             res.send({
               ...result[0],
               message: "You successfully logged in!",
-              error: "success",
+              status: "success",
             });
           } else if (username === result[0].seeker_username || validate) {
             res.send({
               message: "Your Password was Incorrect!",
+              status: "incorrect",
             });
           } else {
             res.send({
               message: "The account was not found! Please try again.",
+              status: "not-found",
             });
           }
         } else {
           res.send({ message: "User does not exist!" });
           res.end();
         }
-        // console.log(result);
+        console.log(result);
       }
     );
   } else {
-    res.send("Please enter username and password");
+    res.send({ message: "Please enter username and password" });
   }
 };
 

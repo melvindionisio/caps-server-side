@@ -30,10 +30,22 @@ exports.getAllSeekerBookmarks = (req, res) => {
   db.query(
     `SELECT * FROM bookmarks WHERE seeker_id = ? `,
     [seekerId],
-    (err, result) => {
+    (err, results) => {
       if (!err) {
-        res.send(result);
+        const formatted = results.map((item) => {
+          return {
+            id: item.bookmark_id,
+            date: item.bookmark_date,
+            seekerId: item.seeker_id,
+            roomId: item.room_id,
+            boardinghouseId: item.boardinghouse_id,
+            // type: item.bookmark_type,
+            // name: item.bookmark_name
+          };
+        });
+        res.send(formatted);
       } else {
+        res.send({ message: err });
         console.log(err);
       }
     }
@@ -42,8 +54,21 @@ exports.getAllSeekerBookmarks = (req, res) => {
 
 exports.deleteBookmark = (req, res) => {
   const bookmarkId = req.params.bookmarkId;
-  res.send({
-    message: "This is where to delete bookmarkId",
-    bookmarkId: bookmarkId,
-  });
+
+  db.query(
+    `DELETE FROM bookmarks WHERE bookmark_id=?`,
+    [bookmarkId],
+    (err, result) => {
+      if (!err) {
+        res.send({
+          result: result,
+          message: "Bookmark successfully deleted!",
+        });
+      } else {
+        res.send({
+          message: err,
+        });
+      }
+    }
+  );
 };
