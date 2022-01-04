@@ -22,6 +22,8 @@ const GetAllBoardinghouseLocations =
 const UpdateBoardinghouseLocation =
   boardinghousesController.updateBoardinghouseCoordinates;
 
+const DeleteBoardinghouse = boardinghousesController.deleteBoardinghouse;
+
 // GET ALL THE BOARDING HOUSE INCLUDING THE OWNER
 Router.get("/", GetAllBoardinghouse);
 Router.get("/export", GetAllBoardinghouseExport);
@@ -43,5 +45,7 @@ Router.put(
   "/owner-map/update-coordinates/:ownerId",
   UpdateBoardinghouseLocation
 ); // Updating existing boardinghouse coordinates
+
+Router.delete("/delete/:ownerId", DeleteBoardinghouse);
 
 module.exports = Router;

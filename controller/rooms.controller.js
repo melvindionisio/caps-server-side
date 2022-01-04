@@ -33,18 +33,35 @@ exports.getRoom = async (req, res) => {
 // ADD A ROOM
 exports.addRoom = async (req, res) => {
   const bhId = req.params.bhId;
-
-  // code for adding a room
+  res.send({ bhId: bhId });
 };
 
 // UPDATE A ROOM details
 exports.updateRoom = async (req, res) => {
   const roomId = req.params.roomId;
+  res.send({
+    roomId: roomId,
+  });
+};
+
+exports.updateRoomAvailability = (req, res) => {
+  const roomId = req.params.roomId;
+  res.send({
+    roomId: roomId,
+  });
+};
+
+exports.disableFullRoom = (req, res) => {
+  const roomId = req.params.roomId;
+  res.send({
+    roomId: roomId,
+  });
 };
 
 // DELETE SPECIFIC ROOM
 exports.deleteRoom = async (req, res) => {
   const roomId = req.params.roomId;
+  res.send({ roomId: roomId });
 };
 
 // UPDATE ROOM AVAILABILITY

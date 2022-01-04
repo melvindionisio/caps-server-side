@@ -3,13 +3,23 @@ const bcrypt = require("bcrypt");
 
 // GET ALL OWNER ACCOUNT
 exports.getAllOwners = async (req, res) => {
-  db.query(`SELECT * FROM boarding_house_owners`, (err, result) => {
-    if (!err) {
-      res.send(result);
-    } else {
-      console.log(err);
+  db.query(
+    `SELECT bho_id, bho_name, bho_username FROM boarding_house_owners`,
+    (err, result) => {
+      if (!err) {
+        let formatted = result.map((item) => {
+          return {
+            id: item.bho_id,
+            name: item.bho_name,
+            username: item.bho_username,
+          };
+        });
+        res.send(formatted);
+      } else {
+        console.log(err);
+      }
     }
-  });
+  );
 };
 
 // GET SPECIFIC OWNER ACCOUNT
@@ -21,7 +31,14 @@ exports.getOwner = (req, res) => {
     [ownerId],
     (err, result) => {
       if (!err) {
-        res.send({ ...result[0] });
+        let formatted = result.map((item) => {
+          return {
+            id: item.bho_id,
+            name: item.bho_name,
+            username: item.bho_username,
+          };
+        });
+        res.send(formatted[0]);
       } else {
         console.log(err);
       }
@@ -151,5 +168,22 @@ exports.updateOwnerPassword = async (req, res) => {
 // DELETE SPECIFIC OWNER ACCOUNT - INCLUDING THE BOARDING HOUSE CONNECTED TO THE ACCOUNT
 exports.deleteOwner = async (req, res) => {
   const ownerId = req.params.ownerId;
-  res.send(ownerId);
+  res.send({ ownerId: ownerId });
+  // db.query(
+  //   "DELETE FROM boarding_house_owners WHERE bho_id = ?",
+  //   [ownerId],
+  //   (err, result) => {
+  //     if (!err) {
+  //       res.send({
+  //         result: result,
+  //         message: `Owner at ${ownerId} successfully deleted!`,
+  //       });
+  //       res.redirect(`/api/boarding-houses/delete/${ownerId}`);
+  //     } else {
+  //       res.send({ message: err });
+  //       console.log(err);
+  //     }
+  //   }
+  // );
+  res.redirect(`/api/boarding-houses/delete/${ownerId}`);
 };

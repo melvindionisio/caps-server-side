@@ -305,3 +305,9 @@ exports.getBoardinghouseLocation = (req, res) => {
     }
   );
 };
+
+// delete boardinghouse along with the deletion of owner via ownerId
+exports.deleteBoardinghouse = (req, res) => {
+  const ownerId = req.params.ownerId;
+  res.send({ ownerId: ownerId });
+};
