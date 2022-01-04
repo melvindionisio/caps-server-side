@@ -2,13 +2,21 @@ const db = require("../connection");
 
 exports.addBookmark = (req, res) => {
   const seekerId = req.params.seekerId;
-  const { bookmarkDate, roomId, boardinghouseId } = req.body;
+  const { bookmarkDate, roomId, boardinghouseId, bookmarkName, bookmarkType } =
+    req.body;
 
   const sqlInsert =
-    "INSERT INTO bookmarks (bookmark_date, seeker_id , room_id, boardinghouse_id) VALUE (?,?,?,?)";
+    "INSERT INTO bookmarks (bookmark_date, seeker_id, bookmark_name, bookmark_type , room_id, boardinghouse_id) VALUE (?,?,?,?,?,?)";
   db.query(
     sqlInsert,
-    [bookmarkDate, seekerId, roomId, boardinghouseId],
+    [
+      bookmarkDate,
+      seekerId,
+      bookmarkName,
+      bookmarkType,
+      roomId,
+      boardinghouseId,
+    ],
     (err, result) => {
       if (!err) {
         console.log(result);
@@ -23,7 +31,6 @@ exports.addBookmark = (req, res) => {
   );
 };
 
-// this will return all bookmarks with the generated liks
 exports.getAllSeekerBookmarks = (req, res) => {
   const seekerId = req.params.seekerId;
 
@@ -39,8 +46,8 @@ exports.getAllSeekerBookmarks = (req, res) => {
             seekerId: item.seeker_id,
             roomId: item.room_id,
             boardinghouseId: item.boardinghouse_id,
-            // type: item.bookmark_type,
-            // name: item.bookmark_name
+            type: item.bookmark_type,
+            name: item.bookmark_name,
           };
         });
         res.send(formatted);
@@ -68,6 +75,7 @@ exports.deleteBookmark = (req, res) => {
         res.send({
           message: err,
         });
+        console.log(err);
       }
     }
   );

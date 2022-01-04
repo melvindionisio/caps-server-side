@@ -27,7 +27,7 @@ const _bhRemap = (result) => {
   return boardinghouses;
 };
 
-// Update Boardinghouse coordinates.
+// Update Boardinghouse coordinates. ✅
 exports.updateBoardinghouseCoordinates = (req, res) => {
   const ownerId = req.params.ownerId;
   const { newLongitude, newLatitude } = req.body;
@@ -44,12 +44,11 @@ exports.updateBoardinghouseCoordinates = (req, res) => {
       }
     }
   );
-
-  // return message
 };
 
 // ADD BASIC BH INFO FROM ADMIN ✅ DONE!
 exports.registerBoardinghouse = (req, res) => {
+  const ownerId = req.params.ownerId;
   const boardinghouse_owner = req.body.boardinghouse_owner;
   const boardinghouse_name = req.body.boardinghouse_name;
   const street_address = req.body.street_address;
@@ -59,8 +58,6 @@ exports.registerBoardinghouse = (req, res) => {
   const latitude = req.body.latitude;
   const contact_number = req.body.contact_number;
   const tagline = req.body.tagline;
-
-  const ownerId = req.params.ownerId;
 
   const sqlInsert =
     "INSERT INTO boarding_house (bh_name, bh_owner, bh_street_address, bh_zone_address, bh_complete_address, bh_longitude, bh_latitude, bh_contacts, tagline, bho_id) VALUE (?,?,?,?,?,?,?,?,?,?)";
@@ -204,10 +201,10 @@ exports.getBoardinghouseByOwnerId = (req, res) => {
     `SELECT * FROM boarding_house WHERE bho_id = ?`,
     [ownerId],
     (err, result) => {
+      let boardinghouses = [];
       if (!err) {
-        res.send({
-          ...result[0],
-        });
+        boardinghouses = _bhRemap(result);
+        res.send({ ...boardinghouses[0] });
       } else {
         console.log(err);
       }
@@ -216,11 +213,23 @@ exports.getBoardinghouseByOwnerId = (req, res) => {
 };
 
 // UPDATE SPECIFIC BOARDING HOUSE by OwnerID
-// missing!
 exports.updateBoardinghouse = (req, res) => {
-  res.send({
-    message: "The boadinghouse has been updated!",
-  });
+  const boardinghouseId = req.params.boardinghouseId;
+  db.query(
+    `UPDATE boarding_house SET ... WHERE boardinghouse_id = ?`,
+    [boardinghouseId],
+    (err, result) => {
+      if (!err) {
+        res.send({
+          result: result,
+          message: "The boadinghouse has been updated!",
+        });
+      } else {
+        res.send({ message: err });
+        console.log(err);
+      }
+    }
+  );
 };
 
 // ! FOR MAP PURPOSE - GET ALL THE LONGITUDE, LATITUDE, NAME, ADDRESS of BH ✅ DONE!
