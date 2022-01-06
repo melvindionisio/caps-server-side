@@ -47,6 +47,22 @@ exports.getRoom = async (req, res) => {
   });
 };
 
+exports.getTotalBoardinghouseRooms = (req, res) => {
+  const bhId = req.params.bhId;
+  db.query(
+    `SELECT COUNT(*) FROM rooms WHERE boardinghouse_id = ?`,
+    [bhId],
+    (err, result) => {
+      if (!err) {
+        let total = { ...result[0] }[Object.keys({ ...result[0] })[0]];
+        res.send({ total: total });
+      } else {
+        console.log(err);
+      }
+    }
+  );
+};
+
 // ADD A ROOM
 exports.addRoom = async (req, res) => {
   const bhId = req.params.bhId;

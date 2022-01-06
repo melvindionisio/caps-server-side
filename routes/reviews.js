@@ -11,7 +11,7 @@ const UpdateReview = reviewsController.updateReview;
 const DeleteReview = reviewsController.deleteReview;
 
 // GET
-Router.post("/:bhId", AddReview);
+Router.post("/add/:bhId", AddReview);
 Router.get("/boardinghouse/:bhId", GetAllReviews);
 Router.get("/:reviewId", GetReview);
 Router.delete("/:reviewId", DeleteReview);
