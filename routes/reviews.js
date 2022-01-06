@@ -14,7 +14,6 @@ const DeleteReview = reviewsController.deleteReview;
 Router.post("/:bhId", AddReview);
 Router.get("/boardinghouse/:bhId", GetAllReviews);
 Router.get("/:reviewId", GetReview);
-Router.put("/:reviewId", UpdateReview);
 Router.delete("/:reviewId", DeleteReview);
 
 module.exports = Router;

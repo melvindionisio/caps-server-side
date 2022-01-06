@@ -2,47 +2,77 @@ const db = require("../connection");
 
 exports.getAllReviews = (req, res) => {
   const bhId = req.params.bhId;
-  res.send({ bhId: bhId, message: "success" });
-  /* db.query(
+  db.query(
     `SELECT * FROM reviews WHERE boardinghouse_id = ? `,
     [bhId],
-    (err, result) => {
+    (err, results) => {
       if (!err) {
-        res.send({ message: "recieved" });
+        res.send(results);
       } else {
+        res.send({ message: err });
         console.log(err);
       }
     }
   );
-*/
 };
 
 exports.getReview = (req, res) => {
   const reviewId = req.params.reviewId;
-  res.send({
-    message: "this will hold an individual review to view",
-    reviewId: reviewId,
-  });
+  db.query(
+    `SELECT * FROM reviews WHERE review_id = ?`,
+    [reviewId],
+    (err, result) => {
+      if (!err) {
+        res.send(result);
+      } else {
+        res.send({ message: err });
+        console.log(err);
+      }
+    }
+  );
 };
 
 exports.addReview = (req, res) => {
-  res.send({
-    message: "post request for adding a review to an individual boardinghouse",
-  });
-};
+  const bhId = req.params.bhId;
+  const { seekerId, reviewerName, reviewText } = req.body;
 
-exports.updateReview = (req, res) => {
-  const reviewId = req.params.reviewId;
-  res.send({
-    message: "This is where you can update specific review.",
-    reviewId: reviewId,
-  });
+  const sqlInsert =
+    "INSERT INTO reviews (boardinghouse_id,seeker_id, review_text, reviewer_name ) VALUE (?,?,?,?)";
+  db.query(
+    sqlInsert,
+    [bhId, seekerId, reviewText, reviewerName],
+    (err, result) => {
+      if (!err) {
+        console.log(result);
+        res.send({
+          message: "Review successfully Added!",
+          result: result,
+        });
+      } else {
+        console.log(err);
+        res.send({ message: err });
+      }
+    }
+  );
 };
 
 exports.deleteReview = (req, res) => {
   const reviewId = req.params.reviewId;
-  res.send({
-    message: "Will delete specific review",
-    reviewId: reviewId,
-  });
+  db.query(
+    `DELETE FROM reviews WHERE review_id=?`,
+    [reviewId],
+    (err, result) => {
+      if (!err) {
+        res.send({
+          result: result,
+          message: "Your review was successfully deleted!",
+        });
+      } else {
+        res.send({
+          message: err,
+        });
+        console.log(err);
+      }
+    }
+  );
 };
