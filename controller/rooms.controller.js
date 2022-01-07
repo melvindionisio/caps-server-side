@@ -16,8 +16,18 @@ const roomsRemap = (rooms) => {
   return formatted;
 };
 
-// GET ALL ROOMS - need boardinghouse_id to get rooms associated with the current login owner
-exports.getAllRooms = async (req, res) => {
+exports.getAllRooms = (req, res) => {
+  db.query(`SELECT * FROM rooms `, (err, result) => {
+    if (!err) {
+      res.send(roomsRemap(result));
+    } else {
+      console.log(err);
+    }
+  });
+};
+
+// GET ALL Boardinghouse ROOMS - need boardinghouse_id to get rooms associated with the current login owner
+exports.getBoardinghouseRooms = async (req, res) => {
   const bhId = req.params.bhId;
 
   db.query(

@@ -3,6 +3,7 @@ const Router = express.Router();
 
 const roomsController = require("../controller/rooms.controller");
 const GetAllRooms = roomsController.getAllRooms;
+const GetBoardinghouseRooms = roomsController.getBoardinghouseRooms;
 const GetRoom = roomsController.getRoom;
 const GetTotalBoardinghouseRooms = roomsController.getTotalBoardinghouseRooms;
 const AddRoom = roomsController.addRoom;
@@ -12,7 +13,8 @@ const UpdateRoomAvailability = roomsController.updateRoomAvailability;
 const DisableFullRoom = roomsController.disableFullRoom;
 
 // GET
-Router.get("/all/:bhId", GetAllRooms);
+Router.get("/", GetAllRooms);
+Router.get("/all/:bhId", GetBoardinghouseRooms);
 Router.get("/:roomId", GetRoom);
 Router.get("/total/:bhId", GetTotalBoardinghouseRooms);
 
