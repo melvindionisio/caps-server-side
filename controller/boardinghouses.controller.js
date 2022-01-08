@@ -1,4 +1,4 @@
-const db = require('../connection')
+const db = require('../connection');
 
 // returns an array of remapped jeys of boardinghouses object
 const _bhRemap = result => {
@@ -22,45 +22,45 @@ const _bhRemap = result => {
          waterSource: boardinghouse.water_source,
          genderCategory: boardinghouse.gender_category,
          totalRooms: boardinghouse.total_rooms,
-      }
-   })
-   return boardinghouses
-}
+      };
+   });
+   return boardinghouses;
+};
 
 // Update Boardinghouse coordinates. ✅
 exports.updateBoardinghouseCoordinates = (req, res) => {
-   const ownerId = req.params.ownerId
-   const { newLongitude, newLatitude } = req.body
+   const ownerId = req.params.ownerId;
+   const { newLongitude, newLatitude } = req.body;
    db.query(
       `UPDATE boarding_house SET bh_longitude = ?, bh_latitude = ? WHERE bho_id = ?`,
       [newLongitude, newLatitude, ownerId],
       (err, result) => {
          if (!err) {
-            res.send({ message: 'Coordinates updated!' })
-            console.log('id', result.affectedRows, 'has updated.')
+            res.send({ message: 'Coordinates updated!' });
+            console.log('id', result.affectedRows, 'has updated.');
          } else {
-            console.log(err)
-            res.send({ message: err })
+            console.log(err);
+            res.send({ message: err });
          }
       }
-   )
-}
+   );
+};
 
 // ADD BASIC BH INFO FROM ADMIN ✅ DONE!
 exports.registerBoardinghouse = (req, res) => {
-   const ownerId = req.params.ownerId
-   const boardinghouse_owner = req.body.boardinghouse_owner
-   const boardinghouse_name = req.body.boardinghouse_name
-   const street_address = req.body.street_address
-   const zone_address = req.body.zone_address
-   const complete_address = req.body.complete_address
-   const longitude = req.body.longitude
-   const latitude = req.body.latitude
-   const contact_number = req.body.contact_number
-   const tagline = req.body.tagline
+   const ownerId = req.params.ownerId;
+   const boardinghouse_owner = req.body.boardinghouse_owner;
+   const boardinghouse_name = req.body.boardinghouse_name;
+   const street_address = req.body.street_address;
+   const zone_address = req.body.zone_address;
+   const complete_address = req.body.complete_address;
+   const longitude = req.body.longitude;
+   const latitude = req.body.latitude;
+   const contact_number = req.body.contact_number;
+   const tagline = req.body.tagline;
 
    const sqlInsert =
-      'INSERT INTO boarding_house (bh_name, bh_owner, bh_street_address, bh_zone_address, bh_complete_address, bh_longitude, bh_latitude, bh_contacts, tagline, bho_id) VALUE (?,?,?,?,?,?,?,?,?,?)'
+      'INSERT INTO boarding_house (bh_name, bh_owner, bh_street_address, bh_zone_address, bh_complete_address, bh_longitude, bh_latitude, bh_contacts, tagline, bho_id) VALUE (?,?,?,?,?,?,?,?,?,?)';
    db.query(
       sqlInsert,
       [
@@ -77,29 +77,29 @@ exports.registerBoardinghouse = (req, res) => {
       ],
       (err, result) => {
          if (!err) {
-            console.log(result)
+            console.log(result);
             res.send({
                message: 'Owner successfully registered!',
                ownerId: result.insertId,
-            })
+            });
          } else {
-            console.log(err)
-            res.send({ message: err })
+            console.log(err);
+            res.send({ message: err });
          }
       }
-   )
-}
+   );
+};
 
 // GET ALL BOARDING HOUSE ✅ DONE!
 exports.getAllBoardinghouse = (req, res) => {
    db.query(`SELECT * FROM boarding_house`, (err, result) => {
       if (!err) {
-         res.send(_bhRemap(result))
+         res.send(_bhRemap(result));
       } else {
-         console.log(err)
+         console.log(err);
       }
-   })
-}
+   });
+};
 
 // GET ALL BOARDING HOUSE Export ✅ DONE!
 exports.getAllBoardinghouseExport = (req, res) => {
@@ -114,103 +114,103 @@ exports.getAllBoardinghouseExport = (req, res) => {
                   owner_name: item.bh_owner,
                   street: item.bh_street_address,
                   zone: item.bh_zone_address,
-               }
-            })
-            res.send(newResults)
+               };
+            });
+            res.send(newResults);
          } else {
-            console.log(err)
+            console.log(err);
          }
       }
-   )
-}
+   );
+};
 
 // GET NUMBER OF TOTAL BOARDING HOUSE ✅DONE!
 exports.getTotalBoardinghouse = (req, res) => {
    db.query(`SELECT COUNT(*) FROM boarding_house`, (err, result) => {
       if (!err) {
-         let total = { ...result[0] }[Object.keys({ ...result[0] })[0]]
-         res.send({ total: total })
+         let total = { ...result[0] }[Object.keys({ ...result[0] })[0]];
+         res.send({ total: total });
       } else {
-         console.log(err)
+         console.log(err);
       }
-   })
-}
+   });
+};
 
 // GET NUMBER OF TOTAL BOARDING HOUSE by ZONE ✅DONE!
 exports.getTotalBoardinghouseByZone = (req, res) => {
-   let zoneAddress = req.params.zoneAddress
-   zoneAddress = zoneAddress.charAt(0).toUpperCase() + zoneAddress.slice(1)
-   const zone = zoneAddress.replace(/-/g, ' ')
+   let zoneAddress = req.params.zoneAddress;
+   zoneAddress = zoneAddress.charAt(0).toUpperCase() + zoneAddress.slice(1);
+   const zone = zoneAddress.replace(/-/g, ' ');
    db.query(`SELECT COUNT(*) FROM boarding_house WHERE bh_zone_address = ? `, [zone], (err, result) => {
       if (!err) {
          if (result.length >= 0) {
-            let total = { ...result[0] }[Object.keys({ ...result[0] })[0]]
-            res.send({ total: total })
+            let total = { ...result[0] }[Object.keys({ ...result[0] })[0]];
+            res.send({ total: total });
          } else {
-            res.send({ total: 0 })
+            res.send({ total: 0 });
          }
       } else {
-         console.log(err)
+         console.log(err);
       }
-   })
-}
+   });
+};
 
 // GET ALL BOARDINGHOUSE BY ZONE ✅DONE!
 exports.getAllBoardinghousesByZone = (req, res) => {
-   const zoneAddress = req.params.zoneAddress
-   const zone = zoneAddress.replace(/-/g, ' ')
+   const zoneAddress = req.params.zoneAddress;
+   const zone = zoneAddress.replace(/-/g, ' ');
    db.query(`SELECT * FROM boarding_house WHERE bh_zone_address= ? `, [zone], (err, result) => {
       if (!err) {
-         res.send(_bhRemap(result))
+         res.send(_bhRemap(result));
       } else {
-         console.log(err)
+         console.log(err);
       }
-   })
-}
+   });
+};
 
 // GET SPECIFIC BOARDING HOUSE ✅ DONE!
 exports.getBoardinghouseById = (req, res) => {
-   const boardinghouseId = req.params.bhId
+   const boardinghouseId = req.params.bhId;
    db.query(`SELECT * FROM boarding_house WHERE boardinghouse_id = ? `, [boardinghouseId], (err, result) => {
-      let boardinghouses = []
+      let boardinghouses = [];
       if (!err) {
-         boardinghouses = _bhRemap(result)
-         res.send({ ...boardinghouses[0] })
+         boardinghouses = _bhRemap(result);
+         res.send({ ...boardinghouses[0] });
       } else {
-         console.log(err)
+         console.log(err);
       }
-   })
-}
+   });
+};
 
 // GET SPECIFIC BOARDING HOUSE by OwnerID ✅ DONE!
 exports.getBoardinghouseByOwnerId = (req, res) => {
-   const ownerId = req.params.ownerId
+   const ownerId = req.params.ownerId;
    db.query(`SELECT * FROM boarding_house WHERE bho_id = ?`, [ownerId], (err, result) => {
-      let boardinghouses = []
+      let boardinghouses = [];
       if (!err) {
-         boardinghouses = _bhRemap(result)
-         res.send({ ...boardinghouses[0] })
+         boardinghouses = _bhRemap(result);
+         res.send({ ...boardinghouses[0] });
       } else {
-         console.log(err)
+         console.log(err);
       }
-   })
-}
+   });
+};
 
 // UPDATE SPECIFIC BOARDING HOUSE by OwnerID
 exports.updateBoardinghouse = (req, res) => {
-   const boardinghouseId = req.params.boardinghouseId
+   const boardinghouseId = req.params.boardinghouseId;
    db.query(`UPDATE boarding_house SET ... WHERE boardinghouse_id = ?`, [boardinghouseId], (err, result) => {
       if (!err) {
          res.send({
             result: result,
             message: 'The boadinghouse has been updated!',
-         })
+         });
       } else {
-         res.send({ message: err })
-         console.log(err)
+         res.send({ message: err });
+         console.log(err);
       }
-   })
-}
+   });
+};
 
 // ! FOR MAP PURPOSE - GET ALL THE LONGITUDE, LATITUDE, NAME, ADDRESS of BH ✅ DONE!
 exports.getAllBoardinghouseLocations = (req, res) => {
@@ -221,7 +221,7 @@ exports.getAllBoardinghouseLocations = (req, res) => {
             let featureCollections = {
                type: 'FeatureCollection',
                features: [],
-            }
+            };
             featureCollections.features = Array.from(result, mark => {
                return {
                   type: 'Feature',
@@ -234,20 +234,20 @@ exports.getAllBoardinghouseLocations = (req, res) => {
                      title: mark.bh_name,
                      description: mark.bh_complete_address,
                   },
-               }
-            })
+               };
+            });
 
-            res.send(featureCollections)
+            res.send(featureCollections);
          } else {
-            console.log(err)
+            console.log(err);
          }
       }
-   )
-}
+   );
+};
 
 // GET SPECIFIC BOARDINGHOUSE LOCATION BY OWNER ID ✅ DONE!
 exports.getBoardinghouseLocation = (req, res) => {
-   const ownerId = req.params.ownerId
+   const ownerId = req.params.ownerId;
 
    db.query(
       `SELECT boardinghouse_id, bh_name, bh_complete_address, bh_longitude, bh_latitude FROM boarding_house WHERE bho_id = ?`,
@@ -257,12 +257,12 @@ exports.getBoardinghouseLocation = (req, res) => {
             if (result.length <= 0) {
                res.send({
                   message: 'Empty response, or simply does not exist!',
-               })
+               });
             } else {
                let featureCollections = {
                   type: 'FeatureCollection',
                   features: [],
-               }
+               };
                featureCollections.features = Array.from(result, mark => {
                   return {
                      type: 'Feature',
@@ -275,29 +275,29 @@ exports.getBoardinghouseLocation = (req, res) => {
                         title: mark.bh_name,
                         description: mark.bh_complete_address,
                      },
-                  }
-               })
-               res.send(featureCollections)
+                  };
+               });
+               res.send(featureCollections);
             }
          } else {
-            console.log(err)
+            console.log(err);
          }
       }
-   )
-}
+   );
+};
 
 // delete boardinghouse along with the deletion of owner via ownerId
 exports.deleteBoardinghouse = (req, res) => {
-   const ownerId = req.params.ownerId
+   const ownerId = req.params.ownerId;
    db.query('DELETE FROM boarding_house WHERE bho_id = ?', [ownerId], (err, result) => {
       if (!err) {
          res.send({
             result: result,
             message: `Boardinghouse owned by ${ownerId} has been successfully deleted!`,
-         })
+         });
       } else {
-         res.send({ message: err })
-         console.log(err)
+         res.send({ message: err });
+         console.log(err);
       }
-   })
-}
+   });
+};
