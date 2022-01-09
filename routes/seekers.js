@@ -1,7 +1,7 @@
-const express = require('express');
+const express = require("express");
 const Router = express.Router();
 
-const seekersController = require('../controller/seeker.controller');
+const seekersController = require("../controller/seeker.controller");
 
 const GetAllSeekers = seekersController.getAllSeekers;
 const GetSeekerProfile = seekersController.getSeekerProfile;
@@ -9,14 +9,16 @@ const RegisterSeeker = seekersController.registerSeeker;
 const LoginSeeker = seekersController.loginSeeker;
 const FacebookSignIn = seekersController.facebookLogin;
 const GoogleSignIn = seekersController.googleLogin;
-const UpdateSeeker = seekersController.updateSeeker;
+const UpdateSeekerProfile = seekersController.updateSeekerProfile;
+const UpdateSeekerPassword = seekersController.updateSeekerPassword;
 
-Router.get('/', GetAllSeekers);
-Router.get('/:seekerId', GetSeekerProfile);
-Router.post('/register', RegisterSeeker);
-Router.post('/login', LoginSeeker);
-Router.post('/google-signin', GoogleSignIn);
-Router.post('/facebook-signin', FacebookSignIn);
-Router.put('/update-seeker', UpdateSeeker);
+Router.get("/", GetAllSeekers);
+Router.get("/:seekerId", GetSeekerProfile);
+Router.post("/register", RegisterSeeker);
+Router.post("/login", LoginSeeker);
+Router.post("/google-signin", GoogleSignIn);
+Router.post("/facebook-signin", FacebookSignIn);
+Router.put("/update-seeker-profile/:seekerId", UpdateSeekerProfile);
+Router.put("/update-seeker-password/:seekerId", UpdateSeekerPassword);
 
 module.exports = Router;
