@@ -110,12 +110,11 @@ exports.loginSeeker = (req, res) => {
 
 exports.updateSeekerProfile = (req, res) => {
    const seekerId = req.params.seekerId;
-   const newName = req.body.newName;
-   const newUsername = req.body.newUsername;
+   const { name, username } = req.body;
 
    db.query(
-      `UPDATE boarding_house_seeker SET seeker_name = ?, seeker_username = ? WHERE seeker_id = ?`,
-      [newName, newUsername, seekerId],
+      `UPDATE boarding_house_seekers SET seeker_name = ?, seeker_username = ? WHERE seeker_id = ?`,
+      [name, username, seekerId],
       (err, result) => {
          if (!err) {
             res.send({
@@ -132,24 +131,42 @@ exports.updateSeekerProfile = (req, res) => {
    );
 };
 
-exports.updateSeekerPassword = (req, res) => {
+exports.authenticateUpdatePassword = (req, res) => {
    const seekerId = req.params.seekerId;
-   const newPassword = req.body.newPassword;
-
+   const { currentPassword, newPassword } = req.body;
    db.query(
-      `UPDATE boarding_house_seeker SET seeker_password = ? WHERE seeker_id = ?`,
-      [newPassword, seekerId],
-      (err, result) => {
+      `SELECT * FROM boarding_house_seekers WHERE seeker_id = ?`,
+      [seekerId],
+      async (err, result) => {
          if (!err) {
-            res.send({
-               message: "Your account has been updated.",
-               result: result,
-            });
+            const validate = await bcrypt.compare(
+               currentPassword,
+               result[0].seeker_password
+            );
+            if (validate) {
+               const encryptedPassword = await bcrypt.hash(
+                  newPassword,
+                  saltRounds
+               );
+               db.query(
+                  `UPDATE boarding_house_seekers SET seeker_password = ? WHERE seeker_id = ?`,
+                  [encryptedPassword, seekerId],
+                  (err, result) => {
+                     if (!err) {
+                        res.send({
+                           message: "Your account has been updated.",
+                           result: result,
+                        });
+                     } else {
+                        res.send({
+                           message: err,
+                        });
+                     }
+                  }
+               );
+            }
          } else {
-            res.send({
-               message: "Error Occured",
-               error: err,
-            });
+            res.send({ message: err });
          }
       }
    );

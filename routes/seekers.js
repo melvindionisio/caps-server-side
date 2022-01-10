@@ -10,7 +10,7 @@ const LoginSeeker = seekersController.loginSeeker;
 const FacebookSignIn = seekersController.facebookLogin;
 const GoogleSignIn = seekersController.googleLogin;
 const UpdateSeekerProfile = seekersController.updateSeekerProfile;
-const UpdateSeekerPassword = seekersController.updateSeekerPassword;
+const AuthenticateUpdatePassword = seekersController.authenticateUpdatePassword;
 
 Router.get("/", GetAllSeekers);
 Router.get("/:seekerId", GetSeekerProfile);
@@ -19,6 +19,9 @@ Router.post("/login", LoginSeeker);
 Router.post("/google-signin", GoogleSignIn);
 Router.post("/facebook-signin", FacebookSignIn);
 Router.put("/update-seeker-profile/:seekerId", UpdateSeekerProfile);
-Router.put("/update-seeker-password/:seekerId", UpdateSeekerPassword);
+Router.post(
+   "/update-seeker-password/auth/:seekerId",
+   AuthenticateUpdatePassword
+);
 
 module.exports = Router;
