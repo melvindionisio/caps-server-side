@@ -325,3 +325,19 @@ exports.deleteBoardinghouse = (req, res) => {
       }
    );
 };
+
+exports.searchBoardinghouse = (req, res) => {
+   const { query } = req.body;
+   db.query(
+      `SELECT * FROM boarding_house WHERE bh_name LIKE '%${query}%'`,
+      (err, results) => {
+         if (!err) {
+            res.send(_bhRemap(results));
+         } else {
+            res.send({
+               message: err,
+            });
+         }
+      }
+   );
+};

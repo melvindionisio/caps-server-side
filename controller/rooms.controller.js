@@ -8,9 +8,9 @@ const roomsRemap = (rooms) => {
          name: room.room_name,
          description: room.room_description,
          type: room.room_type,
-         genderAllowed: room.gender_category,
-         numSlots: room.num_slots,
-         availableSlots: room.available_slots,
+         genderAllowed: room.gender_allowed,
+         totalSlots: room.total_slots,
+         occupiedSlots: room.occupied_slots,
       };
    });
    return formatted;
@@ -88,13 +88,13 @@ exports.addRoom = async (req, res) => {
       roomName,
       roomDescription,
       roomType,
-      genderCategory,
-      numSlots,
-      availableSlots,
+      genderAllowed,
+      totalSlots,
+      occupiedSlots,
    } = req.body;
 
    const sqlInsert =
-      "INSERT INTO rooms (boardinghouse_id, room_name, room_description,room_type, gender_category, num_slots, available_slots) VALUE (?,?,?,?,?,?,?)";
+      "INSERT INTO rooms (boardinghouse_id, room_name, room_description,room_type, gender_allowed, total_slots, occupied_slots) VALUE (?,?,?,?,?,?,?)";
    db.query(
       sqlInsert,
       [
@@ -102,9 +102,9 @@ exports.addRoom = async (req, res) => {
          roomName,
          roomDescription,
          roomType,
-         genderCategory,
-         numSlots,
-         availableSlots,
+         genderAllowed,
+         totalSlots,
+         occupiedSlots,
       ],
       (err, result) => {
          if (!err) {

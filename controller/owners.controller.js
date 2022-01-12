@@ -1,42 +1,49 @@
-const db = require('../connection');
-const bcrypt = require('bcrypt');
+const db = require("../connection");
+const bcrypt = require("bcrypt");
 
 // GET ALL OWNER ACCOUNT
 exports.getAllOwners = async (req, res) => {
-   db.query(`SELECT bho_id, bho_name, bho_username FROM boarding_house_owners`, (err, result) => {
-      if (!err) {
-         let formatted = result.map(item => {
-            return {
-               id: item.bho_id,
-               name: item.bho_name,
-               username: item.bho_username,
-            };
-         });
-         res.send(formatted);
-      } else {
-         console.log(err);
+   db.query(
+      `SELECT bho_id, bho_name, bho_username FROM boarding_house_owners`,
+      (err, result) => {
+         if (!err) {
+            let formatted = result.map((item) => {
+               return {
+                  id: item.bho_id,
+                  name: item.bho_name,
+                  username: item.bho_username,
+               };
+            });
+            res.send(formatted);
+         } else {
+            console.log(err);
+         }
       }
-   });
+   );
 };
 
 // GET SPECIFIC OWNER ACCOUNT
 exports.getOwner = (req, res) => {
    const ownerId = req.params.ownerId;
 
-   db.query(`SELECT * FROM boarding_house_owners WHERE bho_id = ?`, [ownerId], (err, result) => {
-      if (!err) {
-         let formatted = result.map(item => {
-            return {
-               id: item.bho_id,
-               name: item.bho_name,
-               username: item.bho_username,
-            };
-         });
-         res.send(formatted[0]);
-      } else {
-         console.log(err);
+   db.query(
+      `SELECT * FROM boarding_house_owners WHERE bho_id = ?`,
+      [ownerId],
+      (err, result) => {
+         if (!err) {
+            let formatted = result.map((item) => {
+               return {
+                  id: item.bho_id,
+                  name: item.bho_name,
+                  username: item.bho_username,
+               };
+            });
+            res.send(formatted[0]);
+         } else {
+            console.log(err);
+         }
       }
-   });
+   );
 };
 
 // REGISTER OWNER ACCOUNT ✅ DONE!
@@ -47,12 +54,13 @@ exports.registerOwner = async (req, res) => {
    const password = req.body.password;
    const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
-   const sqlInsert = 'INSERT INTO boarding_house_owners (bho_name, bho_username, bho_password) VALUE (?,?,?)';
+   const sqlInsert =
+      "INSERT INTO boarding_house_owners (bho_name, bho_username, bho_password) VALUE (?,?,?)";
    db.query(sqlInsert, [name, username, encryptedPassword], (err, result) => {
       if (!err) {
          console.log(result);
          res.send({
-            message: 'Owner successfully registered!',
+            message: "Owner successfully registered!",
             ownerId: result.insertId,
          });
       } else {
@@ -68,42 +76,47 @@ exports.loginOwner = async (req, res) => {
    const password = req.body.owner_password;
 
    if (username && password) {
-      db.query('SELECT * FROM boarding_house_owners WHERE bho_username = ?', [username], async (err, result) => {
-         if (err) {
-            res.send({
-               code: 400,
-               failed: 'Error Occured',
-               error: err,
-            });
-         }
-         if (result.length > 0) {
-            req.session.loggedin = true;
-            req.session.username = username;
-            const validate = await bcrypt.compare(password, result[0].bho_password);
-
-            if (username === result[0].bho_username && validate) {
+      db.query(
+         "SELECT * FROM boarding_house_owners WHERE bho_username = ?",
+         [username],
+         async (err, result) => {
+            if (err) {
                res.send({
-                  ...result[0],
-                  message: 'You successfully logged in!',
-                  error: 'success',
-               });
-            } else if (username === result[0].bho_username || validate) {
-               res.send({
-                  message: 'Your Password was Incorrect!',
-               });
-            } else {
-               res.send({
-                  message: 'The account was not found! Please try again.',
+                  code: 400,
+                  failed: "Error Occured",
+                  error: err,
                });
             }
-         } else {
-            res.send({ message: 'User does not exist!' });
-            res.end();
+            if (result.length > 0) {
+               req.session.loggedin = true;
+               req.session.username = username;
+               const validate = await bcrypt.compare(
+                  password,
+                  result[0].bho_password
+               );
+               if (username === result[0].bho_username && validate) {
+                  res.send({
+                     ...result[0],
+                     message: "You successfully logged in!",
+                     error: "success",
+                  });
+               } else if (username === result[0].bho_username || validate) {
+                  res.send({
+                     message: "Your Password was Incorrect!",
+                  });
+               } else {
+                  res.send({
+                     message: "The account was not found! Please try again.",
+                  });
+               }
+            } else {
+               res.send({ message: "User does not exist!" });
+               res.end();
+            }
          }
-         // console.log(result);
-      });
+      );
    } else {
-      res.send('Please enter username and password');
+      res.send("Please enter username and password");
    }
 };
 
@@ -117,8 +130,8 @@ exports.updateOwnerProfile = (req, res) => {
       [newName, newUsername, ownerId],
       (err, result) => {
          if (!err) {
-            res.send({ message: 'Profile successfully changed!' });
-            console.log('id', result.affectedRows, 'has updated.');
+            res.send({ message: "Profile successfully changed!" });
+            console.log("id", result.affectedRows, "has updated.");
          } else {
             console.log(err);
             res.send({ message: err });
@@ -130,18 +143,16 @@ exports.updateOwnerProfile = (req, res) => {
 // UPDATE SPECIFIC OWNER PASSWORD ✅ Done !
 exports.updateOwnerPassword = async (req, res) => {
    const ownerId = req.params.ownerId;
+   const { newPassword } = req.body;
 
-   const updatedPassword = req.body.newPassword;
-   const encryptedPassword = await bcrypt.hash(updatedPassword, saltRounds);
-
+   const encryptedPassword = await bcrypt.hash(newPassword, saltRounds);
    // ! HASH PASSWORD BEFORE SENDING TO DB
    db.query(
       `UPDATE boarding_house_owners SET bho_password = ? WHERE bho_id = ?`,
       [encryptedPassword, ownerId],
       async (err, result) => {
          if (!err) {
-            // res.send(result);
-            res.send({ message: 'Password successfully changed!' });
+            res.send({ message: "Password successfully changed!" });
          } else {
             res.send({ message: err });
             console.log(err);
@@ -153,16 +164,20 @@ exports.updateOwnerPassword = async (req, res) => {
 // DELETE SPECIFIC OWNER ACCOUNT - INCLUDING THE BOARDING HOUSE CONNECTED TO THE ACCOUNT
 exports.deleteOwner = async (req, res) => {
    const ownerId = req.params.ownerId;
-   db.query('DELETE FROM boarding_house_owners WHERE bho_id = ?', [ownerId], (err, result) => {
-      if (!err) {
-         res.send({
-            result: result,
-            message: `Owner at ${ownerId} successfully deleted!`,
-         });
-         res.redirect(`/api/boarding-houses/delete/${ownerId}`);
-      } else {
-         res.send({ message: err });
-         console.log(err);
+   db.query(
+      "DELETE FROM boarding_house_owners WHERE bho_id = ?",
+      [ownerId],
+      (err, result) => {
+         if (!err) {
+            res.send({
+               result: result,
+               message: `Owner at ${ownerId} successfully deleted!`,
+            });
+            res.redirect(`/api/boarding-houses/delete/${ownerId}`);
+         } else {
+            res.send({ message: err });
+            console.log(err);
+         }
       }
-   });
+   );
 };
