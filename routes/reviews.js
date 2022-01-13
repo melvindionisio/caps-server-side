@@ -4,7 +4,6 @@ const Router = express.Router();
 const reviewsController = require("../controller/reviews.controller");
 const AddReview = reviewsController.addReview;
 const GetAllReviews = reviewsController.getAllReviews;
-const UpdateReview = reviewsController.updateReview;
 const DeleteReview = reviewsController.deleteReview;
 const GetReview = reviewsController.getReview;
 

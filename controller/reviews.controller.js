@@ -8,6 +8,7 @@ const reviewRemap = (reviews) => {
          reviewerId: review.seeker_id,
          reviewerName: review.reviewer_name,
          text: review.review_text,
+         date: review.review_date,
       };
    });
    return formatted;
@@ -32,8 +33,7 @@ exports.getAllReviews = (req, res) => {
 
 exports.addReview = (req, res) => {
    const bhId = req.params.bhId;
-   const { seekerId, boardinghouseId, reviewDate, reviewerName, reviewText } =
-      req.body;
+   const { seekerId, reviewDate, reviewerName, reviewText } = req.body;
 
    const sqlInsert =
       "INSERT INTO reviews (boardinghouse_id,seeker_id, review_text, reviewer_name, review_date ) VALUE (?,?,?,?,?)";
