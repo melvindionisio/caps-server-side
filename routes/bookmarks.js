@@ -15,13 +15,13 @@ const DeleteBookmarkedBoardinghouse =
    bookmarksController.deleteBookmarkedBoardinghouse;
 
 Router.post("/add/:seekerId", AddBookmark);
-Router.get("/room/isbookmarked/:roomId", RoomIsBookmarked);
-Router.get("/boardinghouse/isbookmarked/:bhId", BhIsBookmarked);
+Router.get("/room/isbookmarked/:roomId/:seekerId", RoomIsBookmarked);
+Router.get("/boardinghouse/isbookmarked/:bhId/:seekerId", BhIsBookmarked);
 // GET
 Router.get("/seeker/:seekerId", GetAllSeekerBookmarks);
 
-Router.delete("/delete/:bookmarkId", DeleteBookmark);
-Router.delete("/delete/room/:roomId", DeleteBookmarkedRoom);
+Router.delete("/delete/:bookmarkId/", DeleteBookmark);
+Router.delete("/delete/room/:roomId/", DeleteBookmarkedRoom);
 Router.delete("/delete/boardinghouse/:bhId", DeleteBookmarkedBoardinghouse);
 
 module.exports = Router;

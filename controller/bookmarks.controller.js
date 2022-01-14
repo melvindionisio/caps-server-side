@@ -126,10 +126,11 @@ exports.deleteBookmarkedBoardinghouse = (req, res) => {
 };
 
 exports.roomIsBookmarked = (req, res) => {
-   const roomId = req.params.roomId;
+   const { seekerId, roomId } = req.params;
+
    db.query(
-      `SELECT * FROM bookmarks WHERE room_id = ? `,
-      [roomId],
+      `SELECT * FROM bookmarks WHERE room_id = ? AND seeker_id = ? `,
+      [roomId, seekerId],
       (err, results) => {
          if (!err) {
             if (results.length > 0) {
@@ -147,10 +148,10 @@ exports.roomIsBookmarked = (req, res) => {
 };
 
 exports.bhIsBookmarked = (req, res) => {
-   const bhId = req.params.bhId;
+   const { bhId, seekerId } = req.params;
    db.query(
-      `SELECT * FROM bookmarks WHERE boardinghouse_id = ? `,
-      [bhId],
+      `SELECT * FROM bookmarks WHERE boardinghouse_id = ? AND seeker_id = ? `,
+      [bhId, seekerId],
       (err, results) => {
          if (!err) {
             if (results.length > 0) {
