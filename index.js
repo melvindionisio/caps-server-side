@@ -8,6 +8,7 @@ const SeekerRoutes = require("./routes/seekers");
 const RoomsRoutes = require("./routes/rooms");
 const BookmarksRoutes = require("./routes/bookmarks");
 const ReviewsRoutes = require("./routes/reviews");
+const StarRoutes = require("./routes/stars");
 
 require("dotenv").config();
 
@@ -34,6 +35,7 @@ app.use("/api/seekers", SeekerRoutes);
 app.use("/api/rooms", RoomsRoutes);
 app.use("/api/bookmarks", BookmarksRoutes);
 app.use("/api/reviews", ReviewsRoutes);
+app.use("/api/stars", StarRoutes);
 
 app.get("/", (req, res) => {
    res.send([

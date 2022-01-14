@@ -42,12 +42,13 @@ exports.removeStar = (req, res) => {
 
 exports.addStar = (req, res) => {
    const bhId = req.params.bhId;
+   const seekerId = req.params.seekerId;
    const { seekerName } = req.body;
 
-   const sqlInsert = "INSERT INTO stars (seeker_name) VALUE (?)";
-   db.query(sqlInsert, [seekerName], (err, result) => {
+   const sqlInsert =
+      "INSERT INTO stars (seeker_name, seeker_id, boardinghouse_id) VALUE (?,?,?)";
+   db.query(sqlInsert, [seekerName, seekerId, bhId], (err, result) => {
       if (!err) {
-         console.log(result);
          res.send({
             message: "Star added successfully!",
             result: result,
@@ -67,7 +68,7 @@ exports.isStarred = (req, res) => {
       [seekerId, bhId],
       (err, result) => {
          if (!err) {
-            if (result.length >= 0) {
+            if (result.length > 0) {
                res.send({ isStarred: true });
             } else {
                res.send({
