@@ -341,3 +341,24 @@ exports.searchBoardinghouse = (req, res) => {
       }
    );
 };
+
+exports.updatePopularity = (req, res) => {
+   const { boardinghouseId } = req.params;
+   const stars = req.body.stars;
+
+   db.query(
+      `UPDATE boarding_house SET bh_popularity = ? WHERE boardinghouse_id = ?`,
+      [stars, boardinghouseId],
+      (err, result) => {
+         if (!err) {
+            res.send({
+               result: result,
+               message: "The boadinghouse popularity has been updated!",
+            });
+         } else {
+            res.send({ message: err });
+            console.log(err);
+         }
+      }
+   );
+};

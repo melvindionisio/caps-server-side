@@ -21,6 +21,7 @@ const GetAllBoardinghouseLocations =
    boardinghousesController.getAllBoardinghouseLocations;
 const UpdateBoardinghouseLocation =
    boardinghousesController.updateBoardinghouseCoordinates;
+const UpdatePopularity = boardinghousesController.updatePopularity;
 const SearchBoardinghouse = boardinghousesController.searchBoardinghouse;
 
 const DeleteBoardinghouse = boardinghousesController.deleteBoardinghouse;
@@ -42,6 +43,7 @@ Router.get("/seeker-map/map-marks", GetAllBoardinghouseLocations); // GETTING AL
 Router.post("/register/:ownerId", RegisterBoardinghouse); // ALONG WITH OWNER ACCOUNT CREATION ✅ DONE!
 Router.post("/search", SearchBoardinghouse);
 Router.put("/update/:boardinghouseId", UpdateBoardinghouse);
+Router.put("/update-popularity/:boardinghouseId", UpdatePopularity);
 
 Router.put(
    "/owner-map/update-coordinates/:ownerId",
