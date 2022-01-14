@@ -91,14 +91,18 @@ exports.registerBoardinghouse = (req, res) => {
 };
 
 // GET ALL BOARDING HOUSE ✅ DONE!
+// ORDER BY POPULARIY DESCENDING
 exports.getAllBoardinghouse = (req, res) => {
-   db.query(`SELECT * FROM boarding_house`, (err, result) => {
-      if (!err) {
-         res.send(_bhRemap(result));
-      } else {
-         console.log(err);
+   db.query(
+      `SELECT * FROM boarding_house ORDER BY bh_popularity DESC`,
+      (err, result) => {
+         if (!err) {
+            res.send(_bhRemap(result));
+         } else {
+            console.log(err);
+         }
       }
-   });
+   );
 };
 
 // GET ALL BOARDING HOUSE Export ✅ DONE!

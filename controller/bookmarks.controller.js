@@ -19,7 +19,6 @@ exports.addBookmark = (req, res) => {
       ],
       (err, result) => {
          if (!err) {
-            console.log(result);
             res.send({
                message: "Bookmark added",
             });
@@ -135,7 +134,6 @@ exports.roomIsBookmarked = (req, res) => {
          if (!err) {
             if (results.length > 0) {
                res.send({ isBookmarked: true });
-               console.log(results);
             } else {
                res.send({ isBookmarked: false });
             }
@@ -156,7 +154,6 @@ exports.bhIsBookmarked = (req, res) => {
          if (!err) {
             if (results.length > 0) {
                res.send({ isBookmarked: true });
-               console.log(results);
             } else {
                res.send({ isBookmarked: false });
             }
