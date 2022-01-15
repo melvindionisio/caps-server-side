@@ -173,13 +173,40 @@ exports.authenticateUpdatePassword = (req, res) => {
 };
 
 exports.googleLogin = (req, res) => {
-   const googleId = req.body.googleId;
-   const googleName = req.body.googleName;
+   const { googleId, name, email } = req.body;
 
-   res.send({
-      message: "this is for google signin",
-      account: [googleId, googleName],
-   });
+   db.query(
+      `SELECT * FROM boarding_house_seekers WHERE google_id = ? AND seeker_username = ?`,
+      [googleId, email],
+      (err, result) => {
+         if (!err) {
+            if (result.length > 0) {
+               res.send({
+                  id: result[0].seeker_id,
+                  message: "Successfully logged in using google",
+               });
+            } else {
+               db.query(
+                  "INSERT INTO boarding_house_seekers (google_id, seeker_name, seeker_username) VALUE (?,?,?)",
+                  [googleId, name, email],
+                  (err, result) => {
+                     if (!err) {
+                        res.send({
+                           message: "Google Account Successfully Added!",
+                        });
+                     } else {
+                        res.send({
+                           message: err,
+                        });
+                     }
+                  }
+               );
+            }
+         } else {
+            res.send({ message: err });
+         }
+      }
+   );
 };
 
 exports.facebookLogin = (req, res) => {
