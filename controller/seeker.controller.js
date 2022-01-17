@@ -191,7 +191,9 @@ exports.googleLogin = (req, res) => {
                   [googleId, name, email],
                   (err, result) => {
                      if (!err) {
+                        console.log(result);
                         res.send({
+                           id: result[0].seeker_id,
                            message: "Google Account Successfully Added!",
                         });
                      } else {
