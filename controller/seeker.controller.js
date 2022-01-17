@@ -210,11 +210,38 @@ exports.googleLogin = (req, res) => {
 };
 
 exports.facebookLogin = (req, res) => {
-   const facebookId = req.body.facebookId;
-   const facebookName = req.body.facebookName;
+   const { facebookId, name, email } = req.body;
 
-   res.send({
-      message: "this is for facebook signin",
-      account: [facebookId, facebookName],
-   });
+   db.query(
+      `SELECT * FROM boarding_house_seekers WHERE facebook_id = ? AND seeker_username = ?`,
+      [facebookId, email],
+      (err, result) => {
+         if (!err) {
+            if (result.length > 0) {
+               res.send({
+                  id: result[0].seeker_id,
+                  message: "Successfully logged in using facebook.",
+               });
+            } else {
+               db.query(
+                  "INSERT INTO boarding_house_seekers (facebook_id, seeker_name, seeker_username) VALUE (?,?,?)",
+                  [facebookId, name, email],
+                  (err, result) => {
+                     if (!err) {
+                        res.send({
+                           message: "Facebook Account Successfully Added!",
+                        });
+                     } else {
+                        res.send({
+                           message: err,
+                        });
+                     }
+                  }
+               );
+            }
+         } else {
+            res.send({ message: err });
+         }
+      }
+   );
 };
