@@ -93,8 +93,7 @@ exports.addRoom = async (req, res) => {
       occupiedSlots,
    } = req.body;
 
-   const sqlInsert =
-      "INSERT INTO rooms (boardinghouse_id, room_name, room_description,room_type, gender_allowed, total_slots, occupied_slots) VALUE (?,?,?,?,?,?,?)";
+   const sqlInsert = `INSERT INTO rooms (boardinghouse_id, room_name, room_description,room_type, gender_allowed, total_slots, occupied_slots) VALUE (?,?,?,?,?,?,?)`;
    db.query(
       sqlInsert,
       [
