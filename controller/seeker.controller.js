@@ -193,7 +193,7 @@ exports.googleLogin = (req, res) => {
                      if (!err) {
                         console.log(result);
                         res.send({
-                           id: result[0].insertId, //error here
+                           id: result.insertId, //error here
                            message: "Google Account Successfully Added!",
                         });
                      } else {
