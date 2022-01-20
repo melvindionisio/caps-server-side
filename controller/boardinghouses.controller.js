@@ -93,8 +93,9 @@ exports.registerBoardinghouse = (req, res) => {
 // GET ALL BOARDING HOUSE ✅ DONE!
 // ORDER BY POPULARIY DESCENDING
 exports.getAllBoardinghouse = (req, res) => {
+   const { sort, sortType } = req.query;
    db.query(
-      `SELECT * FROM boarding_house ORDER BY bh_popularity DESC`,
+      `SELECT * FROM boarding_house ORDER BY ${sort} ${sortType.toUpperCase()}`,
       (err, result) => {
          if (!err) {
             res.send(_bhRemap(result));

@@ -114,7 +114,6 @@ exports.loginSeeker = (req, res) => {
                res.send({ message: "User does not exist!" });
                res.end();
             }
-            console.log(result);
          }
       );
    } else {
