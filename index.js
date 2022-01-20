@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const session = require("express-session");
+//const session = require("express-session");
 const OwnerRoutes = require("./routes/owners");
 const BhRoutes = require("./routes/boardinghouses");
 const AdminRoutes = require("./routes/admin");
@@ -19,13 +19,15 @@ const fallbackPort = 3500;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-   session({
-      secret: "secret",
-      resave: true,
-      saveUninitialized: true,
-   })
-);
+
+//problem with production not available in free
+//app.use(
+//session({
+//secret: "secret",
+//resave: true,
+//saveUninitialized: true,
+//})
+//);
 
 // routers
 app.use("/api/owners", OwnerRoutes);

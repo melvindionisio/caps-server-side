@@ -128,14 +128,14 @@ exports.updateRoom = async (req, res) => {
    });
 };
 
-exports.updateRoomAvailability = (req, res) => {
+exports.enableRoom = (req, res) => {
    const roomId = req.params.roomId;
    res.send({
       roomId: roomId,
    });
 };
 
-exports.disableFullRoom = (req, res) => {
+exports.disableRoom = (req, res) => {
    const roomId = req.params.roomId;
    res.send({
       roomId: roomId,

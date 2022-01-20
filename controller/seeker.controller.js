@@ -8,10 +8,23 @@ const bcrypt = require("bcrypt");
 // UPDATE SEEKER ACCOUNT - add message after successful updating owner account
 // GET ALL SEEKER
 
+const seekerRemap = (seekers) => {
+   let formatted = seekers.map((seeker) => {
+      return {
+         id: seeker.seeker_id,
+         name: seeker.seeker_name,
+         username: seeker.seeker_username,
+         googleId: seeker.google_id,
+         facebookId: seeker.facebook_id,
+      };
+   });
+   return formatted;
+};
+
 exports.getAllSeekers = (req, res) => {
    db.query(`SELECT * FROM boarding_house_seekers`, (err, result) => {
       if (!err) {
-         res.send(result);
+         res.send(seekerRemap(result));
       } else {
          console.log(err);
       }
@@ -25,7 +38,8 @@ exports.getSeekerProfile = (req, res) => {
       [seekerId],
       (err, result) => {
          if (!err) {
-            res.send(result[0]);
+            let formatted = seekerRemap(result);
+            res.send(formatted[0]);
          } else {
             res.send({
                message: err,
@@ -72,8 +86,8 @@ exports.loginSeeker = (req, res) => {
                });
             }
             if (result.length > 0) {
-               req.session.loggedin = true;
-               req.session.username = username;
+               //req.session.loggedin = true;
+               //req.session.username = username;
                const validate = await bcrypt.compare(
                   password,
                   result[0].seeker_password
