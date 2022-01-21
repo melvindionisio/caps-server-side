@@ -88,8 +88,8 @@ exports.loginOwner = async (req, res) => {
                });
             }
             if (result.length > 0) {
-               req.session.loggedin = true;
-               req.session.username = username;
+               //req.session.loggedin = true;
+               //req.session.username = username;
                const validate = await bcrypt.compare(
                   password,
                   result[0].bho_password

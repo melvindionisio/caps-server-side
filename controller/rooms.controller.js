@@ -47,7 +47,7 @@ exports.getBoardinghouseRooms = async (req, res) => {
 
 // GET SPECIFIC ROOM - need boardinghouse_id to get specific room
 exports.getRoom = async (req, res) => {
-   roomId = req.params.roomId;
+   const roomId = req.params.roomId;
 
    db.query(
       `SELECT * FROM rooms WHERE room_id = ?`,

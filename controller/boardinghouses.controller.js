@@ -93,17 +93,30 @@ exports.registerBoardinghouse = (req, res) => {
 // GET ALL BOARDING HOUSE ✅ DONE!
 // ORDER BY POPULARIY DESCENDING
 exports.getAllBoardinghouse = (req, res) => {
-   const { sort, sortType } = req.query;
-   db.query(
-      `SELECT * FROM boarding_house ORDER BY ${sort} ${sortType.toUpperCase()}`,
-      (err, result) => {
-         if (!err) {
-            res.send(_bhRemap(result));
-         } else {
-            console.log(err);
+   const { sort, sortType, zone } = req.query;
+   if (zone === "All") {
+      db.query(
+         `SELECT * FROM boarding_house ORDER BY ${sort} ${sortType.toUpperCase()}`,
+         (err, result) => {
+            if (!err) {
+               res.send(_bhRemap(result));
+            } else {
+               console.log(err);
+            }
          }
-      }
-   );
+      );
+   } else {
+      db.query(
+         `SELECT * FROM boarding_house WHERE bh_zone_address = '${zone}' ORDER BY ${sort} ${sortType}`,
+         (err, result) => {
+            if (!err) {
+               res.send(_bhRemap(result));
+            } else {
+               console.log(err);
+            }
+         }
+      );
+   }
 };
 
 // GET ALL BOARDING HOUSE Export ✅ DONE!
