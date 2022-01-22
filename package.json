@@ -15,7 +15,7 @@
    },
    "scripts": {
       "start": "node index.js",
-      "devStart": "nodemon index.js"
+      "devstart": "nodemon index.js"
    },
    "keywords": [],
    "author": "",

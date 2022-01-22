@@ -81,6 +81,11 @@ exports.getTotalBoardinghouseRooms = (req, res) => {
    );
 };
 
+exports.getRoomImage = (req, res) => {
+   const imagePath = req.params.imagename;
+   res.sendFile(`/room-images/${imagePath}`);
+};
+
 // ADD A ROOM
 exports.addRoom = async (req, res) => {
    const bhId = req.params.bhId;

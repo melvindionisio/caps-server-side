@@ -4,7 +4,6 @@ const Router = express.Router();
 const multer = require("multer");
 const path = require("path");
 
-let imagePath;
 const destinationPath = "room-images";
 const storage = multer.diskStorage({
    destination: (req, file, cb) => {
@@ -12,9 +11,6 @@ const storage = multer.diskStorage({
    },
    filename: (req, file, cb) => {
       console.log(file);
-      imagePath = `/${destinationPath}/${Date.now()}${path.extname(
-         file.originalname
-      )}`;
       cb(null, Date.now() + path.extname(file.originalname));
    },
 });
@@ -31,19 +27,22 @@ const UpdateRoom = roomsController.updateRoom;
 const DeleteRoom = roomsController.deleteRoom;
 const EnableRoom = roomsController.enableRoom;
 const DisableRoom = roomsController.disableRoom;
+const GetRoomImage = roomsController.getRoomImage;
 
 // GET
 Router.get("/", GetAllRooms);
 Router.get("/all/:bhId", GetBoardinghouseRooms);
 Router.get("/:roomId", GetRoom);
 Router.get("/total/:bhId", GetTotalBoardinghouseRooms);
+Router.get("/room-images/:imagename", GetRoomImage);
 
 // ADD
 Router.post("/add/:bhId", AddRoom);
 Router.post("/upload", upload.single("room-image"), (req, res) => {
-   console.log("image uploaded");
+   const url = req.protocol + "://" + req.get("host");
+   let imagePath = `${url}/${destinationPath}/${req.file.filename}`;
    res.send({
-      imagePath: imagePath,
+      imagepath: imagePath,
       mesage: "Image Uploaded",
    });
 });
