@@ -39,6 +39,7 @@ app.use("/api/bookmarks", BookmarksRoutes);
 app.use("/api/reviews", ReviewsRoutes);
 app.use("/api/stars", StarRoutes);
 
+app.use("/room-images", express.static("room-images"));
 app.get("/", (req, res) => {
    res.send([
       {

@@ -27,14 +27,12 @@ const UpdateRoom = roomsController.updateRoom;
 const DeleteRoom = roomsController.deleteRoom;
 const EnableRoom = roomsController.enableRoom;
 const DisableRoom = roomsController.disableRoom;
-const GetRoomImage = roomsController.getRoomImage;
 
 // GET
 Router.get("/", GetAllRooms);
 Router.get("/all/:bhId", GetBoardinghouseRooms);
 Router.get("/:roomId", GetRoom);
 Router.get("/total/:bhId", GetTotalBoardinghouseRooms);
-Router.get("/room-images/:imagename", GetRoomImage);
 
 // ADD
 Router.post("/add/:bhId", AddRoom);

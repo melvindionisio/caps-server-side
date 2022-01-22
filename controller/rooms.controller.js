@@ -8,6 +8,7 @@ const roomsRemap = (rooms) => {
          name: room.room_name,
          description: room.room_description,
          type: room.room_type,
+         picture: room.room_picture,
          genderAllowed: room.gender_allowed,
          totalSlots: room.total_slots,
          occupiedSlots: room.occupied_slots,
@@ -81,11 +82,6 @@ exports.getTotalBoardinghouseRooms = (req, res) => {
    );
 };
 
-exports.getRoomImage = (req, res) => {
-   const imagePath = req.params.imagename;
-   res.sendFile(`/room-images/${imagePath}`);
-};
-
 // ADD A ROOM
 exports.addRoom = async (req, res) => {
    const bhId = req.params.bhId;
@@ -93,12 +89,13 @@ exports.addRoom = async (req, res) => {
       roomName,
       roomDescription,
       roomType,
+      roomPicture,
       genderAllowed,
       totalSlots,
       occupiedSlots,
    } = req.body;
 
-   const sqlInsert = `INSERT INTO rooms (boardinghouse_id, room_name, room_description,room_type, gender_allowed, total_slots, occupied_slots) VALUE (?,?,?,?,?,?,?)`;
+   const sqlInsert = `INSERT INTO rooms (boardinghouse_id, room_name, room_description,room_type, room_picture, gender_allowed, total_slots, occupied_slots) VALUE (?,?,?,?,?,?,?,?)`;
    db.query(
       sqlInsert,
       [
@@ -106,6 +103,7 @@ exports.addRoom = async (req, res) => {
          roomName,
          roomDescription,
          roomType,
+         roomPicture,
          genderAllowed,
          totalSlots,
          occupiedSlots,
