@@ -3,8 +3,14 @@ const Router = express.Router();
 
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
-const destinationPath = "room-images";
+const destinationPath = "./room-images";
+
+if (!fs.existsSync(destinationPath)) {
+   fs.mkdirSync(destinationPath);
+}
+
 const storage = multer.diskStorage({
    destination: (req, file, cb) => {
       cb(null, destinationPath);
