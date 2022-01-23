@@ -1,5 +1,8 @@
 const db = require("../connection");
 
+//DELETE ROOM IMAGE WHEN DELETING ROOMS
+const fs = require("fs");
+
 const roomsRemap = (rooms) => {
    let formatted = rooms.map((room) => {
       return {
@@ -149,19 +152,65 @@ exports.disableRoom = (req, res) => {
 exports.deleteRoom = async (req, res) => {
    const roomId = req.params.roomId;
 
-   db.query(`DELETE FROM rooms WHERE room_id=?`, [roomId], (err, result) => {
-      if (!err) {
-         res.send({
-            result: result,
-            message: "Room was successfully deleted!",
-         });
-      } else {
-         res.send({
-            message: err,
-         });
-         console.log(err);
+   db.query(
+      `SELECT room_picture FROM rooms WHERE room_id = ?`,
+      [roomId],
+      (err, result) => {
+         if (!err) {
+            //DELETING THE IMAGE IN FILE SYSTEM FIRST
+            const imagesPath = "./room-images/";
+            let imagelink = result[0].room_picture;
+            //Regex for getting the filename from the url
+            let imageNameExtraction = /[^/]+$/;
+            let fileName = imagelink.match(imageNameExtraction)[0];
+            let imageToDelete = imagesPath + fileName;
+            try {
+               fs.unlinkSync(imageToDelete);
+               console.log(imageToDelete, "has been deleted");
+            } catch (err) {
+               console.error(err);
+            }
+            //delete bookmarks with same id here
+            db.query(
+               `DELETE FROM bookmarks WHERE room_id=?`,
+               [roomId],
+               (err, result) => {
+                  if (!err) {
+                     console.log(
+                        "Bookmarks related to the room has been deleted!"
+                     );
+                     //DELETING THE ROOM
+                     db.query(
+                        `DELETE FROM rooms WHERE room_id=?`,
+                        [roomId],
+                        (err, result) => {
+                           if (!err) {
+                              res.send({
+                                 result: result,
+                                 message: "Room was successfully deleted!",
+                              });
+                           } else {
+                              res.send({
+                                 message: err,
+                              });
+                              console.log(err);
+                           }
+                        }
+                     );
+                  } else {
+                     res.send({
+                        message: err,
+                     });
+                     console.log(err);
+                  }
+               }
+            );
+         } else {
+            res.send({ message: err });
+            console.log(err);
+         }
       }
-   });
+   );
 };
 
 // UPDATE ROOM AVAILABILITY

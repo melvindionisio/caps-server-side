@@ -92,8 +92,22 @@ exports.registerBoardinghouse = (req, res) => {
 
 // GET ALL BOARDING HOUSE ✅ DONE!
 // ORDER BY POPULARIY DESCENDING
+exports.getAllBoardinghouses = (req, res) => {
+   db.query(
+      `SELECT * FROM boarding_house ORDER BY bh_name ASC`,
+      (err, result) => {
+         if (!err) {
+            res.send(_bhRemap(result));
+         } else {
+            console.log(err);
+         }
+      }
+   );
+};
+
 exports.getAllBoardinghouse = (req, res) => {
    const { sort, sortType, zone } = req.query;
+
    if (zone === "All") {
       db.query(
          `SELECT * FROM boarding_house ORDER BY ${sort} ${sortType.toUpperCase()}`,

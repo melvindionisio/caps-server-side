@@ -25,9 +25,11 @@ const UpdatePopularity = boardinghousesController.updatePopularity;
 const SearchBoardinghouse = boardinghousesController.searchBoardinghouse;
 
 const DeleteBoardinghouse = boardinghousesController.deleteBoardinghouse;
+const GetAllBoardinghouses = boardinghousesController.getAllBoardinghouses;
 
 // GET ALL THE BOARDING HOUSE INCLUDING THE OWNER
 Router.get("/", GetAllBoardinghouse);
+Router.get("/all", GetAllBoardinghouses);
 Router.get("/export", GetAllBoardinghouseExport);
 Router.get("/by-zone/:zoneAddress", GetAllBoardinghouseByZone);
 
