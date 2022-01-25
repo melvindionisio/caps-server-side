@@ -12,6 +12,7 @@ const roomsRemap = (rooms) => {
          description: room.room_description,
          type: room.room_type,
          picture: room.room_picture,
+         status: room.room_status,
          genderAllowed: room.gender_allowed,
          totalSlots: room.total_slots,
          occupiedSlots: room.occupied_slots,
@@ -85,6 +86,23 @@ exports.getTotalBoardinghouseRooms = (req, res) => {
    );
 };
 
+exports.getTotalAvailableRooms = (req, res) => {
+   const bhId = req.params.bhId;
+   db.query(
+      `SELECT COUNT(*) FROM rooms WHERE boardinghouse_id = ? AND room_status = 'Available'`,
+      [bhId],
+      (err, result) => {
+         if (!err) {
+            let total = { ...result[0] }[Object.keys({ ...result[0] })[0]];
+            res.send({ total: total });
+         } else {
+            res.send({ message: err });
+            console.log(err);
+         }
+      }
+   );
+};
+
 // ADD A ROOM
 exports.addRoom = async (req, res) => {
    const bhId = req.params.bhId;
@@ -136,16 +154,36 @@ exports.updateRoom = async (req, res) => {
 
 exports.enableRoom = (req, res) => {
    const roomId = req.params.roomId;
-   res.send({
-      roomId: roomId,
-   });
+   const newStatus = "Available";
+   db.query(
+      `UPDATE rooms SET room_status WHERE room_id = ?`,
+      [newStatus, roomId],
+      (err, result) => {
+         if (!err) {
+            res.send({ message: "Room has been enabled!" });
+         } else {
+            console.log(err);
+            res.send({ message: err });
+         }
+      }
+   );
 };
 
 exports.disableRoom = (req, res) => {
    const roomId = req.params.roomId;
-   res.send({
-      roomId: roomId,
-   });
+   const newStatus = "Unavailable";
+   db.query(
+      `UPDATE rooms SET room_status WHERE room_id = ?`,
+      [newStatus, roomId],
+      (err, result) => {
+         if (!err) {
+            res.send({ message: "Room has been disabled!" });
+         } else {
+            console.log(err);
+            res.send({ message: err });
+         }
+      }
+   );
 };
 
 // DELETE SPECIFIC ROOM
@@ -212,6 +250,3 @@ exports.deleteRoom = async (req, res) => {
       }
    );
 };
-
-// UPDATE ROOM AVAILABILITY
-// UPDATE ROOM SLOTS STATUS

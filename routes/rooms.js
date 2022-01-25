@@ -5,7 +5,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-const destinationPath = "./room-images";
+const destinationPath = "room-images";
 
 if (!fs.existsSync(destinationPath)) {
    fs.mkdirSync(destinationPath);
@@ -27,7 +27,8 @@ const roomsController = require("../controller/rooms.controller");
 const GetAllRooms = roomsController.getAllRooms;
 const GetBoardinghouseRooms = roomsController.getBoardinghouseRooms;
 const GetRoom = roomsController.getRoom;
-const GetTotalBoardinghouseRooms = roomsController.getTotalBoardinghouseRooms;
+const GetTotalRooms = roomsController.getTotalBoardinghouseRooms;
+const GetTotalAvailableRooms = roomsController.getTotalAvailableRooms;
 const AddRoom = roomsController.addRoom;
 const UpdateRoom = roomsController.updateRoom;
 const DeleteRoom = roomsController.deleteRoom;
@@ -38,7 +39,8 @@ const DisableRoom = roomsController.disableRoom;
 Router.get("/", GetAllRooms);
 Router.get("/all/:bhId", GetBoardinghouseRooms);
 Router.get("/:roomId", GetRoom);
-Router.get("/total/:bhId", GetTotalBoardinghouseRooms);
+Router.get("/total/:bhId", GetTotalRooms);
+Router.get("/total-available/:bhId", GetTotalAvailableRooms);
 
 // ADD
 Router.post("/add/:bhId", AddRoom);
@@ -55,6 +57,8 @@ Router.post("/upload", upload.single("room-image"), (req, res) => {
 Router.put("/update/:roomId", UpdateRoom);
 Router.put("/enable/:roomId", EnableRoom);
 Router.put("/disable/:roomId", DisableRoom);
+//Router.put("/update-available-slots", UpdateAvailable);
+//Router.put("/update-occupied-slots")
 
 // DELETE
 Router.delete("/delete/:roomId", DeleteRoom);
