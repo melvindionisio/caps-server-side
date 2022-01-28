@@ -1,7 +1,9 @@
 const db = require("../connection");
+const fetch = require("node-fetch");
 
 //DELETE ROOM IMAGE WHEN DELETING ROOMS
 const fs = require("fs");
+const destinationPath = "room-images";
 
 const roomsRemap = (rooms) => {
    let formatted = rooms.map((room) => {
@@ -22,14 +24,17 @@ const roomsRemap = (rooms) => {
 };
 
 exports.getAllRooms = (req, res) => {
-   db.query(`SELECT * FROM rooms `, (err, result) => {
-      if (!err) {
-         res.send(roomsRemap(result));
-      } else {
-         res.send({ message: err });
-         console.log(err);
+   db.query(
+      `SELECT * FROM rooms WHERE room_status = 'Available' `,
+      (err, result) => {
+         if (!err) {
+            res.send(roomsRemap(result));
+         } else {
+            res.send({ message: err });
+            console.log(err);
+         }
       }
-   });
+   );
 };
 
 // GET ALL Boardinghouse ROOMS - need boardinghouse_id to get rooms associated with the current login owner
@@ -111,12 +116,13 @@ exports.addRoom = async (req, res) => {
       roomDescription,
       roomType,
       roomPicture,
+      roomStatus,
       genderAllowed,
       totalSlots,
       occupiedSlots,
    } = req.body;
 
-   const sqlInsert = `INSERT INTO rooms (boardinghouse_id, room_name, room_description,room_type, room_picture, gender_allowed, total_slots, occupied_slots) VALUE (?,?,?,?,?,?,?,?)`;
+   const sqlInsert = `INSERT INTO rooms (boardinghouse_id, room_name, room_description,room_type, room_picture, room_status, gender_allowed, total_slots, occupied_slots) VALUE (?,?,?,?,?,?,?,?,?)`;
    db.query(
       sqlInsert,
       [
@@ -125,6 +131,7 @@ exports.addRoom = async (req, res) => {
          roomDescription,
          roomType,
          roomPicture,
+         roomStatus,
          genderAllowed,
          totalSlots,
          occupiedSlots,
@@ -144,19 +151,75 @@ exports.addRoom = async (req, res) => {
    );
 };
 
+exports.uploadRoomImage = (req, res) => {
+   const url = req.protocol + "://" + req.get("host");
+   let imagePath = `${url}/${destinationPath}/${req.file.filename}`;
+   res.send({
+      imagepath: imagePath,
+      message: "Image Uploaded",
+   });
+};
+
+exports.updateRoomPicture = (req, res) => {
+   const roomId = req.params.roomId;
+   const { newImageLink } = req.body;
+   db.query(
+      `UPDATE rooms SET room_picture = ? WHERE room_id = ?`,
+      [newImageLink, roomId],
+      (err, result) => {
+         if (!err) {
+            res.send({
+               message: "Room successfully updated picture!",
+            });
+         } else {
+            console.log(err);
+            res.send({ message: err });
+         }
+      }
+   );
+};
+
 // UPDATE A ROOM details
 exports.updateRoom = async (req, res) => {
    const roomId = req.params.roomId;
-   res.send({
-      roomId: roomId,
-   });
+   const {
+      roomName,
+      roomDescription,
+      roomType,
+      roomStatus,
+      genderAllowed,
+      totalSlots,
+      occupiedSlots,
+   } = req.body;
+
+   db.query(
+      `UPDATE rooms SET room_name = ?, room_description = ?, room_type = ?, room_status = ?, gender_allowed = ?, total_slots = ?, occupied_slots = ? WHERE room_id = ?`,
+      [
+         roomName,
+         roomDescription,
+         roomType,
+         roomStatus,
+         genderAllowed,
+         totalSlots,
+         occupiedSlots,
+         roomId,
+      ],
+      (err, result) => {
+         if (!err) {
+            res.send({ message: "Room successfully updated!" });
+         } else {
+            console.log(err);
+            res.send({ message: err });
+         }
+      }
+   );
 };
 
 exports.enableRoom = (req, res) => {
    const roomId = req.params.roomId;
    const newStatus = "Available";
    db.query(
-      `UPDATE rooms SET room_status WHERE room_id = ?`,
+      `UPDATE rooms SET room_status=? WHERE room_id = ?`,
       [newStatus, roomId],
       (err, result) => {
          if (!err) {
@@ -173,7 +236,7 @@ exports.disableRoom = (req, res) => {
    const roomId = req.params.roomId;
    const newStatus = "Unavailable";
    db.query(
-      `UPDATE rooms SET room_status WHERE room_id = ?`,
+      `UPDATE rooms SET room_status=? WHERE room_id = ?`,
       [newStatus, roomId],
       (err, result) => {
          if (!err) {
@@ -186,10 +249,9 @@ exports.disableRoom = (req, res) => {
    );
 };
 
-// DELETE SPECIFIC ROOM
-exports.deleteRoom = async (req, res) => {
+//DELETE ROOM PICTURE
+exports.deleteRoomPicture = (req, res) => {
    const roomId = req.params.roomId;
-
    db.query(
       `SELECT room_picture FROM rooms WHERE room_id = ?`,
       [roomId],
@@ -198,17 +260,37 @@ exports.deleteRoom = async (req, res) => {
             //DELETING THE IMAGE IN FILE SYSTEM FIRST
             const imagesPath = "./room-images/";
             let imagelink = result[0].room_picture;
-            //Regex for getting the filename from the url
+            //Regex for extracting the filename from the url
             let imageNameExtraction = /[^/]+$/;
             let fileName = imagelink.match(imageNameExtraction)[0];
             let imageToDelete = imagesPath + fileName;
             try {
                fs.unlinkSync(imageToDelete);
                console.log(imageToDelete, "has been deleted");
+               res.send({
+                  message: "has been deleted",
+               });
             } catch (err) {
                console.error(err);
             }
-            //delete bookmarks with same id here
+         } else {
+            res.send({ message: err });
+            console.log(err);
+         }
+      }
+   );
+};
+
+// DELETE SPECIFIC ROOM
+exports.deleteRoom = async (req, res) => {
+   const roomId = req.params.roomId;
+
+   fetch(`http://localhost:3500/api/rooms/delete-picture/${roomId}`)
+      .then((res) => res.json())
+      .then((data) => {
+         if (data) {
+            //update new room contents here
+            console.log(data.message);
             db.query(
                `DELETE FROM bookmarks WHERE room_id=?`,
                [roomId],
@@ -243,10 +325,7 @@ exports.deleteRoom = async (req, res) => {
                   }
                }
             );
-         } else {
-            res.send({ message: err });
-            console.log(err);
          }
-      }
-   );
+      })
+      .catch((err) => console.log(err));
 };

@@ -34,6 +34,9 @@ const UpdateRoom = roomsController.updateRoom;
 const DeleteRoom = roomsController.deleteRoom;
 const EnableRoom = roomsController.enableRoom;
 const DisableRoom = roomsController.disableRoom;
+const DeleteRoomPicture = roomsController.deleteRoomPicture;
+const UploadRoomImage = roomsController.uploadRoomImage;
+const UpdateRoomPicture = roomsController.updateRoomPicture;
 
 // GET
 Router.get("/", GetAllRooms);
@@ -44,23 +47,16 @@ Router.get("/total-available/:bhId", GetTotalAvailableRooms);
 
 // ADD
 Router.post("/add/:bhId", AddRoom);
-Router.post("/upload", upload.single("room-image"), (req, res) => {
-   const url = req.protocol + "://" + req.get("host");
-   let imagePath = `${url}/${destinationPath}/${req.file.filename}`;
-   res.send({
-      imagepath: imagePath,
-      mesage: "Image Uploaded",
-   });
-});
+Router.post("/upload", upload.single("room-image"), UploadRoomImage);
 
 // UPDATE
 Router.put("/update/:roomId", UpdateRoom);
+Router.put("/update-room-picture/:roomId", UpdateRoomPicture);
 Router.put("/enable/:roomId", EnableRoom);
 Router.put("/disable/:roomId", DisableRoom);
-//Router.put("/update-available-slots", UpdateAvailable);
-//Router.put("/update-occupied-slots")
 
 // DELETE
 Router.delete("/delete/:roomId", DeleteRoom);
+Router.get("/delete-picture/:roomId", DeleteRoomPicture);
 
 module.exports = Router;
