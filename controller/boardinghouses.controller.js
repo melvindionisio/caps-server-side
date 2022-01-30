@@ -20,7 +20,7 @@ const _bhRemap = (result) => {
          offers: boardinghouse.offers,
          priceRange: boardinghouse.price_range,
          waterSource: boardinghouse.water_source,
-         genderAllowed: boardinghouse.gender_category,
+         genderAllowed: boardinghouse.gender_allowed,
          totalRooms: boardinghouse.total_rooms,
       };
    });

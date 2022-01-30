@@ -131,6 +131,13 @@ exports.updateOwnerProfile = (req, res) => {
       (err, result) => {
          if (!err) {
             res.send({ message: "Profile successfully changed!" });
+            db.query(
+               `UPDATE boarding_house SET bh_owner = ? WHERE bho_id = ?`,
+               [newName, ownerId],
+               (err, result) => {
+                  console.log(result);
+               }
+            );
             console.log("id", result.affectedRows, "has updated.");
          } else {
             console.log(err);
