@@ -247,9 +247,42 @@ exports.getBoardinghouseByOwnerId = (req, res) => {
 // UPDATE SPECIFIC BOARDING HOUSE by OwnerID
 exports.updateBoardinghouse = (req, res) => {
    const boardinghouseId = req.params.boardinghouseId;
+   const {
+      name,
+      owner,
+      completeAddress,
+      contact,
+      zoneAddress,
+      streetAddress,
+      longitude,
+      latitude,
+      offers,
+      tagline,
+      waterSource,
+      houseProtocols,
+      gendersAllowed,
+      priceRange,
+   } = req.body;
+
    db.query(
-      `UPDATE boarding_house SET ... WHERE boardinghouse_id = ?`,
-      [boardinghouseId],
+      `UPDATE boarding_house SET bh_name = ?, bh_owner = ?, bh_complete_address = ?, bh_contacts = ?, bh_zone_address = ?, bh_street_address = ?, bh_longitude = ?, bh_latitude = ?, offers = ?, tagline = ?, water_source = ?, house_protocols = ?, gender_allowed = ?, price_range = ? WHERE boardinghouse_id = ?`,
+      [
+         name,
+         owner,
+         completeAddress,
+         contact,
+         zoneAddress,
+         streetAddress,
+         longitude,
+         latitude,
+         offers,
+         tagline,
+         waterSource,
+         houseProtocols,
+         gendersAllowed,
+         priceRange,
+         boardinghouseId,
+      ],
       (err, result) => {
          if (!err) {
             res.send({
