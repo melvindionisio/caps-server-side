@@ -22,6 +22,7 @@ exports.downloadPDF = (req, res) => {
    //setTimeout(function () {
    //if (fs.existsSync(`${__dirname}\\result.pdf`)) {
    //fs.unlinkSync(`${__dirname}\\result.pdf`);
+   //console.log("generated file deleted.");
    //}
-   //}, 180000);
+   //}, 120000);
 };

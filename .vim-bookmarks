@@ -1,0 +1,3 @@
+let l:bm_file_version = 1
+let l:bm_sessions = {'default': {'D:\CAPSTONE\caps-server-side\controller\excel.controller.js': [{'sign_idx': 9500, 'line_nr': 65, 'content': '   try {'},],}}
+let l:bm_current_session = 'default'
