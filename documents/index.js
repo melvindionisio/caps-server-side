@@ -1,4 +1,4 @@
-module.exports = ({ name, price1, price2, receiptId }) => {
+module.exports = (boardinghouses) => {
    const today = new Date();
    const time = today.toLocaleTimeString(); //returns time (e.g. "6:08:25 PM")
    const style = `
@@ -61,6 +61,7 @@ module.exports = ({ name, price1, price2, receiptId }) => {
       }
       td {
         padding: 0.3rem 0.5rem;
+        word-wrap: break-word;
       }
       th {
         text-transform: uppercase;
@@ -91,11 +92,19 @@ module.exports = ({ name, price1, price2, receiptId }) => {
       </header>
    `;
 
-   const table = () => {
+   const tableContent = boardinghouses.map((boardinghouse) => {
       return `
-         <h1>Hello World</h1>
+          <tr>
+            <td>${boardinghouse.id}</td>
+            <td>${boardinghouse.ownerName}</td>
+            <td>${boardinghouse.contacts}</td>
+            <td>${boardinghouse.name}</td>
+            <td>${boardinghouse.street}</td>
+            <td>${boardinghouse.zone}</td>
+          </tr>
       `;
-   };
+   });
+
    return `
    <!DOCTYPE html>
 <html>
@@ -113,16 +122,11 @@ module.exports = ({ name, price1, price2, receiptId }) => {
           <tr>
             <th>ID</th>
             <th>Owner Name</th>
+            <th>Contacts</th>
             <th>Boarding House</th>
             <th colspan="2">Address</th>
           </tr>
-          <tr>
-            <td>0</td>
-            <td>Melvin Dionisio</td>
-            <td>The Lone House</td>
-            <td>Lorem Ipsum</td>
-            <td>Zone 1</td>
-          </tr>
+          ${tableContent}
         </table>
       </main>
     </div>

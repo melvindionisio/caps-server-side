@@ -136,16 +136,17 @@ exports.getAllBoardinghouse = (req, res) => {
 // GET ALL BOARDING HOUSE Export ✅ DONE!
 exports.getAllBoardinghouseExport = (req, res) => {
    db.query(
-      `SELECT boardinghouse_id, bh_name, bh_owner, bh_street_address, bh_zone_address FROM boarding_house`,
+      `SELECT boardinghouse_id, bh_name, bh_owner, bh_street_address, bh_zone_address, bh_contacts FROM boarding_house`,
       (err, results) => {
          if (!err) {
             const newResults = results.map((item) => {
                return {
                   id: item.boardinghouse_id,
                   name: item.bh_name,
-                  owner_name: item.bh_owner,
+                  ownerName: item.bh_owner,
                   street: item.bh_street_address,
                   zone: item.bh_zone_address,
+                  contacts: item.bh_contacts,
                };
             });
             res.send(newResults);

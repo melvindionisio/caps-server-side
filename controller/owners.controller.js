@@ -180,6 +180,8 @@ exports.deleteOwner = async (req, res) => {
                result: result,
                message: `Owner at ${ownerId} successfully deleted!`,
             });
+
+            // DELETE BOARINGHOUSE OWNED
             res.redirect(`/api/boarding-houses/delete/${ownerId}`);
          } else {
             res.send({ message: err });
