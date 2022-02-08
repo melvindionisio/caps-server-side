@@ -18,6 +18,7 @@ exports.generateExcel = async (req, res) => {
       { header: "Street", key: "street", width: 20 },
       { header: "Zone", key: "zone", width: 20 },
    ];
+   //worksheet.mergeCells("E1:F1");
 
    // Looping through boardinghouse data
    let counter = 1;

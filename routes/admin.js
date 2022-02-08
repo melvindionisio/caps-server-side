@@ -1,10 +1,14 @@
-const express = require('express');
-const db = require('../connection');
+const express = require("express");
+const db = require("../connection");
 const Router = express.Router();
 
-const adminController = require('../controller/admin.controller');
+const adminController = require("../controller/admin.controller");
+const UpdateAdminProfile = adminController.updateAdminProfile;
+const UpdateAdminPassword = adminController.updateAdminPassword;
+const DeleteOwner = adminController.deleteOwner;
+
 // GET
-Router.get('/', (req, res) => {
+Router.get("/", (req, res) => {
    db.query(`SELECT * FROM admin`, (err, rows) => {
       if (!err) {
          res.send(rows);
@@ -14,10 +18,14 @@ Router.get('/', (req, res) => {
    });
 });
 
-// SEND
-Router.post('/', adminController.loginAdmin);
+// LOGIN
+Router.post("/auth", adminController.loginAdmin);
 
-// SEND
-Router.put('/:adminId', adminController.updateAdmin);
+//DELETE OWNER ALONG WITH THE BH
+Router.delete("/delete/owner/:ownerId", DeleteOwner);
+
+// UPDATE
+Router.put("/update-profile/:adminId", UpdateAdminProfile); // ✅ Done!
+Router.put("/update-password/:adminId", UpdateAdminPassword); // ✅ Done!
 
 module.exports = Router;
