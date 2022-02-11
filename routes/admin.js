@@ -21,6 +21,7 @@ Router.get("/", (req, res) => {
 // LOGIN
 Router.post("/auth", adminController.loginAdmin);
 
+Router.post("/register", adminController.registerAdmin);
 //DELETE OWNER ALONG WITH THE BH
 Router.delete("/delete/owner/:ownerId", DeleteOwner);
 

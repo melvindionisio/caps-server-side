@@ -2,9 +2,20 @@ const db = require("../connection");
 const express = require("express");
 const bcrypt = require("bcrypt");
 
+const adminRemap = (admins) => {
+   let formatted = admins.map((admin) => {
+      return {
+         name: admin.admin_name,
+         username: admin.admin_username,
+      };
+   });
+   return formatted;
+};
+
 const saltRounds = 5;
 exports.registerAdmin = async (req, res) => {
    const { name, username, password } = req.body;
+   console.log(name, username, password);
    const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
    const sqlInsert =
@@ -25,7 +36,7 @@ exports.registerAdmin = async (req, res) => {
 
 // LOGIN ADMIN
 exports.loginAdmin = async (req, res) => {
-   const { usename, password } = req.body;
+   const { username, password } = req.body;
 
    if (username && password) {
       db.query(
@@ -38,6 +49,7 @@ exports.loginAdmin = async (req, res) => {
                   failed: "Error Occured",
                   error: err,
                });
+               console.log(err);
             }
             if (result.length > 0) {
                const validate = await bcrypt.compare(
@@ -48,7 +60,7 @@ exports.loginAdmin = async (req, res) => {
                   res.send({
                      ...result[0],
                      message: "You successfully logged in!",
-                     error: "success",
+                     error: null,
                   });
                } else if (username === result[0].admin_username || validate) {
                   res.send({
@@ -97,20 +109,45 @@ exports.updateAdminProfile = (req, res) => {
 
 exports.updateAdminPassword = async (req, res) => {
    const adminId = req.params.adminId;
-   const { newPassword } = req.body;
-
-   const encryptedPassword = await bcrypt.hash(newPassword, saltRounds);
-   // ! HASH PASSWORD BEFORE SENDING TO DB
+   const { currentPassword, newPassword } = req.body;
 
    db.query(
-      `UPDATE admin SET admin_password = ? WHERE admin_id = ?`,
-      [encryptedPassword, adminId],
+      `SELECT * FROM admin WHERE admin_id = ?`,
+      [adminId],
       async (err, result) => {
          if (!err) {
-            res.send({ message: "Password successfully changed!" });
+            const validate = await bcrypt.compare(
+               currentPassword,
+               result[0].admin_password
+            );
+            if (validate) {
+               const encryptedPassword = await bcrypt.hash(
+                  newPassword,
+                  saltRounds
+               );
+               db.query(
+                  `UPDATE admin SET admin_password = ? WHERE admin_id = ?`,
+                  [encryptedPassword, adminId],
+                  async (err, result) => {
+                     if (!err) {
+                        res.send({
+                           message: "Your password successfully changed!",
+                           err: null,
+                        });
+                     } else {
+                        res.send({ message: err });
+                        console.log(err);
+                     }
+                  }
+               );
+            } else {
+               res.send({
+                  message: "Current Password not match",
+                  err: "incorrect-current",
+               });
+            }
          } else {
             res.send({ message: err });
-            console.log(err);
          }
       }
    );
