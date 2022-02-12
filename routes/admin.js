@@ -20,6 +20,7 @@ Router.get("/", (req, res) => {
 
 // LOGIN
 Router.post("/auth", adminController.loginAdmin);
+Router.post("/validate-export", adminController.validateExport);
 
 Router.post("/register", adminController.registerAdmin);
 //DELETE OWNER ALONG WITH THE BH

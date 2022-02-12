@@ -152,3 +152,26 @@ exports.updateAdminPassword = async (req, res) => {
       }
    );
 };
+
+exports.validateExport = (req, res) => {
+   const { password, admin } = req.body;
+   if (password) {
+      db.query(
+         `SELECT * FROM admin WHERE admin_username = ? `,
+         [admin],
+         async (err, result) => {
+            if (!err) {
+               const validate = await bcrypt.compare(
+                  password,
+                  result[0].admin_password
+               );
+               if (validate) {
+                  res.send({
+                     isValid: true,
+                  });
+               }
+            }
+         }
+      );
+   }
+};
