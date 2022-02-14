@@ -288,7 +288,7 @@ exports.updateBoardinghouse = (req, res) => {
          if (!err) {
             res.send({
                result: result,
-               message: "The boadinghouse has been updated!",
+               message: `(Boarding house) ${name} has been updated!`,
             });
          } else {
             res.send({ message: err });

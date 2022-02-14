@@ -171,18 +171,33 @@ exports.updateOwnerPassword = async (req, res) => {
 // DELETE SPECIFIC OWNER ACCOUNT - INCLUDING THE BOARDING HOUSE CONNECTED TO THE ACCOUNT
 exports.deleteOwner = async (req, res) => {
    const ownerId = req.params.ownerId;
+   console.log(ownerId);
+
+   // DELETE BOARINGHOUSE OWNED
    db.query(
-      "DELETE FROM boarding_house_owners WHERE bho_id = ?",
+      "DELETE FROM boarding_house WHERE bho_id = ?",
       [ownerId],
       (err, result) => {
          if (!err) {
-            res.send({
-               result: result,
-               message: `Owner at ${ownerId} successfully deleted!`,
-            });
-
-            // DELETE BOARINGHOUSE OWNED
-            res.redirect(`/api/boarding-houses/delete/${ownerId}`);
+            //res.send({
+            //result: result,
+            //message: `Boardinghouse owned by ${ownerId} has been successfully deleted!`,
+            //});
+            db.query(
+               "DELETE FROM boarding_house_owners WHERE bho_id = ?",
+               [ownerId],
+               (err, result) => {
+                  if (!err) {
+                     res.send({
+                        result: result,
+                        message: `Owner at ${ownerId} successfully deleted!`,
+                     });
+                  } else {
+                     res.send({ message: err });
+                     console.log(err);
+                  }
+               }
+            );
          } else {
             res.send({ message: err });
             console.log(err);

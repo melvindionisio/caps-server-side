@@ -206,7 +206,7 @@ exports.updateRoom = async (req, res) => {
       ],
       (err, result) => {
          if (!err) {
-            res.send({ message: "Room successfully updated!" });
+            res.send({ message: `(Room) ${roomName} successfully updated!` });
          } else {
             console.log(err);
             res.send({ message: err });
