@@ -169,20 +169,22 @@ exports.updateOwnerPassword = async (req, res) => {
 };
 
 // DELETE SPECIFIC OWNER ACCOUNT - INCLUDING THE BOARDING HOUSE CONNECTED TO THE ACCOUNT
+
+// To Delete the owner
+// 1. first delete all rooms of boarding house that the owner owned
+// 2. then delete the boarding house itself
+// 3. last will be the owner acoount
 exports.deleteOwner = async (req, res) => {
    const ownerId = req.params.ownerId;
    console.log(ownerId);
 
    // DELETE BOARINGHOUSE OWNED
+
    db.query(
       "DELETE FROM boarding_house WHERE bho_id = ?",
       [ownerId],
       (err, result) => {
          if (!err) {
-            //res.send({
-            //result: result,
-            //message: `Boardinghouse owned by ${ownerId} has been successfully deleted!`,
-            //});
             db.query(
                "DELETE FROM boarding_house_owners WHERE bho_id = ?",
                [ownerId],

@@ -55,5 +55,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(process.env.PORT || fallbackPort, () => {
-   console.log(`🚀 Server started at http://localhost:${fallbackPort}`);
+   console.log(`🚀 Server started running.`);
 });

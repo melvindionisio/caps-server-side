@@ -6,6 +6,9 @@ const adminController = require("../controller/admin.controller");
 const UpdateAdminProfile = adminController.updateAdminProfile;
 const UpdateAdminPassword = adminController.updateAdminPassword;
 const DeleteOwner = adminController.deleteOwner;
+const ValidateAdmin = adminController.validateAdmin;
+const LoginAdmin = adminController.loginAdmin;
+const RegisterAdmin = adminController.registerAdmin;
 
 // GET
 Router.get("/", (req, res) => {
@@ -19,10 +22,11 @@ Router.get("/", (req, res) => {
 });
 
 // LOGIN
-Router.post("/auth", adminController.loginAdmin);
-Router.post("/validate-export", adminController.validateExport);
+Router.post("/auth", LoginAdmin);
+Router.post("/validate-export", ValidateAdmin);
 
-Router.post("/register", adminController.registerAdmin);
+Router.post("/register", RegisterAdmin);
+
 //DELETE OWNER ALONG WITH THE BH
 Router.delete("/delete/owner/:ownerId", DeleteOwner);
 

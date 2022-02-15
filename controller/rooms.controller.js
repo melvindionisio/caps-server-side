@@ -1,5 +1,6 @@
 const db = require("../connection");
 const fetch = require("node-fetch");
+const domain = require("../domain/domain");
 
 //DELETE ROOM IMAGE WHEN DELETING ROOMS
 const fs = require("fs");
@@ -268,7 +269,8 @@ exports.deleteRoomPicture = (req, res) => {
                fs.unlinkSync(imageToDelete);
                console.log(imageToDelete, "has been deleted");
                res.send({
-                  message: "has been deleted",
+                  message: "Picture been deleted",
+                  status: "deleted",
                });
             } catch (err) {
                console.error(err);
@@ -285,11 +287,10 @@ exports.deleteRoomPicture = (req, res) => {
 exports.deleteRoom = async (req, res) => {
    const roomId = req.params.roomId;
 
-   fetch(`http://localhost:3500/api/rooms/delete-picture/${roomId}`)
+   fetch(`${domain}/api/rooms/delete-picture/${roomId}`)
       .then((res) => res.json())
       .then((data) => {
-         if (data) {
-            //update new room contents here
+         if (data.status === "deleted") {
             console.log(data.message);
             db.query(
                `DELETE FROM bookmarks WHERE room_id=?`,
@@ -308,6 +309,7 @@ exports.deleteRoom = async (req, res) => {
                               res.send({
                                  result: result,
                                  message: "Room was successfully deleted!",
+                                 status: "deleted",
                               });
                            } else {
                               res.send({

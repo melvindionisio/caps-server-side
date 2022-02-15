@@ -1,6 +1,8 @@
 const db = require("../connection");
 const express = require("express");
 const bcrypt = require("bcrypt");
+const domain = require("../domain/domain");
+const fetch = require("node-fetch");
 
 const adminRemap = (admins) => {
    let formatted = admins.map((admin) => {
@@ -82,13 +84,6 @@ exports.loginAdmin = async (req, res) => {
    }
 };
 
-exports.deleteOwner = (req, res) => {
-   const ownerId = req.params.ownerId;
-   res.send({
-      message: "Owner successfully deleted along with their boarding house.",
-   });
-};
-
 exports.updateAdminProfile = (req, res) => {
    const adminId = req.params.adminId;
    const { newUsername, newName } = req.body;
@@ -153,7 +148,7 @@ exports.updateAdminPassword = async (req, res) => {
    );
 };
 
-exports.validateExport = (req, res) => {
+exports.validateAdmin = (req, res) => {
    const { password, admin } = req.body;
    if (password) {
       db.query(
@@ -172,4 +167,70 @@ exports.validateExport = (req, res) => {
          }
       );
    }
+};
+
+// DELETE SPECIFIC OWNER ACCOUNT - INCLUDING THE BOARDING HOUSE CONNECTED TO THE ACCOUNT
+
+// To Delete the owner
+// 1. first delete all rooms of boarding house that the owner owned
+// 2. then delete the boarding house itself
+// 3. last will be the owner acoount
+exports.deleteOwner = (req, res) => {
+   const ownerId = req.params.ownerId;
+
+   fetch(`${domain}/api/boarding-houses/by-owner/${ownerId}`)
+      .then((res) => res.json())
+      .then((boardinghouse) => {
+         db.query(
+            "SELECT * FROM rooms WHERE boardinghouse_id = ?",
+            [boardinghouse.id],
+            (err, rooms) => {
+               if (!err) {
+                  // TO DO HERE.
+                  //DELETE EACH ROOM PICTURE FILE FIRST
+                  //DELETE ALL USER BOOKMARKED RELATED TO THE ROOM
+                  //DELETE THE ROOM ITSELF
+                  rooms.map((room) => {
+                     fetch(`${domain}/api/rooms/delete/${room_id}`, {
+                        method: "DELETE",
+                     })
+                        .then((res) => res.json())
+                        .then((data) => console.log(data))
+                        .catch((err) => console.log(err));
+                  });
+
+                  db.query(
+                     "DELETE FROM boarding_house WHERE bho_id = ?",
+                     [ownerId],
+                     (err, result) => {
+                        if (!err) {
+                           db.query(
+                              "DELETE FROM boarding_house_owners WHERE bho_id = ?",
+                              [ownerId],
+                              (err, result) => {
+                                 if (!err) {
+                                    res.send({
+                                       result: result,
+                                       message: `All related data about the owner has been deleted.`,
+                                    });
+                                 } else {
+                                    res.send({ message: err });
+                                    console.log(err);
+                                 }
+                              }
+                           );
+                        } else {
+                           res.send({ message: err });
+                           console.log(err);
+                        }
+                     }
+                  );
+               } else {
+                  console.log(err);
+                  res.send({ message: err });
+               }
+            }
+         );
+      })
+      .catch((err) => console.log(err));
 };
