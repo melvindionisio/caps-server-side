@@ -4,16 +4,6 @@ const bcrypt = require("bcrypt");
 const domain = require("../domain/domain");
 const fetch = require("node-fetch");
 
-const adminRemap = (admins) => {
-   let formatted = admins.map((admin) => {
-      return {
-         name: admin.admin_name,
-         username: admin.admin_username,
-      };
-   });
-   return formatted;
-};
-
 const saltRounds = 5;
 exports.registerAdmin = async (req, res) => {
    const { name, username, password } = req.body;
@@ -191,7 +181,7 @@ exports.deleteOwner = (req, res) => {
                   //DELETE ALL USER BOOKMARKED RELATED TO THE ROOM
                   //DELETE THE ROOM ITSELF
                   rooms.map((room) => {
-                     fetch(`${domain}/api/rooms/delete/${room_id}`, {
+                     fetch(`${domain}/api/rooms/delete/${room.room_id}`, {
                         method: "DELETE",
                      })
                         .then((res) => res.json())
@@ -200,28 +190,57 @@ exports.deleteOwner = (req, res) => {
                   });
 
                   db.query(
-                     "DELETE FROM boarding_house WHERE bho_id = ?",
-                     [ownerId],
+                     `DELETE FROM bookmarks WHERE boardinghouse_id = ?`,
+                     [boardinghouse.id],
                      (err, result) => {
                         if (!err) {
-                           db.query(
-                              "DELETE FROM boarding_house_owners WHERE bho_id = ?",
-                              [ownerId],
-                              (err, result) => {
-                                 if (!err) {
-                                    res.send({
-                                       result: result,
-                                       message: `All related data about the owner has been deleted.`,
-                                    });
-                                 } else {
-                                    res.send({ message: err });
-                                    console.log(err);
-                                 }
+                           fetch(
+                              `${domain}/api/reviews/delete/boardinghouse/${boardinghouse.id}`,
+                              {
+                                 method: "DELETE",
                               }
-                           );
-                        } else {
-                           res.send({ message: err });
-                           console.log(err);
+                           )
+                              .then((res) => res.json())
+                              .then((data) => {
+                                 console.log(data);
+                                 fetch(
+                                    `${domain}/api/stars/remove/boardinghouse/${boardinghouse.id}`,
+                                    { method: "delete" }
+                                 )
+                                    .then((res) => res.json())
+                                    .then((data) => {
+                                       db.query(
+                                          "DELETE FROM boarding_house WHERE bho_id = ?",
+                                          [ownerId],
+                                          (err, result) => {
+                                             if (!err) {
+                                                db.query(
+                                                   "DELETE FROM boarding_house_owners WHERE bho_id = ?",
+                                                   [ownerId],
+                                                   (err, result) => {
+                                                      if (!err) {
+                                                         res.send({
+                                                            result: result,
+                                                            message: `All related data about the owner has been deleted.`,
+                                                         });
+                                                      } else {
+                                                         res.send({
+                                                            message: err,
+                                                         });
+                                                         console.log(err);
+                                                      }
+                                                   }
+                                                );
+                                             } else {
+                                                res.send({ message: err });
+                                                console.log(err);
+                                             }
+                                          }
+                                       );
+                                    })
+                                    .catch((err) => console.log(err));
+                              })
+                              .catch((err) => console.log(err));
                         }
                      }
                   );

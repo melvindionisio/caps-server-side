@@ -76,6 +76,28 @@ exports.deleteReview = (req, res) => {
    );
 };
 
+exports.deleteAllReview = (req, res) => {
+   const bhId = req.params.bhId;
+   db.query(
+      `DELETE FROM reviews WHERE boardinghouse_id = ?`,
+      [bhId],
+      (err, result) => {
+         if (!err) {
+            res.send({
+               result: result,
+               message:
+                  "All reviews of boarding house was successfully deleted!",
+            });
+         } else {
+            res.send({
+               message: err,
+            });
+            console.log(err);
+         }
+      }
+   );
+};
+
 exports.getReview = (req, res) => {
    const reviewId = req.params.reviewId;
    db.query(

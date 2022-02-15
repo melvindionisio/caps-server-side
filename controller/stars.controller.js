@@ -84,3 +84,25 @@ exports.isStarred = (req, res) => {
       }
    );
 };
+
+exports.deleteAllBhStars = (req, res) => {
+   const { bhId } = req.params;
+
+   db.query(
+      `DELETE FROM stars WHERE boardinghouse_id = ?`,
+      [bhId],
+      (err, result) => {
+         if (!err) {
+            res.send({
+               result: result,
+               message: "All Boarding house stars was successfully removed!",
+            });
+         } else {
+            res.send({
+               message: err,
+            });
+            console.log(err);
+         }
+      }
+   );
+};
