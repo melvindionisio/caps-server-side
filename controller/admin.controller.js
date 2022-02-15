@@ -165,11 +165,9 @@ exports.validateExport = (req, res) => {
                   password,
                   result[0].admin_password
                );
-               if (validate) {
-                  res.send({
-                     isValid: true,
-                  });
-               }
+               res.send({
+                  isValid: validate,
+               });
             }
          }
       );
