@@ -94,10 +94,10 @@ module.exports = (boardinghouses) => {
       </header>
    `;
 
-   const tableContent = boardinghouses.map((boardinghouse) => {
+   const tableContent = boardinghouses.map((boardinghouse, index) => {
       return `
           <tr>
-            <td>${boardinghouse.id}</td>
+            <td>${index + 1}</td>
             <td>${boardinghouse.ownerName}</td>
             <td>${boardinghouse.contacts}</td>
             <td>${boardinghouse.name}</td>
@@ -122,7 +122,7 @@ module.exports = (boardinghouses) => {
       <main>
         <table cellpadding="0" cellspacing="0">
           <tr>
-            <th>ID</th>
+            <th>No.</th>
             <th>Owner Name</th>
             <th>Contacts</th>
             <th>Boarding House</th>
