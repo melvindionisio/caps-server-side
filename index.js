@@ -44,6 +44,7 @@ app.use("/api/pdf", PdfRoutes);
 app.use("/api/excel", ExcelRoutes);
 
 app.use("/room-images", express.static("room-images"));
+app.use("/logo", express.static("logo"));
 app.get("/", (req, res) => {
    res.send([
       {

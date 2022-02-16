@@ -1,3 +1,5 @@
+const domain = require("../domain/domain");
+
 module.exports = (boardinghouses) => {
    const today = new Date();
    const time = today.toLocaleTimeString(); //returns time (e.g. "6:08:25 PM")
@@ -80,7 +82,7 @@ module.exports = (boardinghouses) => {
       <header class="header">
         <div class="image">
           <img
-            src="https://i2.wp.com/cleverlogos.co/wp-content/uploads/2018/05/reciepthound_1.jpg?fit=800%2C600&ssl=1"
+            src="${domain}/logo/sns-logo.png"
             id="logo"
           />
           <h1 id="site-name">Search 'N Stay</h1>
