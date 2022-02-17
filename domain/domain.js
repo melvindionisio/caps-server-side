@@ -4,4 +4,4 @@ const domains = {
    productions: "https://api-searchnstay.herokuapp.com",
 };
 
-module.exports = domains.localhost;
+module.exports = domains.productions;
