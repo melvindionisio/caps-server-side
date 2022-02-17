@@ -16,7 +16,7 @@ exports.generatePDF = (req, res) => {
 };
 
 exports.downloadPDF = (req, res) => {
-   res.sendFile(`${__dirname}\\result.pdf`);
+   res.sendFile(`${__dirname}/result.pdf`);
 
    //delete after downloading
    //setTimeout(function () {

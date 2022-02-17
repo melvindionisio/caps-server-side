@@ -41,7 +41,7 @@ exports.generateExcel = async (req, res) => {
             res.send({
                status: "success",
                message: "file successfully generated",
-               path: `${path}/boardinghouses.xlsx`,
+               path: `${path}\\boardinghouses.xlsx`,
             });
          });
    } catch (err) {
@@ -54,5 +54,5 @@ exports.generateExcel = async (req, res) => {
 
 //send file
 exports.downloadExcel = (req, res) => {
-   res.sendFile(`${__dirname}\\exports\\boardinghouses.xlsx`);
+   res.sendFile(`${__dirname}/exports/boardinghouses.xlsx`);
 };
