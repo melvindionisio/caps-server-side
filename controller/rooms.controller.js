@@ -26,7 +26,7 @@ const roomsRemap = (rooms) => {
 
 exports.getAllRooms = (req, res) => {
    db.query(
-      `SELECT * FROM rooms WHERE room_status = 'Available' `,
+      `SELECT * FROM rooms WHERE room_status = 'Available' ORDER BY room_name ASC`,
       (err, result) => {
          if (!err) {
             res.send(roomsRemap(result));

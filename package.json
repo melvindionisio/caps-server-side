@@ -1,7 +1,7 @@
 {
-   "name": "searchnstay-try",
+   "name": "searchnstay-server",
    "version": "1.0.0",
-   "description": "",
+   "description": "Server for My group's Capstone Project.",
    "main": "index.js",
    "dependencies": {
       "bcrypt": "^5.0.1",
