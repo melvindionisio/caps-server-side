@@ -40,6 +40,7 @@ const UpdateRoomPicture = roomsController.updateRoomPicture;
 
 // GET
 Router.get("/", GetAllRooms);
+Router.get("/total-rooms", roomsController.getTotalRooms);
 Router.get("/all/:bhId", GetBoardinghouseRooms);
 Router.get("/:roomId", GetRoom);
 Router.get("/total/:bhId", GetTotalRooms);

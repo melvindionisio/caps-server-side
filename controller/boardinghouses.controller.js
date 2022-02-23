@@ -301,7 +301,7 @@ exports.updateBoardinghouse = (req, res) => {
 // ! FOR MAP PURPOSE - GET ALL THE LONGITUDE, LATITUDE, NAME, ADDRESS of BH ✅ DONE!
 exports.getAllBoardinghouseLocations = (req, res) => {
    db.query(
-      `SELECT boardinghouse_id, bh_name, bh_complete_address, bh_longitude, bh_latitude FROM boarding_house`,
+      `SELECT boardinghouse_id, bh_name, bh_complete_address, bh_longitude, bh_latitude, total_rooms FROM boarding_house`,
       (err, result) => {
          if (!err) {
             let featureCollections = {
@@ -319,6 +319,7 @@ exports.getAllBoardinghouseLocations = (req, res) => {
                      id: mark.boardinghouse_id,
                      title: mark.bh_name,
                      description: mark.bh_complete_address,
+                     totalRooms: mark.total_rooms,
                   },
                };
             });
@@ -395,7 +396,7 @@ exports.deleteBoardinghouse = (req, res) => {
 exports.searchBoardinghouse = (req, res) => {
    const { query } = req.body;
    db.query(
-      `SELECT * FROM boarding_house WHERE bh_name LIKE '%${query}%'`,
+      `SELECT * FROM boarding_house WHERE bh_name LIKE '${query}%'`,
       (err, results) => {
          if (!err) {
             res.send(_bhRemap(results));

@@ -83,6 +83,30 @@ exports.getTotalBoardinghouseRooms = (req, res) => {
       (err, result) => {
          if (!err) {
             let total = { ...result[0] }[Object.keys({ ...result[0] })[0]];
+
+            db.query(
+               `UPDATE boarding_house SET total_rooms = ? WHERE boardinghouse_id = ?`,
+               [total, bhId],
+               (err, result) => {
+                  if (!err) {
+                     res.send({ total: total });
+                  }
+               }
+            );
+         } else {
+            res.send({ message: err });
+            console.log(err);
+         }
+      }
+   );
+};
+
+exports.getTotalRooms = (req, res) => {
+   db.query(
+      `SELECT COUNT(*) FROM rooms WHERE room_status = 'Available'`,
+      (err, result) => {
+         if (!err) {
+            let total = { ...result[0] }[Object.keys({ ...result[0] })[0]];
             res.send({ total: total });
          } else {
             res.send({ message: err });
