@@ -40,7 +40,7 @@ exports.updateBoardinghouseCoordinates = (req, res) => {
             console.log("id", result.affectedRows, "has updated.");
          } else {
             console.log(err);
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );
@@ -84,7 +84,7 @@ exports.registerBoardinghouse = (req, res) => {
             });
          } else {
             console.log(err);
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );
@@ -291,7 +291,7 @@ exports.updateBoardinghouse = (req, res) => {
                message: `(Boarding house) ${name} has been updated!`,
             });
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }
@@ -386,7 +386,7 @@ exports.deleteBoardinghouse = (req, res) => {
                message: `Boardinghouse owned by ${ownerId} has been successfully deleted!`,
             });
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }
@@ -402,7 +402,7 @@ exports.searchBoardinghouse = (req, res) => {
             res.send(_bhRemap(results));
          } else {
             res.send({
-               message: err,
+               message: "error occured.",
             });
          }
       }
@@ -423,7 +423,7 @@ exports.updatePopularity = (req, res) => {
                message: "The boadinghouse popularity has been updated!",
             });
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }

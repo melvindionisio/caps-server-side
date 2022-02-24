@@ -24,7 +24,7 @@ exports.addBookmark = (req, res) => {
             });
          } else {
             console.log(err);
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );
@@ -51,7 +51,7 @@ exports.getAllSeekerBookmarks = (req, res) => {
             });
             res.send(formatted);
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }
@@ -72,7 +72,7 @@ exports.deleteBookmark = (req, res) => {
             });
          } else {
             res.send({
-               message: err,
+               message: "error occured.",
             });
             console.log(err);
          }
@@ -94,7 +94,7 @@ exports.deleteBookmarkedRoom = (req, res) => {
             });
          } else {
             res.send({
-               message: err,
+               message: "error occured.",
             });
             console.log(err);
          }
@@ -116,7 +116,7 @@ exports.deleteBookmarkedBoardinghouse = (req, res) => {
             });
          } else {
             res.send({
-               message: err,
+               message: "error occured.",
             });
             console.log(err);
          }
@@ -138,7 +138,7 @@ exports.roomIsBookmarked = (req, res) => {
                res.send({ isBookmarked: false });
             }
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }
@@ -158,7 +158,7 @@ exports.bhIsBookmarked = (req, res) => {
                res.send({ isBookmarked: false });
             }
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }

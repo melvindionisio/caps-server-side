@@ -42,7 +42,7 @@ exports.getSeekerProfile = (req, res) => {
             res.send(formatted[0]);
          } else {
             res.send({
-               message: err,
+               message: "error occured.",
             });
          }
       }
@@ -64,7 +64,7 @@ exports.registerSeeker = async (req, res) => {
          });
       } else {
          console.log(err);
-         res.send({ message: err });
+         res.send({ message: "error occured." });
       }
    });
 };
@@ -172,14 +172,14 @@ exports.authenticateUpdatePassword = (req, res) => {
                         });
                      } else {
                         res.send({
-                           message: err,
+                           message: "error occured.",
                         });
                      }
                   }
                );
             }
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );
@@ -211,14 +211,14 @@ exports.googleLogin = (req, res) => {
                         });
                      } else {
                         res.send({
-                           message: err,
+                           message: "error occured.",
                         });
                      }
                   }
                );
             }
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );
@@ -248,14 +248,14 @@ exports.facebookLogin = (req, res) => {
                         });
                      } else {
                         res.send({
-                           message: err,
+                           message: "error occured.",
                         });
                      }
                   }
                );
             }
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );

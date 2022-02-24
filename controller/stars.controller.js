@@ -11,7 +11,7 @@ exports.getBoardinghouseStars = (req, res) => {
             let total = { ...result[0] }[Object.keys({ ...result[0] })[0]];
             res.send({ totalStars: total });
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }
@@ -32,7 +32,7 @@ exports.removeStar = (req, res) => {
             });
          } else {
             res.send({
-               message: err,
+               message: "error occured.",
             });
             console.log(err);
          }
@@ -55,7 +55,7 @@ exports.addStar = (req, res) => {
          });
       } else {
          console.log(err);
-         res.send({ message: err });
+         res.send({ message: "error occured." });
       }
    });
 };
@@ -77,7 +77,7 @@ exports.isStarred = (req, res) => {
             }
          } else {
             res.send({
-               message: err,
+               message: "error occured.",
             });
             console.log(err);
          }
@@ -99,7 +99,7 @@ exports.deleteAllBhStars = (req, res) => {
             });
          } else {
             res.send({
-               message: err,
+               message: "error occured.",
             });
             console.log(err);
          }

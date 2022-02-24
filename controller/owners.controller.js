@@ -65,7 +65,7 @@ exports.registerOwner = async (req, res) => {
          });
       } else {
          console.log(err);
-         res.send({ message: err });
+         res.send({ message: "error occured." });
       }
    });
 };
@@ -141,7 +141,7 @@ exports.updateOwnerProfile = (req, res) => {
             console.log("id", result.affectedRows, "has updated.");
          } else {
             console.log(err);
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );
@@ -161,7 +161,7 @@ exports.updateOwnerPassword = async (req, res) => {
          if (!err) {
             res.send({ message: "Password successfully changed!" });
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }
@@ -195,13 +195,13 @@ exports.deleteOwner = async (req, res) => {
                         message: `Owner at ${ownerId} successfully deleted!`,
                      });
                   } else {
-                     res.send({ message: err });
+                     res.send({ message: "error occured." });
                      console.log(err);
                   }
                }
             );
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }

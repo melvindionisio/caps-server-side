@@ -24,7 +24,7 @@ exports.getAllReviews = (req, res) => {
             let formatted = reviewRemap(results);
             res.send(formatted);
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }
@@ -49,7 +49,7 @@ exports.addReview = (req, res) => {
             });
          } else {
             console.log(err);
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );
@@ -68,7 +68,7 @@ exports.deleteReview = (req, res) => {
             });
          } else {
             res.send({
-               message: err,
+               message: "error occured.",
             });
             console.log(err);
          }
@@ -90,7 +90,7 @@ exports.deleteAllReview = (req, res) => {
             });
          } else {
             res.send({
-               message: err,
+               message: "error occured.",
             });
             console.log(err);
          }
@@ -108,7 +108,7 @@ exports.getReview = (req, res) => {
             let formatted = reviewRemap(result);
             res.send(formatted);
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );

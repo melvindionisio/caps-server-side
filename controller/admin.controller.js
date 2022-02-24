@@ -21,7 +21,7 @@ exports.registerAdmin = async (req, res) => {
          });
       } else {
          console.log(err);
-         res.send({ message: err });
+         res.send({ message: "error occured." });
       }
    });
 };
@@ -86,7 +86,7 @@ exports.updateAdminProfile = (req, res) => {
             res.send({ message: "Profile successfully changed!" });
          } else {
             console.log(err);
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );
@@ -120,7 +120,7 @@ exports.updateAdminPassword = async (req, res) => {
                            err: null,
                         });
                      } else {
-                        res.send({ message: err });
+                        res.send({ message: "error occured." });
                         console.log(err);
                      }
                   }
@@ -132,7 +132,7 @@ exports.updateAdminPassword = async (req, res) => {
                });
             }
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );
@@ -225,14 +225,17 @@ exports.deleteOwner = (req, res) => {
                                                          });
                                                       } else {
                                                          res.send({
-                                                            message: err,
+                                                            message:
+                                                               "error occured.",
                                                          });
                                                          console.log(err);
                                                       }
                                                    }
                                                 );
                                              } else {
-                                                res.send({ message: err });
+                                                res.send({
+                                                   message: "error occured.",
+                                                });
                                                 console.log(err);
                                              }
                                           }
@@ -246,7 +249,7 @@ exports.deleteOwner = (req, res) => {
                   );
                } else {
                   console.log(err);
-                  res.send({ message: err });
+                  res.send({ message: "error occured." });
                }
             }
          );

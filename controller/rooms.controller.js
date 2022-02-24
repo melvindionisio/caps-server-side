@@ -31,7 +31,7 @@ exports.getAllRooms = (req, res) => {
          if (!err) {
             res.send(roomsRemap(result));
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }
@@ -49,7 +49,7 @@ exports.getBoardinghouseRooms = async (req, res) => {
          if (!err) {
             res.send(roomsRemap(result));
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }
@@ -68,7 +68,7 @@ exports.getRoom = async (req, res) => {
             let rooms = roomsRemap(result);
             res.send(rooms[0]);
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }
@@ -94,7 +94,7 @@ exports.getTotalBoardinghouseRooms = (req, res) => {
                }
             );
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }
@@ -109,7 +109,7 @@ exports.getTotalRooms = (req, res) => {
             let total = { ...result[0] }[Object.keys({ ...result[0] })[0]];
             res.send({ total: total });
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }
@@ -126,7 +126,7 @@ exports.getTotalAvailableRooms = (req, res) => {
             let total = { ...result[0] }[Object.keys({ ...result[0] })[0]];
             res.send({ total: total });
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }
@@ -170,7 +170,7 @@ exports.addRoom = async (req, res) => {
             });
          } else {
             console.log(err);
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );
@@ -198,7 +198,7 @@ exports.updateRoomPicture = (req, res) => {
             });
          } else {
             console.log(err);
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );
@@ -234,7 +234,7 @@ exports.updateRoom = async (req, res) => {
             res.send({ message: `(Room) ${roomName} successfully updated!` });
          } else {
             console.log(err);
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );
@@ -251,7 +251,7 @@ exports.enableRoom = (req, res) => {
             res.send({ message: "Room has been enabled!" });
          } else {
             console.log(err);
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );
@@ -268,7 +268,7 @@ exports.disableRoom = (req, res) => {
             res.send({ message: "Room has been disabled!" });
          } else {
             console.log(err);
-            res.send({ message: err });
+            res.send({ message: "error occured." });
          }
       }
    );
@@ -300,7 +300,7 @@ exports.deleteRoomPicture = (req, res) => {
                console.error(err);
             }
          } else {
-            res.send({ message: err });
+            res.send({ message: "error occured." });
             console.log(err);
          }
       }
@@ -337,7 +337,7 @@ exports.deleteRoom = async (req, res) => {
                               });
                            } else {
                               res.send({
-                                 message: err,
+                                 message: "error occured.",
                               });
                               console.log(err);
                            }
@@ -345,7 +345,7 @@ exports.deleteRoom = async (req, res) => {
                      );
                   } else {
                      res.send({
-                        message: err,
+                        message: "error occured.",
                      });
                      console.log(err);
                   }
