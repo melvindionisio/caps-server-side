@@ -289,18 +289,26 @@ exports.deleteRoomPicture = (req, res) => {
             let imageNameExtraction = /[^/]+$/;
             let fileName = imagelink.match(imageNameExtraction)[0];
             let imageToDelete = imagesPath + fileName;
-            try {
+            //try {
+            if (fs.existsSync(imageToDelete)) {
                fs.unlinkSync(imageToDelete);
                console.log(imageToDelete, "has been deleted");
                res.send({
                   message: "Picture been deleted",
                   status: "deleted",
                });
-            } catch (err) {
-               console.error(err);
+            } else {
+               console.log(imageToDelete, "not found in file system");
+               res.send({
+                  message: "Picture not found",
+                  status: "image-not-found",
+               });
             }
+            //} catch (err) {
+            //console.error(err);
+            //}
          } else {
-            res.send({ message: "error occured." });
+            res.send({ message: "error occured.", status: "not-deleted" });
             console.log(err);
          }
       }
@@ -314,44 +322,43 @@ exports.deleteRoom = async (req, res) => {
    fetch(`${domain}/api/rooms/delete-picture/${roomId}`)
       .then((res) => res.json())
       .then((data) => {
-         if (data.status === "deleted") {
-            console.log(data.message);
-            db.query(
-               `DELETE FROM bookmarks WHERE room_id=?`,
-               [roomId],
-               (err, result) => {
-                  if (!err) {
-                     console.log(
-                        "Bookmarks related to the room has been deleted!"
-                     );
-                     //DELETING THE ROOM
-                     db.query(
-                        `DELETE FROM rooms WHERE room_id=?`,
-                        [roomId],
-                        (err, result) => {
-                           if (!err) {
-                              res.send({
-                                 result: result,
-                                 message: "Room was successfully deleted!",
-                                 status: "deleted",
-                              });
-                           } else {
-                              res.send({
-                                 message: "error occured.",
-                              });
-                              console.log(err);
-                           }
+         console.log(data.message);
+         // DELETE ALL THE USER BOOKMARKS THAT THIS ROOM IS INCLUDED
+         db.query(
+            `DELETE FROM bookmarks WHERE room_id=?`,
+            [roomId],
+            (err, result) => {
+               if (!err) {
+                  console.log(
+                     "Bookmarks related to the room has been deleted!"
+                  );
+                  //DELETING THE ROOM
+                  db.query(
+                     `DELETE FROM rooms WHERE room_id=?`,
+                     [roomId],
+                     (err, result) => {
+                        if (!err) {
+                           res.send({
+                              result: result,
+                              message: "Room was successfully deleted!",
+                              status: "deleted",
+                           });
+                        } else {
+                           res.send({
+                              message: "error occured.",
+                           });
+                           console.log(err);
                         }
-                     );
-                  } else {
-                     res.send({
-                        message: "error occured.",
-                     });
-                     console.log(err);
-                  }
+                     }
+                  );
+               } else {
+                  res.send({
+                     message: "error occured.",
+                  });
+                  console.log(err);
                }
-            );
-         }
+            }
+         );
       })
       .catch((err) => console.log(err));
 };

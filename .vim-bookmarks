@@ -1,3 +1,0 @@
-let l:bm_file_version = 1
-let l:bm_sessions = {'default': {'D:\CAPSTONE\caps-server-side\controller\boardinghouses.controller.js': [{'sign_idx': 9500, 'line_nr': 399, 'content': '      `SELECT * FROM boarding_house WHERE bh_name LIKE ''${query}%''`,'},],}}
-let l:bm_current_session = 'default'
