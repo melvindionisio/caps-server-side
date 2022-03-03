@@ -178,11 +178,17 @@ exports.addRoom = async (req, res) => {
 
 exports.uploadRoomImage = (req, res) => {
    const url = req.protocol + "://" + req.get("host");
-   let imagePath = `${url}/${destinationPath}/${req.file.filename}`;
-   res.send({
-      imagepath: imagePath,
-      message: "Image Uploaded",
-   });
+   if (req.file) {
+      let imagePath = `${url}/${destinationPath}/${req.file.filename}`;
+      res.send({
+         imagepath: imagePath,
+         message: "Image Uploaded",
+      });
+   } else {
+      res.send({
+         message: "Does not contain the image file.",
+      });
+   }
 };
 
 exports.updateRoomPicture = (req, res) => {
@@ -284,25 +290,29 @@ exports.deleteRoomPicture = (req, res) => {
          if (!err) {
             //DELETING THE IMAGE IN FILE SYSTEM FIRST
             const imagesPath = "./room-images/";
-            let imagelink = result[0].room_picture;
-            //Regex for extracting the filename from the url
-            let imageNameExtraction = /[^/]+$/;
-            let fileName = imagelink.match(imageNameExtraction)[0];
-            let imageToDelete = imagesPath + fileName;
-            //try {
-            if (fs.existsSync(imageToDelete)) {
-               fs.unlinkSync(imageToDelete);
-               console.log(imageToDelete, "has been deleted");
-               res.send({
-                  message: "Picture been deleted",
-                  status: "deleted",
-               });
+            if (result[0].room_picture) {
+               let imagelink = result[0].room_picture;
+               //Regex for extracting the filename from the url
+               let imageNameExtraction = /[^/]+$/;
+               let fileName = imagelink.match(imageNameExtraction)[0];
+               let imageToDelete = imagesPath + fileName;
+               //try {
+               if (fs.existsSync(imageToDelete)) {
+                  fs.unlinkSync(imageToDelete);
+                  console.log(imageToDelete, "has been deleted");
+                  res.send({
+                     message: "Picture been deleted",
+                     status: "deleted",
+                  });
+               } else {
+                  console.log(imageToDelete, "not found in file system");
+                  res.send({
+                     message: "Picture not found",
+                     status: "image-not-found",
+                  });
+               }
             } else {
-               console.log(imageToDelete, "not found in file system");
-               res.send({
-                  message: "Picture not found",
-                  status: "image-not-found",
-               });
+               res.send({ message: "no current image" });
             }
             //} catch (err) {
             //console.error(err);

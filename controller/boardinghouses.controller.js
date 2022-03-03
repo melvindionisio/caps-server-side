@@ -22,6 +22,7 @@ const _bhRemap = (result) => {
          waterSource: boardinghouse.water_source,
          genderAllowed: boardinghouse.gender_allowed,
          totalRooms: boardinghouse.total_rooms,
+         acceptingTransient: boardinghouse.accepting_transient,
       };
    });
    return boardinghouses;
@@ -263,10 +264,11 @@ exports.updateBoardinghouse = (req, res) => {
       houseProtocols,
       gendersAllowed,
       priceRange,
+      acceptingTransient,
    } = req.body;
 
    db.query(
-      `UPDATE boarding_house SET bh_name = ?, bh_owner = ?, bh_complete_address = ?, bh_contacts = ?, bh_zone_address = ?, bh_street_address = ?, bh_longitude = ?, bh_latitude = ?, offers = ?, tagline = ?, water_source = ?, house_protocols = ?, gender_allowed = ?, price_range = ? WHERE boardinghouse_id = ?`,
+      `UPDATE boarding_house SET bh_name = ?, bh_owner = ?, bh_complete_address = ?, bh_contacts = ?, bh_zone_address = ?, bh_street_address = ?, bh_longitude = ?, bh_latitude = ?, offers = ?, tagline = ?, water_source = ?, house_protocols = ?, gender_allowed = ?, price_range = ?, accepting_transient=? WHERE boardinghouse_id = ?`,
       [
          name,
          owner,
@@ -282,6 +284,7 @@ exports.updateBoardinghouse = (req, res) => {
          houseProtocols,
          gendersAllowed,
          priceRange,
+         acceptingTransient,
          boardinghouseId,
       ],
       (err, result) => {
