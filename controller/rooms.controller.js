@@ -163,6 +163,31 @@ exports.addRoom = async (req, res) => {
       ],
       (err, result) => {
          if (!err) {
+            //SET THE TOTAL ROOMS AFTER ADDING
+            db.query(
+               `SELECT COUNT(*) FROM rooms WHERE boardinghouse_id = ?`,
+               [bhId],
+               (err, result) => {
+                  if (!err) {
+                     let total = { ...result[0] }[
+                        Object.keys({ ...result[0] })[0]
+                     ];
+
+                     db.query(
+                        `UPDATE boarding_house SET total_rooms = ? WHERE boardinghouse_id = ?`,
+                        [total, bhId],
+                        (err, result) => {
+                           if (!err) {
+                              console.log("Total rooms updated! (increased)");
+                           }
+                        }
+                     );
+                  } else {
+                     console.log(err);
+                  }
+               }
+            );
+
             console.log(result);
             res.send({
                message: "Room successfully Added!",
@@ -342,22 +367,61 @@ exports.deleteRoom = async (req, res) => {
                   console.log(
                      "Bookmarks related to the room has been deleted!"
                   );
-                  //DELETING THE ROOM
+
                   db.query(
-                     `DELETE FROM rooms WHERE room_id=?`,
+                     `SELECT * FROM rooms WHERE room_id = ?`,
                      [roomId],
                      (err, result) => {
+                        const bhId = result[0].boardinghouse_id;
+                        console.log(bhId);
                         if (!err) {
-                           res.send({
-                              result: result,
-                              message: "Room was successfully deleted!",
-                              status: "deleted",
-                           });
-                        } else {
-                           res.send({
-                              message: "error occured.",
-                           });
-                           console.log(err);
+                           //DELETING THE ROOM
+                           db.query(
+                              `DELETE FROM rooms WHERE room_id=?`,
+                              [roomId],
+                              (err, result) => {
+                                 if (!err) {
+                                    db.query(
+                                       `SELECT COUNT(*) FROM rooms WHERE boardinghouse_id = ?`,
+                                       [bhId],
+                                       (err, result) => {
+                                          if (!err) {
+                                             let total = { ...result[0] }[
+                                                Object.keys({ ...result[0] })[0]
+                                             ];
+
+                                             db.query(
+                                                `UPDATE boarding_house SET total_rooms = ? WHERE boardinghouse_id = ?`,
+                                                [total, bhId],
+                                                (err, result) => {
+                                                   if (!err) {
+                                                      console.log(
+                                                         "Total rooms updated! (decreased)"
+                                                      );
+                                                   }
+                                                }
+                                             );
+                                          } else {
+                                             console.log(err);
+                                          }
+                                       }
+                                    );
+
+                                    res.send({
+                                       result: result,
+                                       message:
+                                          "Room was successfully deleted!",
+                                       status: "deleted",
+                                    });
+                                    console.log("Room has been deleted.");
+                                 } else {
+                                    res.send({
+                                       message: "error occured.",
+                                    });
+                                    console.log(err);
+                                 }
+                              }
+                           );
                         }
                      }
                   );
