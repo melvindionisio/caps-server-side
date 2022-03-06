@@ -78,14 +78,14 @@ exports.registerBoardinghouse = (req, res) => {
       ],
       (err, result) => {
          if (!err) {
-            console.log(result);
             res.send({
                message: "Owner successfully registered!",
                ownerId: result.insertId,
             });
+            console.log("An owner has been registed.");
          } else {
-            console.log(err);
             res.send({ message: "error occured." });
+            console.log(err);
          }
       }
    );
@@ -290,7 +290,6 @@ exports.updateBoardinghouse = (req, res) => {
       (err, result) => {
          if (!err) {
             res.send({
-               result: result,
                message: `(Boarding house) ${name} has been updated!`,
             });
          } else {
@@ -385,7 +384,6 @@ exports.deleteBoardinghouse = (req, res) => {
       (err, result) => {
          if (!err) {
             res.send({
-               result: result,
                message: `Boardinghouse owned by ${ownerId} has been successfully deleted!`,
             });
          } else {
@@ -422,7 +420,6 @@ exports.updatePopularity = (req, res) => {
       (err, result) => {
          if (!err) {
             res.send({
-               result: result,
                message: "The boadinghouse popularity has been updated!",
             });
          } else {

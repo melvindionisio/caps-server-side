@@ -132,7 +132,6 @@ exports.updateSeekerProfile = (req, res) => {
          if (!err) {
             res.send({
                message: "Your account has been updated.",
-               result: result,
             });
          } else {
             res.send({
@@ -168,7 +167,6 @@ exports.authenticateUpdatePassword = (req, res) => {
                      if (!err) {
                         res.send({
                            message: "Your account has been updated.",
-                           result: result,
                         });
                      } else {
                         res.send({
@@ -204,7 +202,6 @@ exports.googleLogin = (req, res) => {
                   [googleId, name, email],
                   (err, result) => {
                      if (!err) {
-                        console.log(result);
                         res.send({
                            id: result.insertId, //error here
                            message: "Google Account Successfully Added!",

@@ -207,3 +207,24 @@ exports.deleteOwner = async (req, res) => {
       }
    );
 };
+
+exports.validateOwner = (req, res) => {
+   const { password, ownerUsername } = req.body;
+   if (password) {
+      db.query(
+         `SELECT * FROM boarding_house_owners WHERE owner_username = ? `,
+         [ownerUsername],
+         async (err, result) => {
+            if (!err) {
+               const validate = await bcrypt.compare(
+                  password,
+                  result[0].admin_password
+               );
+               res.send({
+                  isValid: validate,
+               });
+            }
+         }
+      );
+   }
+};

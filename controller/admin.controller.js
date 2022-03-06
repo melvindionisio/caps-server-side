@@ -7,11 +7,11 @@ const fetch = require("node-fetch");
 const saltRounds = 5;
 exports.registerAdmin = async (req, res) => {
    const { name, username, password } = req.body;
-   console.log(name, username, password);
    const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
    const sqlInsert =
       "INSERT INTO admin (admin_name, admin_username, admin_password) VALUE (?,?,?)";
+
    db.query(sqlInsert, [name, username, encryptedPassword], (err, result) => {
       if (!err) {
          console.log(result);
@@ -127,8 +127,8 @@ exports.updateAdminPassword = async (req, res) => {
                );
             } else {
                res.send({
-                  message: "Current Password not match",
-                  err: "incorrect-current",
+                  message: "Current Password does not match",
+                  err: "incorrect-password",
                });
             }
          } else {
@@ -177,9 +177,9 @@ exports.deleteOwner = (req, res) => {
             (err, rooms) => {
                if (!err) {
                   // TO DO HERE.
-                  //DELETE EACH ROOM PICTURE FILE FIRST
-                  //DELETE ALL USER BOOKMARKED RELATED TO THE ROOM
-                  //DELETE THE ROOM ITSELF
+                  //1. DELETE EACH ROOM PICTURE IN THE FILE SYSTEM FIRST
+                  //2. DELETE ALL USER BOOKMARKED RELATED TO THE ROOM
+                  //3. DELETE THE ROOM ITSELF
                   rooms.map((room) => {
                      fetch(`${domain}/api/rooms/delete/${room.room_id}`, {
                         method: "DELETE",
@@ -189,6 +189,7 @@ exports.deleteOwner = (req, res) => {
                         .catch((err) => console.log(err));
                   });
 
+                  // REMOVE ALL USER BOOKMARKED BY THIS BOARING HOUSE
                   db.query(
                      `DELETE FROM bookmarks WHERE boardinghouse_id = ?`,
                      [boardinghouse.id],
@@ -203,17 +204,20 @@ exports.deleteOwner = (req, res) => {
                               .then((res) => res.json())
                               .then((data) => {
                                  console.log(data);
+                                 // REMOVE ALL GIVEN STARS TO BOARDING HOUSE
                                  fetch(
                                     `${domain}/api/stars/remove/boardinghouse/${boardinghouse.id}`,
                                     { method: "delete" }
                                  )
                                     .then((res) => res.json())
                                     .then((data) => {
+                                       // REMOVE THE BOARDING HOUSE OWNED
                                        db.query(
                                           "DELETE FROM boarding_house WHERE bho_id = ?",
                                           [ownerId],
                                           (err, result) => {
                                              if (!err) {
+                                                // LAST REMOVE THE OWNER ACCOUNT ITSELF
                                                 db.query(
                                                    "DELETE FROM boarding_house_owners WHERE bho_id = ?",
                                                    [ownerId],

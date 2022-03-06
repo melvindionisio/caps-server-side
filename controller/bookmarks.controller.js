@@ -67,7 +67,6 @@ exports.deleteBookmark = (req, res) => {
       (err, result) => {
          if (!err) {
             res.send({
-               result: result,
                message: "Bookmark successfully deleted!",
             });
          } else {
@@ -89,7 +88,6 @@ exports.deleteBookmarkedRoom = (req, res) => {
       (err, result) => {
          if (!err) {
             res.send({
-               result: result,
                message: "Bookmark successfully deleted!",
             });
          } else {
@@ -111,7 +109,6 @@ exports.deleteBookmarkedBoardinghouse = (req, res) => {
       (err, result) => {
          if (!err) {
             res.send({
-               result: result,
                message: "Bookmark successfully deleted!",
             });
          } else {

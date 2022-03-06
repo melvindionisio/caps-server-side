@@ -42,7 +42,6 @@ exports.addReview = (req, res) => {
       [bhId, seekerId, reviewText, reviewerName, reviewDate],
       (err, result) => {
          if (!err) {
-            console.log(result);
             res.send({
                message: "Review successfully Added!",
                result: result,
@@ -63,7 +62,6 @@ exports.deleteReview = (req, res) => {
       (err, result) => {
          if (!err) {
             res.send({
-               result: result,
                message: "Your review was successfully deleted!",
             });
          } else {
@@ -84,7 +82,6 @@ exports.deleteAllReview = (req, res) => {
       (err, result) => {
          if (!err) {
             res.send({
-               result: result,
                message:
                   "All reviews of boarding house was successfully deleted!",
             });
