@@ -303,7 +303,7 @@ exports.updateBoardinghouse = (req, res) => {
 // ! FOR MAP PURPOSE - GET ALL THE LONGITUDE, LATITUDE, NAME, ADDRESS of BH ✅ DONE!
 exports.getAllBoardinghouseLocations = (req, res) => {
    db.query(
-      `SELECT boardinghouse_id, bh_name, bh_complete_address, bh_longitude, bh_latitude, total_rooms FROM boarding_house`,
+      `SELECT boardinghouse_id, bh_name, bh_complete_address, bh_zone_address, bh_longitude, bh_latitude, total_rooms FROM boarding_house`,
       (err, result) => {
          if (!err) {
             let featureCollections = {
@@ -322,6 +322,7 @@ exports.getAllBoardinghouseLocations = (req, res) => {
                      title: mark.bh_name,
                      description: mark.bh_complete_address,
                      totalRooms: mark.total_rooms,
+                     zoneAddress: mark.bh_zone_address,
                   },
                };
             });
