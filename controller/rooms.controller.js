@@ -15,6 +15,7 @@ const roomsRemap = (rooms) => {
          description: room.room_description,
          type: room.room_type,
          picture: room.room_picture,
+         price: room.price,
          status: room.room_status,
          genderAllowed: room.gender_allowed,
          totalSlots: room.total_slots,
@@ -138,6 +139,7 @@ exports.addRoom = async (req, res) => {
    const bhId = req.params.bhId;
    const {
       roomName,
+      roomPrice,
       roomDescription,
       roomType,
       roomPicture,
@@ -147,12 +149,13 @@ exports.addRoom = async (req, res) => {
       occupiedSlots,
    } = req.body;
 
-   const sqlInsert = `INSERT INTO rooms (boardinghouse_id, room_name, room_description,room_type, room_picture, room_status, gender_allowed, total_slots, occupied_slots) VALUE (?,?,?,?,?,?,?,?,?)`;
+   const sqlInsert = `INSERT INTO rooms (boardinghouse_id, room_name,price, room_description,room_type, room_picture, room_status, gender_allowed, total_slots, occupied_slots) VALUE (?,?,?,?,?,?,?,?,?,?)`;
    db.query(
       sqlInsert,
       [
          bhId,
          roomName,
+         roomPrice,
          roomDescription,
          roomType,
          roomPicture,
@@ -240,6 +243,7 @@ exports.updateRoom = async (req, res) => {
    const roomId = req.params.roomId;
    const {
       roomName,
+      roomPrice,
       roomDescription,
       roomType,
       roomStatus,
@@ -249,9 +253,10 @@ exports.updateRoom = async (req, res) => {
    } = req.body;
 
    db.query(
-      `UPDATE rooms SET room_name = ?, room_description = ?, room_type = ?, room_status = ?, gender_allowed = ?, total_slots = ?, occupied_slots = ? WHERE room_id = ?`,
+      `UPDATE rooms SET room_name = ?,price = ?, room_description = ?, room_type = ?, room_status = ?, gender_allowed = ?, total_slots = ?, occupied_slots = ? WHERE room_id = ?`,
       [
          roomName,
+         roomPrice,
          roomDescription,
          roomType,
          roomStatus,
