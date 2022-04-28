@@ -2,6 +2,16 @@ const db = require("../connection");
 const fetch = require("node-fetch");
 const domain = require("../domain/domain");
 
+// const cloudinary = require("cloudinary").v2;
+
+// Change cloud name, API Key, and API Secret below
+// cloudinary.config({
+//    cloud_name: "searchnstay",
+//    api_key: "624193438329612",
+//    api_secret: "WwFyOo0fxkn9dVtf2z219f2uP_s",
+//    secure: true,
+// });
+
 //DELETE ROOM IMAGE WHEN DELETING ROOMS
 const fs = require("fs");
 const destinationPath = "room-images";
@@ -26,17 +36,45 @@ const roomsRemap = (rooms) => {
 };
 
 exports.getAllRooms = (req, res) => {
-   db.query(
-      `SELECT * FROM rooms WHERE room_status = 'Available' ORDER BY room_name ASC`,
-      (err, result) => {
-         if (!err) {
-            res.send(roomsRemap(result));
-         } else {
-            res.send({ message: "error occured." });
-            console.log(err);
+   const { sort, sortType, gender } = req.query;
+   console.log(sort, sortType, gender);
+
+   // db.query(
+   //    `SELECT * FROM rooms WHERE room_status = 'Available' ORDER BY room_name ASC`,
+   //    (err, result) => {
+   //       if (!err) {
+   //          res.send(roomsRemap(result));
+   //       } else {
+   //          res.send({ message: "error occured." });
+   //          console.log(err);
+   //       }
+   //    }
+   // );
+
+   if (gender === "Male/Female") {
+      db.query(
+         `SELECT * FROM rooms WHERE room_status = 'Available' ORDER BY ${sort} ${sortType.toUpperCase()}`,
+         (err, result) => {
+            if (!err) {
+               res.send(roomsRemap(result));
+            } else {
+               res.send({ message: "error occured." });
+               console.log(err);
+            }
          }
-      }
-   );
+      );
+   } else {
+      db.query(
+         `SELECT * FROM rooms WHERE room_status = 'Available' AND gender_allowed = '${gender}'  ORDER BY ${sort} ${sortType.toUpperCase()}`,
+         (err, result) => {
+            if (!err) {
+               res.send(_bhRemap(result));
+            } else {
+               console.log(err);
+            }
+         }
+      );
+   }
 };
 
 // GET ALL Boardinghouse ROOMS - need boardinghouse_id to get rooms associated with the current login owner
@@ -312,6 +350,9 @@ exports.disableRoom = (req, res) => {
 
 //DELETE ROOM PICTURE
 exports.deleteRoomPicture = (req, res) => {
+   // // Change 'sample' to any public ID of your choice
+   // cloudinary.uploader.destroy('sample', function(result) { console.log(result) });
+
    const roomId = req.params.roomId;
    db.query(
       `SELECT room_picture FROM rooms WHERE room_id = ?`,
@@ -441,3 +482,6 @@ exports.deleteRoom = async (req, res) => {
       })
       .catch((err) => console.log(err));
 };
+
+//task:
+// after deployment saya ka upayon an pagdelete san picture

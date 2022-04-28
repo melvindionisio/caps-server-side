@@ -14,6 +14,7 @@ const _bhRemap = (result) => {
          longitude: boardinghouse.bh_longitude,
          latitude: boardinghouse.bh_latitude,
          contacts: boardinghouse.bh_contacts,
+         email: boardinghouse.bh_email,
          popularity: boardinghouse.bh_popularity,
          tagline: boardinghouse.tagline,
          houseProtocols: boardinghouse.house_protocols,
@@ -107,11 +108,11 @@ exports.getAllBoardinghouses = (req, res) => {
 };
 
 exports.getAllBoardinghouse = (req, res) => {
-   const { sort, sortType, zone } = req.query;
+   const { sort, sortType, zone, gender } = req.query;
 
    if (zone === "All") {
       db.query(
-         `SELECT * FROM boarding_house ORDER BY ${sort} ${sortType.toUpperCase()}`,
+         `SELECT * FROM boarding_house WHERE gender_allowed = '${gender}' ORDER BY ${sort} ${sortType.toUpperCase()}`,
          (err, result) => {
             if (!err) {
                res.send(_bhRemap(result));
@@ -122,7 +123,7 @@ exports.getAllBoardinghouse = (req, res) => {
       );
    } else {
       db.query(
-         `SELECT * FROM boarding_house WHERE bh_zone_address = '${zone}' ORDER BY ${sort} ${sortType}`,
+         `SELECT * FROM boarding_house WHERE bh_zone_address = '${zone}' AND gender_allowed = '${gender}' ORDER BY ${sort} ${sortType.toUpperCase()}`,
          (err, result) => {
             if (!err) {
                res.send(_bhRemap(result));
@@ -254,6 +255,7 @@ exports.updateBoardinghouse = (req, res) => {
       owner,
       completeAddress,
       contact,
+      email,
       zoneAddress,
       streetAddress,
       longitude,
@@ -268,12 +270,13 @@ exports.updateBoardinghouse = (req, res) => {
    } = req.body;
 
    db.query(
-      `UPDATE boarding_house SET bh_name = ?, bh_owner = ?, bh_complete_address = ?, bh_contacts = ?, bh_zone_address = ?, bh_street_address = ?, bh_longitude = ?, bh_latitude = ?, offers = ?, tagline = ?, water_source = ?, house_protocols = ?, gender_allowed = ?, price_range = ?, accepting_transient=? WHERE boardinghouse_id = ?`,
+      `UPDATE boarding_house SET bh_name = ?, bh_owner = ?, bh_complete_address = ?, bh_contacts = ?, bh_email = ?, bh_zone_address = ?, bh_street_address = ?, bh_longitude = ?, bh_latitude = ?, offers = ?, tagline = ?, water_source = ?, house_protocols = ?, gender_allowed = ?, price_range = ?, accepting_transient=? WHERE boardinghouse_id = ?`,
       [
          name,
          owner,
          completeAddress,
          contact,
+         email,
          zoneAddress,
          streetAddress,
          longitude,

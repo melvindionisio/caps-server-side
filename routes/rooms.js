@@ -5,6 +5,43 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
+// let directory: string = ''
+// let bookImages: string[] = []
+// let files: Express.Multer.File[] = req.files as Express.Multer.File[]
+
+// for (let i in files) {
+//   if (process.platform !== 'win32') directory = `/tmp/${files[i].filename}`
+//   else directory = `${process.env.TEMP}/${files[i].filename}`
+
+//   if (fs.existsSync(directory)) {
+//     const res: UploadApiResponse = await cloudinaryStorage(directory)
+//     bookImages.push(res.secure_url)
+//   }
+// }
+
+// // custom libs cloudinary
+// import cloudinary, { UploadApiResponse } from 'cloudinary'
+// import { ExpressError } from '@helpers/helper.error'
+
+// export { UploadApiResponse }
+// export const cloudinaryStorage = async (filename: string): Promise<UploadApiResponse> => {
+//   try {
+//     const cloudStorage: typeof cloudinary.v2 = cloudinary.v2
+//     cloudStorage.config({
+//       cloud_name: process.env.CLOUDINARY_NAME,
+//       api_key: process.env.CLOUDINARY_KEY,
+//       api_secret: process.env.CLOUDINARY_SECRET,
+//       shorten: true,
+//       secure: true,
+//       ssl_detected: true
+//     })
+//     const res = (await cloudStorage.uploader.upload(filename, { resource_type: 'auto' })) as UploadApiResponse
+//     return res
+//   } catch (e: any) {
+//     return Promise.reject(new ExpressError(`Uploading file error: ${e.message}`))
+//   }
+// }
+
 const destinationPath = "room-images";
 
 if (!fs.existsSync(destinationPath)) {

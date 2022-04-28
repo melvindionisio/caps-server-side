@@ -9,6 +9,7 @@ const reviewRemap = (reviews) => {
          reviewerName: review.reviewer_name,
          text: review.review_text,
          date: review.review_date,
+         status: review.status,
       };
    });
    return formatted;
@@ -17,7 +18,7 @@ const reviewRemap = (reviews) => {
 exports.getAllReviews = (req, res) => {
    const bhId = req.params.bhId;
    db.query(
-      `SELECT * FROM reviews WHERE boardinghouse_id = ? `,
+      `SELECT * FROM reviews WHERE boardinghouse_id = ? AND status = 'approved' `,
       [bhId],
       (err, results) => {
          if (!err) {
@@ -33,13 +34,14 @@ exports.getAllReviews = (req, res) => {
 
 exports.addReview = (req, res) => {
    const bhId = req.params.bhId;
-   const { seekerId, reviewDate, reviewerName, reviewText } = req.body;
+   const { seekerId, reviewDate, reviewerName, reviewText, reviewStatus } =
+      req.body;
 
    const sqlInsert =
-      "INSERT INTO reviews (boardinghouse_id,seeker_id, review_text, reviewer_name, review_date ) VALUE (?,?,?,?,?)";
+      "INSERT INTO reviews (boardinghouse_id,seeker_id, review_text, reviewer_name, review_date, status ) VALUE (?,?,?,?,?,?)";
    db.query(
       sqlInsert,
-      [bhId, seekerId, reviewText, reviewerName, reviewDate],
+      [bhId, seekerId, reviewText, reviewerName, reviewDate, reviewStatus],
       (err, result) => {
          if (!err) {
             res.send({
@@ -106,6 +108,57 @@ exports.getReview = (req, res) => {
             res.send(formatted);
          } else {
             res.send({ message: "error occured." });
+         }
+      }
+   );
+};
+
+exports.approveReview = (req, res) => {
+   const reviewId = req.params.reviewId;
+   const status = req.body.status;
+   console.log(reviewId);
+   db.query(
+      `UPDATE reviews SET status = ? WHERE review_id = ?`,
+      [status, reviewId],
+      (err, result) => {
+         if (!err) {
+            res.send({
+               message: `${reviewId} review has been approved.`,
+            });
+         } else {
+            res.send({ message: "error occured." });
+         }
+      }
+   );
+};
+
+exports.getAllPendingReviews = (req, res) => {
+   db.query(
+      `SELECT * FROM reviews WHERE status = 'pending'`,
+      (err, results) => {
+         if (!err) {
+            let formatted = reviewRemap(results);
+            res.send(formatted);
+         } else {
+            res.send({ message: "error occured." });
+            console.log(err);
+         }
+      }
+   );
+};
+
+exports.getBhPendingReviews = (req, res) => {
+   const bhId = req.params.bhId;
+   db.query(
+      `SELECT * FROM reviews WHERE boardinghouse_id = ? AND status = 'pending' `,
+      [bhId],
+      (err, results) => {
+         if (!err) {
+            let formatted = reviewRemap(results);
+            res.send(formatted);
+         } else {
+            res.send({ message: "error occured." });
+            console.log(err);
          }
       }
    );
