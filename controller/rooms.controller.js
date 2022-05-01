@@ -2,15 +2,15 @@ const db = require("../connection");
 const fetch = require("node-fetch");
 const domain = require("../domain/domain");
 
-// const cloudinary = require("cloudinary").v2;
+const cloudinary = require("cloudinary").v2;
 
 // Change cloud name, API Key, and API Secret below
-// cloudinary.config({
-//    cloud_name: "searchnstay",
-//    api_key: "624193438329612",
-//    api_secret: "WwFyOo0fxkn9dVtf2z219f2uP_s",
-//    secure: true,
-// });
+cloudinary.config({
+   cloud_name: "searchnstay",
+   api_key: "624193438329612",
+   api_secret: "WwFyOo0fxkn9dVtf2z219f2uP_s",
+   secure: true,
+});
 
 //DELETE ROOM IMAGE WHEN DELETING ROOMS
 const fs = require("fs");
@@ -348,11 +348,58 @@ exports.disableRoom = (req, res) => {
    );
 };
 
-//DELETE ROOM PICTURE
 exports.deleteRoomPicture = (req, res) => {
-   // // Change 'sample' to any public ID of your choice
-   // cloudinary.uploader.destroy('sample', function(result) { console.log(result) });
+   // Change 'sample' to any public ID of your choice
+   const roomId = req.params.roomId;
 
+   db.query(
+      `SELECT room_picture FROM rooms WHERE room_id = ?`,
+      [roomId],
+      (err, result) => {
+         if (!err) {
+            //DELETING THE IMAGE IN FILE SYSTEM FIRST Cloudinary
+            if (result[0].room_picture) {
+               let imagelink = result[0].room_picture;
+               //Regex for extracting the filename from the url
+               let imageNameExtraction = /[^/]+$/;
+               let fileName = imagelink.match(imageNameExtraction)[0];
+
+               // extracting file name without file extension
+               let imagePublicId =
+                  fileName.substring(0, fileName.lastIndexOf(".")) || fileName;
+
+               cloudinary.uploader.destroy(
+                  `${imagePublicId}`,
+                  function (err, result) {
+                     if (!err) {
+                        console.log(result);
+                        res.send({
+                           message: "Image deleted!",
+                        });
+                     } else {
+                        console.log(err);
+                        res.send({
+                           message: " Failed to delete image!",
+                        });
+                     }
+                  }
+               );
+            } else {
+               res.send({ message: "no current image" });
+            }
+            //} catch (err) {
+            //console.error(err);
+            //}
+         } else {
+            res.send({ message: "error occured.", status: "not-deleted" });
+            console.log(err);
+         }
+      }
+   );
+};
+
+//DELETE ROOM PICTURE
+exports.deleteRoomPictureOld = (req, res) => {
    const roomId = req.params.roomId;
    db.query(
       `SELECT room_picture FROM rooms WHERE room_id = ?`,
@@ -482,6 +529,3 @@ exports.deleteRoom = async (req, res) => {
       })
       .catch((err) => console.log(err));
 };
-
-//task:
-// after deployment saya ka upayon an pagdelete san picture
