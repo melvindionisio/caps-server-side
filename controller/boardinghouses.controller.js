@@ -109,10 +109,22 @@ exports.getAllBoardinghouses = (req, res) => {
 
 exports.getAllBoardinghouse = (req, res) => {
    const { sort, sortType, zone, gender } = req.query;
+   console.log(sort, sortType, zone, gender);
 
-   if (zone === "All") {
+   if (zone === "All" && gender !== "Male/Female") {
       db.query(
          `SELECT * FROM boarding_house WHERE gender_allowed = '${gender}' ORDER BY ${sort} ${sortType.toUpperCase()}`,
+         (err, result) => {
+            if (!err) {
+               res.send(_bhRemap(result));
+            } else {
+               console.log(err);
+            }
+         }
+      );
+   } else if (gender === "Male/Female") {
+      db.query(
+         `SELECT * FROM boarding_house ORDER BY ${sort} ${sortType.toUpperCase()}`,
          (err, result) => {
             if (!err) {
                res.send(_bhRemap(result));

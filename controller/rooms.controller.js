@@ -39,7 +39,7 @@ exports.getAllRooms = (req, res) => {
    const { sort, sortType, gender } = req.query;
    console.log(sort, sortType, gender);
 
-   // db.query(
+   // db.query (
    //    `SELECT * FROM rooms WHERE room_status = 'Available' ORDER BY room_name ASC`,
    //    (err, result) => {
    //       if (!err) {
